@@ -1,6 +1,6 @@
 {
   "name": "bc3js",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Parser and hierarchical model for FIEBDC-3 BC3 files.",
   "main": "dist/index.js",
   "module": "dist/index.js",
@@ -15,6 +15,8 @@
     "prepublishOnly": "npm run ci",
     "format": "prettier --write .",
     "check-format": "prettier --check .",
+    "changeset": "changeset",
+    "version-packages": "changeset version",
     "local-release": "changeset version && changeset publish"
   },
   "keywords": [

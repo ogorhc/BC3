@@ -1,5 +1,11 @@
 # bc3js
 
+## 0.0.2
+
+### Patch Changes
+
+- a776c0e: Firtst changeset
+
 ## 0.0.3
 
 ### Patch Changes
