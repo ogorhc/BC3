@@ -1,9 +1,7 @@
 {
   "name": "bc3js",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Parser and hierarchical model for FIEBDC-3 BC3 files.",
-  "author": "Igor HC (ogorhc)",
-  "license": "MIT",
   "main": "dist/index.js",
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -11,7 +9,36 @@
     "dist"
   ],
   "scripts": {
+    "ci": "npm run build && npm run check-format",
     "build": "tsup src/index.ts --dts",
-    "clean": "rm -rf dist"
+    "clean": "rm -rf dist",
+    "prepublishOnly": "npm run ci",
+    "format": "prettier --write .",
+    "check-format": "prettier --check .",
+    "local-release": "changeset version && changeset publish"
+  },
+  "keywords": [
+    "bc3",
+    "parser",
+    "construction",
+    "fiebdc",
+    "ts",
+    "library"
+  ],
+  "author": "Igor HC (ogorhc)",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ogorhc/bc3js.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ogorhc/bc3js/issues"
+  },
+  "homepage": "https://github.com/ogorhc/bc3js#readme",
+  "devDependencies": {
+    "@changesets/cli": "^2.29.8",
+    "prettier": "^3.7.4",
+    "tsup": "^8.5.1",
+    "typescript": "^5.9.3"
   }
 }
