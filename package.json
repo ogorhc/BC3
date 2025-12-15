@@ -31,12 +31,12 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ogorhc/bc3js.git"
+    "url": "git+https://github.com/ogorhc/bc3.git"
   },
   "bugs": {
-    "url": "https://github.com/ogorhc/bc3js/issues"
+    "url": "https://github.com/ogorhc/bc3/issues"
   },
-  "homepage": "https://github.com/ogorhc/bc3js#readme",
+  "homepage": "https://github.com/ogorhc/bc3#readme",
   "devDependencies": {
     "@changesets/cli": "^2.29.8",
     "prettier": "^3.7.4",
