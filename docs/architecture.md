@@ -1,8 +1,8 @@
-# Architecture Overview — BC3js
+# Architecture Overview — BC3
 
 ## 1. Purpose
 
-BC3js aims to parse FIEBDC-3 / BC3 files and produce a strongly-typed
+BC3 aims to parse FIEBDC-3 / BC3 files and produce a strongly-typed
 hierarchical in-memory model.
 
 ## 2. High-Level Design

@@ -1,6 +1,6 @@
-# BC3js
+# BC3
 
-**BC3js** is an open-source TypeScript library for parsing and modeling FIEBDC-3 / BC3
+**BC3** is an open-source TypeScript library for parsing and modeling FIEBDC-3 / BC3
 construction database files.
 
 This repository provides the core parsing architecture and the hierarchical

@@ -1,4 +1,4 @@
-# Roadmap — BC3js
+# Roadmap — BC3
 
 ### Phase 0 — Planning
 
