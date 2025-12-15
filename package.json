@@ -1,5 +1,5 @@
 {
-  "name": "bc3js",
+  "name": "bc3",
   "version": "0.0.2",
   "description": "Parser and hierarchical model for FIEBDC-3 BC3 files.",
   "main": "dist/index.js",
