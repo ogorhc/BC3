@@ -1,5 +1,11 @@
 # bc3
 
+## 0.0.4
+
+### Patch Changes
+
+- 51470b1: Update references from bc3js to bc3 in documentation and package files
+
 ## 0.0.3
 
 ### Patch Changes
