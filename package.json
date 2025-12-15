@@ -12,7 +12,7 @@
   },
   "homepage": "https://github.com/ogorhc/bc3#readme",
   "version": "0.0.4",
-  "main": "dist/index.cjs",
+  "main": "dist/index.js",
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
   "exports": {
@@ -34,9 +34,7 @@
     "check-format": "prettier --check .",
     "changeset": "changeset",
     "version-packages": "changeset version",
-    "publish:changesets": "changeset publish",
-    "prepare": "husky",
-    "check": "npm run check-format"
+    "local-release": "changeset version && changeset publish"
   },
   "keywords": [
     "bc3",
@@ -48,15 +46,8 @@
   ],
   "devDependencies": {
     "@changesets/cli": "^2.29.8",
-    "husky": "9.1.7",
-    "lint-staged": "16.2.7",
     "prettier": "^3.7.4",
     "tsup": "8.5.1",
     "typescript": "5.9.3"
-  },
-  "lint-staged": {
-    "*.{ts,tsx,js,jsx,json,md,yml,yaml}": [
-      "prettier --write"
-    ]
   }
 }
