@@ -1,0 +1,17 @@
+{
+  "name": "bc3js",
+  "version": "0.0.1",
+  "description": "Parser and hierarchical model for FIEBDC-3 BC3 files.",
+  "author": "Igor HC (ogorhc)",
+  "license": "MIT",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup src/index.ts --dts",
+    "clean": "rm -rf dist"
+  }
+}
