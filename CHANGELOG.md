@@ -1,5 +1,23 @@
 # bc3
 
+## 0.1.1
+
+### Patch Changes
+
+- c8ea108: docs: add core domain model documentation for BC3 entities
+- f7e409a: docs: add module boundaries and folder structure documentation for BC3 project
+- 044a0ca: docs: update README with architecture documentation and usage examples
+- 4c6a711: chore: use npm ci for consistent dependency installation in CI
+- 71f954e: docs: move issue templates for bug reports, documentation, and feature requests
+- b478ade: docs: add documentation for BC3 parsing modes, including strict and lenient behaviors
+- eb00468: chore: add pull request template for consistent PR submissions
+- a15b900: docs: add BC3 grammar rules documentation for tokenization and parsing
+- 147e4f7: docs: add public API contract documentation for BC3 library
+- c2c7d33: docs: update README to reflect early development status, installation instructions, and usage examples
+- 69100bc: docs: add design patterns documentation for BC3 parsing architecture
+- 7705904: docs: add contributing guidelines for BC3 project
+- 0d0faee: docs: add issue templates for bug reports, documentation, and feature requests
+
 ## 0.1.0
 
 ### Minor Changes
