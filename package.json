@@ -1,32 +1,6 @@
 {
   "name": "bc3",
-  "version": "0.0.4",
   "description": "Parser and hierarchical model for FIEBDC-3 BC3 files.",
-  "main": "dist/index.js",
-  "module": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "files": [
-    "dist"
-  ],
-  "scripts": {
-    "ci": "npm run build && npm run check-format",
-    "build": "tsup src/index.ts --dts",
-    "clean": "rm -rf dist",
-    "prepublishOnly": "npm run ci",
-    "format": "prettier --write .",
-    "check-format": "prettier --check .",
-    "changeset": "changeset",
-    "version-packages": "changeset version",
-    "local-release": "changeset version && changeset publish"
-  },
-  "keywords": [
-    "bc3",
-    "parser",
-    "construction",
-    "fiebdc",
-    "ts",
-    "library"
-  ],
   "author": "Igor HC (ogorhc)",
   "license": "MIT",
   "repository": {
@@ -37,10 +11,52 @@
     "url": "https://github.com/ogorhc/bc3/issues"
   },
   "homepage": "https://github.com/ogorhc/bc3#readme",
+  "version": "0.1.0",
+  "main": "dist/index.cjs",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "ci": "npm run build && npm run check-format",
+    "build": "tsup src/index.ts --format esm,cjs --dts --sourcemap --clean",
+    "clean": "rm -rf dist",
+    "prepublishOnly": "npm run ci",
+    "format": "prettier --write .",
+    "check-format": "prettier --check .",
+    "changeset": "changeset",
+    "version-packages": "changeset version",
+    "publish:changesets": "changeset publish",
+    "prepare": "husky",
+    "check": "npm run check-format"
+  },
+  "keywords": [
+    "bc3",
+    "parser",
+    "construction",
+    "fiebdc",
+    "ts",
+    "library"
+  ],
   "devDependencies": {
     "@changesets/cli": "^2.29.8",
+    "husky": "9.1.7",
+    "lint-staged": "16.2.7",
     "prettier": "^3.7.4",
-    "tsup": "^8.5.1",
-    "typescript": "^5.9.3"
+    "tsup": "8.5.1",
+    "typescript": "5.9.3"
+  },
+  "lint-staged": {
+    "*.{ts,tsx,js,jsx,json,md,yml,yaml}": [
+      "prettier --write"
+    ]
   }
 }
