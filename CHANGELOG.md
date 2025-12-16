@@ -1,5 +1,18 @@
 # bc3
 
+## 0.1.0
+
+### Minor Changes
+
+- b433b17: first minor version to check the workflow
+
+### Patch Changes
+
+- 09bb5b5: add release process markdown file
+- df4cb17: add additional metadada and build script implementation
+- 4a21874: add base config files
+- 958ba81: chore: add husky dependency and release yml to automatic versioning
+
 ## 0.0.4
 
 ### Patch Changes
