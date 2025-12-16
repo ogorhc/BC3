@@ -1,0 +1,28 @@
+name: Documentation
+description: Documentation improvements or additions
+title: "[Docs]: "
+labels: ["docs"]
+assignees:
+  - ogorhc
+
+body:
+  - type: textarea
+    id: scope
+    attributes:
+      label: Documentation scope
+      description: What should be documented or improved?
+    validations:
+      required: true
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Context / Motivation
+      description: Why is this needed?
+
+  - type: checkboxes
+    id: workflow
+    attributes:
+      label: Workflow
+      options:
+        - label: This issue is ready to be added to the project backlog
