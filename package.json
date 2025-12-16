@@ -35,7 +35,7 @@
     "changeset": "changeset",
     "version-packages": "changeset version",
     "publish:changesets": "changeset publish",
-    "prepare": "husky",
+    "prepare": "test \"$CI\" = \"true\" || husky",
     "check": "npm run check-format"
   },
   "keywords": [
