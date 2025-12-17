@@ -12,6 +12,7 @@
   },
   "homepage": "https://github.com/ogorhc/bc3#readme",
   "version": "0.1.1",
+  "type": "module",
   "main": "dist/index.cjs",
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
