@@ -2,7 +2,7 @@ import { BC3Document } from '../domain/BC3Document';
 
 import { Diagnostic } from '../domain/types';
 import { ImporterSource } from '../importers';
-import { BC3DocumentData } from '../parsing/dispatch/parsers/types/BC3DocumentData';
+
 import {
   CodeChangeInput,
   ConceptInput,
@@ -12,6 +12,7 @@ import {
   TextInput,
   VersionPropertyInput,
 } from '../parsing/dispatch/parsers/types/Parsers';
+import { BC3ParseStore } from './BC3ParseStore';
 
 export class BC3Builder {
   private source: ImporterSource | null = null;
@@ -111,32 +112,41 @@ export class BC3Builder {
     }
     this.texts = newTexts;
 
-    // Measurements rawCode remap (si rawCode incluye PADRE\HIJO, esto será más avanzado luego)
-    this.measurements = this.measurements.map((m) => {
-      const mapped = this.codeChanges.get(m.rawCode) ?? m.rawCode;
-      return mapped ? { ...m, rawCode: mapped } : m;
-    });
+    this.measurements = this.measurements.map((m) => ({
+      ...m,
+      rawCode: this.remapRelation(m.rawCode),
+    }));
   }
 
-  build(): BC3Document {
-    if (!this.source || this.raw === null || !this.diagnostics) {
-      throw new Error('BC3Builder.build() called before init().');
-    }
+  private remapCode(code: string): string {
+    const mapped = this.codeChanges.get(code);
+    return mapped === undefined ? code : mapped;
+  }
 
-    const data: BC3DocumentData = {
+  private remapRelation(rawCode: string): string {
+    const parts = rawCode.split('\\');
+    if (parts.length === 1) return this.remapCode(rawCode);
+
+    const parent = this.remapCode(parts[0] ?? '');
+    const child = this.remapCode(parts[1] ?? '');
+
+    if (!parent) return child;
+    if (!child) return parent;
+    return `${parent}\\${child}`;
+  }
+
+  buildStore(): BC3ParseStore {
+    this.applyCodeChanges();
+    return new BC3ParseStore({
       source: this.source,
       raw: this.raw,
       diagnostics: this.diagnostics,
-
       meta: this.meta,
       decimals: this.decimals,
-
       concepts: this.concepts,
       decompositions: this.decompositions,
       texts: this.texts,
       measurements: this.measurements,
-    };
-    this.applyCodeChanges();
-    return new BC3Document(data);
+    });
   }
 }

@@ -32,7 +32,6 @@ export function parseBC3(args: {
   const dispatcher = new RecordDispatcher(createDefaultParsers());
   dispatcher.dispatch(records, ctx);
 
-  const document = ctx.builder.build();
-
-  return { document, diagnostics: ctx.diagnostics };
+  const store = ctx.builder.buildStore();
+  return { store, diagnostics: ctx.diagnostics };
 }

@@ -3,6 +3,7 @@ import { RawRecord } from '../../types/RawRecord';
 import { ParseContext } from '../types/ParseContext';
 import { MeasurementDetailInput, MeasurementInput } from './types/Parsers';
 import { RecordParser } from './types/RecordParser';
+import { parseDetails } from './helpers/parserDetails';
 
 export class NParser implements RecordParser {
   readonly type = 'N';
@@ -11,32 +12,34 @@ export class NParser implements RecordParser {
     const f = record.fields;
 
     const rawCode = f[0]?.[0] ?? '';
-    if (!isNonEmpty(rawCode)) return;
+    if (!isNonEmpty(rawCode)) {
+      ctx.diagnostics.push({
+        level: 'warn',
+        code: 'BC3_N_MISSING_CODE',
+        message: 'Record ~N without code in first field.',
+        recordIndex: record.index,
+        recordType: record.type,
+      });
+      return;
+    }
 
     const positions = (f[1] ?? []).map((x) => x.trim()).filter(isNonEmpty);
-    const total = f[2]?.[0] ?? undefined;
+
+    const totalRaw = f[2]?.[0];
+    const total = isNonEmpty(totalRaw) ? totalRaw : undefined;
 
     const detailRaw = f[3] ?? [];
-    const details: MeasurementDetailInput[] = [
-      {
-        type: detailRaw[0],
-        comment: detailRaw[1],
-        units: detailRaw[2],
-        length: detailRaw[3],
-        latitude: detailRaw[4],
-        height: detailRaw[5],
-        raw: detailRaw,
-      },
-    ];
+    const details = parseDetails(detailRaw);
 
-    const etiqueta = f[4]?.[0] ?? undefined;
+    const labelRaw = f[4]?.[0];
+    const label = isNonEmpty(labelRaw) ? labelRaw : undefined;
 
     const payload: MeasurementInput = {
       rawCode,
       positions,
-      total: isNonEmpty(total) ? total : undefined,
+      total,
       details,
-      label: isNonEmpty(etiqueta) ? etiqueta : undefined,
+      label,
       rawFields: f,
     };
 

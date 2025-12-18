@@ -1,17 +1,17 @@
-import { ImporterSource } from '../../../../importers';
+import { ImporterSource } from '../../importers';
 import {
   ConceptInput,
   DecompositionLineInput,
   KDecimalsInput,
   MeasurementInput,
   VersionPropertyInput,
-} from './Parsers';
-import { Diagnostic } from '../../../../domain/types/Diagnostic';
+} from '../../parsing/dispatch/parsers/types/Parsers';
+import { Diagnostic } from '../../domain/types/Diagnostic';
 
-export interface BC3DocumentData {
-  source: ImporterSource;
-  raw: string;
-  diagnostics: Diagnostic[];
+export interface BC3ParseStoreData {
+  source: ImporterSource | null;
+  raw: string | null;
+  diagnostics: Diagnostic[] | null;
 
   meta?: VersionPropertyInput;
   decimals?: KDecimalsInput;

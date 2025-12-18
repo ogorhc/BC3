@@ -26,7 +26,18 @@ export class RecordDispatcher {
         continue;
       }
 
-      parser.parse(record, ctx);
+      try {
+        parser.parse(record, ctx);
+      } catch (e) {
+        ctx.diagnostics.push({
+          level: 'error',
+          code: 'BC3_PARSER_ERROR',
+          message: e instanceof Error ? e.message : String(e),
+          recordIndex: record.index,
+          recordType: record.type,
+        });
+        if (ctx.options.mode === 'strict') throw e;
+      }
     }
   }
 }
