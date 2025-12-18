@@ -106,7 +106,7 @@ function buildRawRecord(args: {
   const type = raw[1] ?? '';
   if (!type && !lenient) return null;
 
-  const body = raw.slice(2);
+  const body = raw.slice(3);
   const normalizedBody = trimBoth ? trimStartWs(body) : body;
   const fields = parseFields(normalizedBody, trimBoth);
 

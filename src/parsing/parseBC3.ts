@@ -1,8 +1,12 @@
 import { ParseOptions, ParseResult } from '../api/types/PublicApi';
-import { BC3Document, Diagnostic } from '../domain';
+import { BC3Builder } from '../builder/BC3Builder';
+import { Diagnostic } from '../domain';
 import { ImporterSource } from '../importers';
+import { DefaultTokenizer } from './DefaultTokenizer';
+import { RecordDispatcher } from './dispatch/RecordDispatcher';
+import { createParseContext } from './dispatch/createParseContext';
+import { createDefaultParsers } from './dispatch/parsers/createDefaultParsers';
 
-//TODO: Implement tokenizer, dispatcher, and strategies
 export function parseBC3(args: {
   source: ImporterSource;
   content: string;
@@ -10,19 +14,25 @@ export function parseBC3(args: {
 }): ParseResult {
   const diagnostics: Diagnostic[] = [];
 
-  if (!args.content.includes('~')) {
-    diagnostics.push({
-      level: 'warn',
-      code: 'BC3_NO_RECORD_DELIMITER',
-      message: 'Input does not contain any "~" record delimiter.',
-    });
-  }
+  const tokenizer = new DefaultTokenizer();
+  const records = tokenizer.tokenize(args.content, {
+    lenient: (args.options.mode ?? 'lenient') !== 'strict',
+    trimAroundSeparators: true,
+  });
 
-  const document = new BC3Document({
-    source: args.source,
-    raw: args.content,
+  const builder = new BC3Builder();
+  builder.init({ source: args.source, raw: args.content, diagnostics });
+
+  const ctx = createParseContext({
+    builder,
+    options: args.options,
     diagnostics,
   });
 
-  return { document, diagnostics };
+  const dispatcher = new RecordDispatcher(createDefaultParsers());
+  dispatcher.dispatch(records, ctx);
+
+  const document = ctx.builder.build();
+
+  return { document, diagnostics: ctx.diagnostics };
 }
