@@ -27,6 +27,8 @@
     "dist"
   ],
   "scripts": {
+    "dev:build": "tsup src/index.ts --format esm,cjs --dts --sourcemap --clean --watch",
+    "dev:tokenize": " npm run build && node scripts/tokenize.mjs ./scripts/file.bc3",
     "ci": "npm run build && npm run check-format",
     "build": "tsup src/index.ts --format esm,cjs --dts --sourcemap --clean",
     "clean": "rm -rf dist",

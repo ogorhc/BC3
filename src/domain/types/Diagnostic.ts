@@ -5,4 +5,5 @@ export interface Diagnostic {
   message: string;
   code?: string;
   recordIndex?: number;
+  recordType?: string;
 }
