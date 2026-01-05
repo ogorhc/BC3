@@ -1,6 +1,9 @@
 import { Attachment } from './Attachment';
 import { Decomposition } from './Decomposition';
+import { ITCodes } from './ITCode';
 import { Measurement } from './Measurement';
+import { Specification } from './Specification';
+import { Thesaurus } from './Thesaurus';
 import { Concept } from './types/Concept';
 
 /**
@@ -8,7 +11,7 @@ import { Concept } from './types/Concept';
  *
  * It uses the Composite pattern to represent chapters, subchapters, and items uniformly.
  * Each node can have children (forming the hierarchy) and associated measurements,
- * decompositions, and attachments.
+ * decompositions, attachments, pliegos, IT codes, and thesaurus.
  */
 export class ConceptNode {
   readonly concept: Concept;
@@ -16,6 +19,9 @@ export class ConceptNode {
   readonly measurements: Measurement[] = [];
   readonly decompositions: Decomposition[] = [];
   readonly attachments: Attachment[] = [];
+  specification?: Specification;
+  itCodes?: ITCodes;
+  thesaurus?: Thesaurus;
 
   constructor(concept: Concept) {
     this.concept = concept;
@@ -47,5 +53,26 @@ export class ConceptNode {
    */
   addAttachment(attachment: Attachment): void {
     this.attachments.push(attachment);
+  }
+
+  /**
+   * Sets the specification for this node.
+   */
+  setSpecification(specification: Specification): void {
+    this.specification = specification;
+  }
+
+  /**
+   * Sets the IT codes for this node.
+   */
+  setITCodes(itCodes: ITCodes): void {
+    this.itCodes = itCodes;
+  }
+
+  /**
+   * Sets the thesaurus for this node.
+   */
+  setThesaurus(thesaurus: Thesaurus): void {
+    this.thesaurus = thesaurus;
   }
 }

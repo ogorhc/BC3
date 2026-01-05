@@ -2,13 +2,17 @@ import { Diagnostic } from '../domain/types';
 import { ImporterSource } from '../importers';
 
 import {
+  AInput,
   CodeChangeInput,
   ConceptInput,
   DecompositionInput,
+  EInput,
   KDecimalsInput,
+  LInput,
   MeasurementInput,
   TextInput,
   VersionPropertyInput,
+  XInput,
 } from '../parsing/dispatch/parsers/types/Parsers';
 import { BC3ParseStore } from './BC3ParseStore';
 import { ParseNode } from './store/ParseNode';
@@ -26,6 +30,13 @@ export class BC3Builder {
   private decompositions: Map<string, DecompositionInput['lines']> = new Map();
   private texts: Map<string, string> = new Map();
   private measurements: MeasurementInput[] = [];
+
+  private pliegos: Map<string, LInput> = new Map(); // conceptCode -> LInput
+  private pliegosDictionary: LInput | undefined; // dictionary mode (no conceptCode)
+  private itCodes: Map<string, XInput> = new Map(); // conceptCode -> XInput
+  private itCodesDictionary: XInput | undefined; // dictionary mode
+  private entities: Map<string, EInput> = new Map(); // entityCode -> EInput
+  private thesaurus: Map<string, AInput> = new Map(); // conceptCode -> AInput
 
   private codeChanges: Map<string, string> = new Map();
 
@@ -76,6 +87,30 @@ export class BC3Builder {
 
   onB(input: CodeChangeInput): void {
     this.codeChanges.set(input.from, input.to ?? '');
+  }
+
+  onL(input: LInput): void {
+    if (input.conceptCode) {
+      this.pliegos.set(input.conceptCode, input);
+    } else {
+      this.pliegosDictionary = input;
+    }
+  }
+
+  onX(input: XInput): void {
+    if (input.conceptCode) {
+      this.itCodes.set(input.conceptCode, input);
+    } else {
+      this.itCodesDictionary = input;
+    }
+  }
+
+  onE(input: EInput): void {
+    this.entities.set(input.entityCode, input);
+  }
+
+  onA(input: AInput): void {
+    this.thesaurus.set(input.conceptCode, input);
   }
 
   private applyCodeChanges(): void {
@@ -228,6 +263,12 @@ export class BC3Builder {
       decompositions: this.decompositions,
       texts: this.texts,
       measurements: this.measurements,
+      pliegos: this.pliegos,
+      pliegosDictionary: this.pliegosDictionary,
+      itCodes: this.itCodes,
+      itCodesDictionary: this.itCodesDictionary,
+      entities: this.entities,
+      thesaurus: this.thesaurus,
       nodes,
       roots,
     });

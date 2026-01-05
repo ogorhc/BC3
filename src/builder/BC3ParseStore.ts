@@ -14,6 +14,14 @@ export class BC3ParseStore {
   readonly texts: BC3ParseStoreData['texts'];
   readonly measurements: BC3ParseStoreData['measurements'];
 
+  // Phase 5: Extended records
+  readonly pliegos: BC3ParseStoreData['pliegos'];
+  readonly pliegosDictionary: BC3ParseStoreData['pliegosDictionary'];
+  readonly itCodes: BC3ParseStoreData['itCodes'];
+  readonly itCodesDictionary: BC3ParseStoreData['itCodesDictionary'];
+  readonly entities: BC3ParseStoreData['entities'];
+  readonly thesaurus: BC3ParseStoreData['thesaurus'];
+
   /** Map of normalized codes to ParseNode */
   readonly nodes: Map<string, ParseNode>;
   /** Array of root node codes (concepts without parents) */
@@ -31,6 +39,13 @@ export class BC3ParseStore {
     this.decompositions = data.decompositions;
     this.texts = data.texts;
     this.measurements = data.measurements;
+
+    this.pliegos = data.pliegos ?? new Map();
+    this.pliegosDictionary = data.pliegosDictionary;
+    this.itCodes = data.itCodes ?? new Map();
+    this.itCodesDictionary = data.itCodesDictionary;
+    this.entities = data.entities ?? new Map();
+    this.thesaurus = data.thesaurus ?? new Map();
 
     // Initialize nodes and roots from data or empty
     this.nodes = data.nodes ?? new Map();
