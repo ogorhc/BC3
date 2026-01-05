@@ -1,5 +1,11 @@
 # bc3
 
+## 0.4.0
+
+### Minor Changes
+
+- c4757e4: add rest of the records and parse to domain
+
 ## 0.3.0
 
 ### Minor Changes
