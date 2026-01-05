@@ -2,7 +2,14 @@ import { Attachment } from '../../domain/Attachment';
 import { BC3Document } from '../../domain/BC3Document';
 import { ConceptNode } from '../../domain/ConceptNode';
 import { Decomposition } from '../../domain/Decomposition';
+import { Entity, EntityContact } from '../../domain/Entity';
+import { ITCode, ITCodes } from '../../domain/ITCode';
 import { Measurement, MeasurementDetail } from '../../domain/Measurement';
+import {
+  Specification,
+  SpecificationSection,
+} from '../../domain/Specification';
+import { Thesaurus } from '../../domain/Thesaurus';
 import { Concept } from '../../domain/types/Concept';
 import { BC3ParseStore } from '../BC3ParseStore';
 import { normalizeCode } from '../store/normalizeCode';
@@ -146,6 +153,129 @@ export class DomainAssembler {
       }
     }
 
+    // Sixth pass: build and associate Specifications
+    for (const [conceptCode, lInput] of store.pliegos.entries()) {
+      const normalizedCode = normalizeCode(conceptCode);
+      const node = conceptNodes.get(normalizedCode);
+      if (!node) continue;
+
+      const sections = lInput.sections.map(
+        (s) =>
+          new SpecificationSection({
+            sectionCode: s.sectionCode,
+            sectionLabel: s.sectionLabel,
+            text: s.text,
+            rtfFile: s.rtfFile,
+            htmFile: s.htmFile,
+          }),
+      );
+
+      const specification = new Specification({
+        conceptCode: normalizedCode,
+        sections,
+      });
+
+      node.setSpecification(specification);
+    }
+
+    // Seventh pass: build and associate IT Codes
+    for (const [conceptCode, xInput] of store.itCodes.entries()) {
+      const normalizedCode = normalizeCode(conceptCode);
+      const node = conceptNodes.get(normalizedCode);
+      if (!node) continue;
+
+      const items = xInput.items.map(
+        (item) =>
+          new ITCode({
+            itCode: item.itCode,
+            description: item.description,
+            unit: item.unit,
+            value: item.value,
+          }),
+      );
+
+      const itCodes = new ITCodes({
+        conceptCode: normalizedCode,
+        items,
+      });
+
+      node.setITCodes(itCodes);
+    }
+
+    // Eighth pass: build and associate Thesaurus
+    for (const [conceptCode, aInput] of store.thesaurus.entries()) {
+      const normalizedCode = normalizeCode(conceptCode);
+      const node = conceptNodes.get(normalizedCode);
+      if (!node) continue;
+
+      const thesaurus = new Thesaurus({
+        conceptCode: normalizedCode,
+        keys: aInput.thesaurusKeys,
+      });
+
+      node.setThesaurus(thesaurus);
+    }
+
+    // Build entities
+    const entities = new Map<string, Entity>();
+    for (const [entityCode, eInput] of store.entities.entries()) {
+      const entity = new Entity({
+        entityCode,
+        summary: eInput.summary,
+        name: eInput.name,
+        contact: eInput.contact
+          ? new EntityContact({
+              type: eInput.contact.type,
+              subname: eInput.contact.subname,
+              address: eInput.contact.address,
+              postalCode: eInput.contact.postalCode,
+              city: eInput.contact.city,
+              province: eInput.contact.province,
+              country: eInput.contact.country,
+              phones: eInput.contact.phones,
+              faxes: eInput.contact.faxes,
+              contacts: eInput.contact.contacts,
+            })
+          : undefined,
+        cif: eInput.cif,
+        web: eInput.web,
+        email: eInput.email,
+      });
+
+      entities.set(entityCode, entity);
+    }
+
+    // Build specifications dictionary
+    const specificationsDictionary = store.pliegosDictionary
+      ? new Specification({
+          sections: store.pliegosDictionary.sections.map(
+            (s) =>
+              new SpecificationSection({
+                sectionCode: s.sectionCode,
+                sectionLabel: s.sectionLabel,
+                text: s.text,
+                rtfFile: s.rtfFile,
+                htmFile: s.htmFile,
+              }),
+          ),
+        })
+      : undefined;
+
+    // Build IT codes dictionary
+    const itCodesDictionary = store.itCodesDictionary
+      ? new ITCodes({
+          items: store.itCodesDictionary.items.map(
+            (item) =>
+              new ITCode({
+                itCode: item.itCode,
+                description: item.description,
+                unit: item.unit,
+                value: item.value,
+              }),
+          ),
+        })
+      : undefined;
+
     // Build metadata from ~V record
     const metadata = store.meta
       ? {
@@ -168,6 +298,9 @@ export class DomainAssembler {
       metadata,
       roots: rootNodes,
       conceptsByCode: conceptNodes,
+      entities,
+      specificationsDictionary,
+      itCodesDictionary,
       diagnostics: store.diagnostics ?? [],
     });
   }
