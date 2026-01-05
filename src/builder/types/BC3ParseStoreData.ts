@@ -7,6 +7,7 @@ import {
   VersionPropertyInput,
 } from '../../parsing/dispatch/parsers/types/Parsers';
 import { Diagnostic } from '../../domain/types/Diagnostic';
+import { ParseNode } from '../store/ParseNode';
 
 export interface BC3ParseStoreData {
   source: ImporterSource | null;
@@ -20,4 +21,7 @@ export interface BC3ParseStoreData {
   decompositions: Map<string, DecompositionLineInput[]>;
   texts: Map<string, string>;
   measurements: MeasurementInput[];
+
+  nodes?: Map<string, ParseNode>;
+  roots?: string[];
 }

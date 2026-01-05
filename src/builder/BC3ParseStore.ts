@@ -1,3 +1,4 @@
+import { ParseNode } from './store/ParseNode';
 import { BC3ParseStoreData } from './types/BC3ParseStoreData';
 
 export class BC3ParseStore {
@@ -13,6 +14,11 @@ export class BC3ParseStore {
   readonly texts: BC3ParseStoreData['texts'];
   readonly measurements: BC3ParseStoreData['measurements'];
 
+  /** Map of normalized codes to ParseNode */
+  readonly nodes: Map<string, ParseNode>;
+  /** Array of root node codes (concepts without parents) */
+  readonly roots: string[];
+
   constructor(data: BC3ParseStoreData) {
     this.source = data.source;
     this.raw = data.raw;
@@ -25,5 +31,9 @@ export class BC3ParseStore {
     this.decompositions = data.decompositions;
     this.texts = data.texts;
     this.measurements = data.measurements;
+
+    // Initialize nodes and roots from data or empty
+    this.nodes = data.nodes ?? new Map();
+    this.roots = data.roots ?? [];
   }
 }
