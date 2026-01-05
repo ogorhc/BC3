@@ -1,5 +1,8 @@
 import { Attachment } from './Attachment';
 import { ConceptNode } from './ConceptNode';
+import { Entity } from './Entity';
+import { ITCodes } from './ITCode';
+import { Specification } from './Specification';
 import { Diagnostic } from './types';
 
 /**
@@ -42,6 +45,15 @@ export class BC3Document {
   /** Global attachments (not tied to specific concepts) */
   readonly attachments: Attachment[];
 
+  /** Entities (companies, persons, etc.) */
+  readonly entities: Map<string, Entity>;
+
+  /** Specifications dictionary (sections definitions) */
+  readonly specificationsDictionary?: Specification;
+
+  /** IT codes dictionary (IT codes definitions) */
+  readonly itCodesDictionary?: ITCodes;
+
   /** Diagnostics collected during parsing */
   readonly diagnostics: Diagnostic[];
 
@@ -50,12 +62,18 @@ export class BC3Document {
     roots: ConceptNode[];
     conceptsByCode: Map<string, ConceptNode>;
     attachments?: Attachment[];
+    entities?: Map<string, Entity>;
+    specificationsDictionary?: Specification;
+    itCodesDictionary?: ITCodes;
     diagnostics: Diagnostic[];
   }) {
     this.metadata = args.metadata;
     this.roots = args.roots;
     this.conceptsByCode = args.conceptsByCode;
     this.attachments = args.attachments ?? [];
+    this.entities = args.entities ?? new Map();
+    this.specificationsDictionary = args.specificationsDictionary;
+    this.itCodesDictionary = args.itCodesDictionary;
     this.diagnostics = args.diagnostics;
   }
 

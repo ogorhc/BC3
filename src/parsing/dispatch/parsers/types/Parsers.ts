@@ -72,6 +72,59 @@ export interface MeasurementInput {
 
 export interface CodeChangeInput {
   from: string;
-  to?: string; // undefined => “eliminar/no definido”
+  to?: string; // undefined => "eliminar/no definido"
   rawFields: string[][];
+}
+
+export interface SpecificationSectionInput {
+  sectionCode: string;
+  sectionLabel?: string;
+  text?: string;
+  rtfFile?: string;
+  htmFile?: string;
+}
+
+export interface LInput {
+  conceptCode?: string; // undefined = dictionary mode
+  sections: SpecificationSectionInput[];
+}
+
+export interface ITCodeInput {
+  itCode: string;
+  description?: string;
+  unit?: string;
+  value?: string;
+}
+
+export interface XInput {
+  conceptCode?: string; // undefined = dictionary mode
+  items: ITCodeInput[];
+}
+
+export interface EntityContactInput {
+  type?: string;
+  subname?: string;
+  address?: string;
+  postalCode?: string;
+  city?: string;
+  province?: string;
+  country?: string;
+  phones: string[];
+  faxes: string[];
+  contacts: string[];
+}
+
+export interface EInput {
+  entityCode: string;
+  summary?: string;
+  name?: string;
+  contact?: EntityContactInput;
+  cif?: string;
+  web?: string;
+  email?: string;
+}
+
+export interface AInput {
+  conceptCode: string;
+  thesaurusKeys: string[];
 }

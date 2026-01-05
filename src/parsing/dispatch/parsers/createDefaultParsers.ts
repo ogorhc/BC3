@@ -1,14 +1,18 @@
+import { AParser } from './AParser';
+import { BParser } from './BParser';
 import { CParser } from './CParser';
 import { DParser } from './DParser';
+import { EParser } from './EParser';
 import { KParser } from './KParser';
+import { LParser } from './LParser';
 import { MParser } from './MParser';
-import { TParser } from './TParser';
+import { NParser } from './NParser';
 import { RecordParser } from './types/RecordParser';
+import { TParser } from './TParser';
 import { UnknownRecordParser } from './UnknownRecordParser';
 import { VParser } from './VParser';
-import { BParser } from './BParser';
+import { XParser } from './XParser';
 import { YParser } from './YParser';
-import { NParser } from './NParser';
 
 export function createDefaultParsers(): RecordParser[] {
   return [
@@ -21,6 +25,10 @@ export function createDefaultParsers(): RecordParser[] {
     new NParser(),
     new BParser(),
     new YParser(),
+    new LParser(),
+    new XParser(),
+    new EParser(),
+    new AParser(),
     new UnknownRecordParser(),
   ];
 }
