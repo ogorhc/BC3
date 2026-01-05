@@ -1,8 +1,9 @@
 import { ParseOptions, ParseResult } from '../api/types/PublicApi';
 import { BC3Builder } from '../builder/BC3Builder';
+import { DomainAssembler } from '../builder/assemblers/DomainAssembler';
 import { Diagnostic } from '../domain';
 import { ImporterSource } from '../importers';
-import { DefaultTokenizer } from './DefaultTokenizer';
+import { Tokenizer } from './Tokenizer';
 import { RecordDispatcher } from './dispatch/RecordDispatcher';
 import { createParseContext } from './dispatch/createParseContext';
 import { createDefaultParsers } from './dispatch/parsers/createDefaultParsers';
@@ -14,7 +15,7 @@ export function parseBC3(args: {
 }): ParseResult {
   const diagnostics: Diagnostic[] = [];
 
-  const tokenizer = new DefaultTokenizer();
+  const tokenizer = new Tokenizer();
   const records = tokenizer.tokenize(args.content, {
     lenient: (args.options.mode ?? 'lenient') !== 'strict',
     trimAroundSeparators: true,
@@ -32,6 +33,12 @@ export function parseBC3(args: {
   const dispatcher = new RecordDispatcher(createDefaultParsers());
   dispatcher.dispatch(records, ctx);
 
+  // Build parse store (parsing layer ends here)
   const store = ctx.builder.buildStore();
-  return { store, diagnostics: ctx.diagnostics };
+
+  // Build domain document (domain layer starts here)
+  // This happens AFTER hierarchy is assembled in buildStore()
+  const document = DomainAssembler.buildDocument(store);
+
+  return { document, store, diagnostics: ctx.diagnostics };
 }

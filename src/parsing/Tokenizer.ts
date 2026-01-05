@@ -1,5 +1,8 @@
 import { RawRecord } from './types/RawRecord';
-import { Tokenizer, TokenizerOptions } from './types/Tokenizer';
+import {
+  TokenizerInterface,
+  TokenizerOptions,
+} from './types/TokenizerInterface';
 
 //EOF End-Of-File
 const EOF_MARKER = '\x1a';
@@ -113,7 +116,7 @@ function buildRawRecord(args: {
   return { type, index, raw, fields };
 }
 
-export class DefaultTokenizer implements Tokenizer {
+export class Tokenizer implements TokenizerInterface {
   tokenize(input: string, options: TokenizerOptions = {}): RawRecord[] {
     const trimBoth = options.trimAroundSeparators ?? true;
     const lenient = options.lenient ?? true;

@@ -1,1 +1,1 @@
-export * from './DefaultTokenizer';
+export * from './Tokenizer';

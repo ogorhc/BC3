@@ -1,5 +1,18 @@
 # bc3
 
+## 0.4.0
+
+### Minor Changes
+
+- c4757e4: add rest of the records and parse to domain
+
+## 0.3.0
+
+### Minor Changes
+
+- 39e6584: assemble hierarche with parsers
+- 6fea8ee: add domain classes and convert parsers tree to domain tree
+
 ## 0.2.0
 
 ### Minor Changes

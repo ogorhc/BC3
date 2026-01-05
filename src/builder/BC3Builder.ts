@@ -1,18 +1,22 @@
-import { BC3Document } from '../domain/BC3Document';
-
 import { Diagnostic } from '../domain/types';
 import { ImporterSource } from '../importers';
 
 import {
+  AInput,
   CodeChangeInput,
   ConceptInput,
   DecompositionInput,
+  EInput,
   KDecimalsInput,
+  LInput,
   MeasurementInput,
   TextInput,
   VersionPropertyInput,
+  XInput,
 } from '../parsing/dispatch/parsers/types/Parsers';
 import { BC3ParseStore } from './BC3ParseStore';
+import { ParseNode } from './store/ParseNode';
+import { normalizeCode } from './store/normalizeCode';
 
 export class BC3Builder {
   private source: ImporterSource | null = null;
@@ -26,6 +30,13 @@ export class BC3Builder {
   private decompositions: Map<string, DecompositionInput['lines']> = new Map();
   private texts: Map<string, string> = new Map();
   private measurements: MeasurementInput[] = [];
+
+  private pliegos: Map<string, LInput> = new Map(); // conceptCode -> LInput
+  private pliegosDictionary: LInput | undefined; // dictionary mode (no conceptCode)
+  private itCodes: Map<string, XInput> = new Map(); // conceptCode -> XInput
+  private itCodesDictionary: XInput | undefined; // dictionary mode
+  private entities: Map<string, EInput> = new Map(); // entityCode -> EInput
+  private thesaurus: Map<string, AInput> = new Map(); // conceptCode -> AInput
 
   private codeChanges: Map<string, string> = new Map();
 
@@ -76,6 +87,30 @@ export class BC3Builder {
 
   onB(input: CodeChangeInput): void {
     this.codeChanges.set(input.from, input.to ?? '');
+  }
+
+  onL(input: LInput): void {
+    if (input.conceptCode) {
+      this.pliegos.set(input.conceptCode, input);
+    } else {
+      this.pliegosDictionary = input;
+    }
+  }
+
+  onX(input: XInput): void {
+    if (input.conceptCode) {
+      this.itCodes.set(input.conceptCode, input);
+    } else {
+      this.itCodesDictionary = input;
+    }
+  }
+
+  onE(input: EInput): void {
+    this.entities.set(input.entityCode, input);
+  }
+
+  onA(input: AInput): void {
+    this.thesaurus.set(input.conceptCode, input);
   }
 
   private applyCodeChanges(): void {
@@ -135,8 +170,89 @@ export class BC3Builder {
     return `${parent}\\${child}`;
   }
 
+  /**
+   * Assembles the hierarchy from concepts and decompositions.
+   * Returns a map of normalized codes to ParseNode and an array of root codes.
+   */
+  private assembleHierarchy(): {
+    nodes: Map<string, ParseNode>;
+    roots: string[];
+  } {
+    const nodes = new Map<string, ParseNode>();
+    const childCodes = new Set<string>();
+
+    // First pass: create nodes for all concepts
+    for (const [code, concept] of this.concepts.entries()) {
+      const normalized = normalizeCode(code);
+      const text = this.texts.get(code);
+
+      const node: ParseNode = {
+        code: normalized,
+        concept,
+        parentCode: null,
+        childCodes: [],
+        text,
+      };
+
+      nodes.set(normalized, node);
+    }
+
+    // Second pass: establish parent-child relationships from decompositions
+    for (const [parentCode, lines] of this.decompositions.entries()) {
+      const normalizedParent = normalizeCode(parentCode);
+      const parentNode = nodes.get(normalizedParent);
+
+      if (!parentNode) {
+        // Parent concept not found - will be reported as diagnostic later
+        continue;
+      }
+
+      for (const line of lines) {
+        const normalizedChild = normalizeCode(line.code);
+        const childNode = nodes.get(normalizedChild);
+
+        if (!childNode) {
+          // Child concept not found - will be reported as diagnostic later
+          continue;
+        }
+
+        // Establish relationship
+        parentNode.childCodes.push(normalizedChild);
+        childNode.parentCode = normalizedParent;
+        childCodes.add(normalizedChild);
+      }
+    }
+
+    // Third pass: identify roots (concepts without parents)
+    const roots: string[] = [];
+    for (const [code, node] of nodes.entries()) {
+      if (node.parentCode === null && !childCodes.has(code)) {
+        roots.push(code);
+      }
+    }
+
+    // If no roots found, create a synthetic root
+    if (roots.length === 0 && nodes.size > 0) {
+      const syntheticRootCode = '__ROOT__';
+      // Add all nodes without parents as children of synthetic root
+      for (const [code, node] of nodes.entries()) {
+        if (node.parentCode === null) {
+          roots.push(code);
+        }
+      }
+      // If still no roots, all nodes are orphans - add them all
+      if (roots.length === 0) {
+        roots.push(...Array.from(nodes.keys()));
+      }
+    }
+
+    return { nodes, roots };
+  }
+
   buildStore(): BC3ParseStore {
     this.applyCodeChanges();
+    const { nodes, roots } = this.assembleHierarchy();
+
     return new BC3ParseStore({
       source: this.source,
       raw: this.raw,
@@ -147,6 +263,14 @@ export class BC3Builder {
       decompositions: this.decompositions,
       texts: this.texts,
       measurements: this.measurements,
+      pliegos: this.pliegos,
+      pliegosDictionary: this.pliegosDictionary,
+      itCodes: this.itCodes,
+      itCodesDictionary: this.itCodesDictionary,
+      entities: this.entities,
+      thesaurus: this.thesaurus,
+      nodes,
+      roots,
     });
   }
 }

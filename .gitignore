@@ -24,4 +24,9 @@ Thumbs.db
 .vscode
 .idea
 
-scripts
+# scripts
+/scripts
+
+# rules
+/.cursor
+.cursorrules
