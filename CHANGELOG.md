@@ -1,5 +1,11 @@
 # bc3
 
+## 0.5.1
+
+### Patch Changes
+
+- dabe586: force release workflow
+
 ## 0.5.0
 
 ### Minor Changes

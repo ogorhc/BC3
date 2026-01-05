@@ -11,7 +11,7 @@
     "url": "https://github.com/ogorhc/bc3/issues"
   },
   "homepage": "https://github.com/ogorhc/bc3#readme",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "type": "module",
   "main": "dist/index.cjs",
   "module": "dist/index.js",
