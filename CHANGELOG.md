@@ -1,5 +1,11 @@
 # bc3
 
+## 0.5.0
+
+### Minor Changes
+
+- 7299c41: improve parent-child relationship
+
 ## 0.4.0
 
 ### Minor Changes
