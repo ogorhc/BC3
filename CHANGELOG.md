@@ -1,5 +1,17 @@
 # bc3
 
+## 0.2.0
+
+### Minor Changes
+
+- e58bb53: add first approach of the BC3 structure
+
+### Patch Changes
+
+- 005b584: Phase 2 finished
+- 005b584: Parsers first approach
+- 005b584: update MParser to be more robust
+
 ## 0.1.1
 
 ### Patch Changes
