@@ -15,6 +15,6 @@ export interface TokenizerOptions {
   lenient?: boolean;
 }
 
-export interface Tokenizer {
+export interface TokenizerInterface {
   tokenize(input: string, options: TokenizerOptions): RawRecord[];
 }
