@@ -59,6 +59,9 @@ export class DomainAssembler {
     }
 
     // Second pass: establish parent-child relationships in domain model
+    // IMPORTANT: In BC3, the same concept can appear multiple times in the tree
+    // (as a child of different parents). We reuse the same ConceptNode instance,
+    // but it will appear in multiple places in the tree structure.
     for (const [code, parseNode] of store.nodes.entries()) {
       const node = conceptNodes.get(code);
       if (!node) continue;
@@ -66,6 +69,7 @@ export class DomainAssembler {
       for (const childCode of parseNode.childCodes) {
         const childNode = conceptNodes.get(childCode);
         if (childNode) {
+          // Add the same child node instance - it can appear multiple times
           node.addChild(childNode);
         }
       }

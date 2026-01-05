@@ -75,4 +75,62 @@ export class ConceptNode {
   setThesaurus(thesaurus: Thesaurus): void {
     this.thesaurus = thesaurus;
   }
+
+  /**
+   * Checks if this node is a leaf (has no children).
+   */
+  isLeaf(): boolean {
+    return this.children.length === 0;
+  }
+
+  /**
+   * Gets the depth of this node in the tree.
+   * Requires walking up to root, so this is O(n) where n is tree height.
+   * For better performance, use BC3Document.getPathToConcept().
+   */
+  getDepth(findParent: (node: ConceptNode) => ConceptNode | undefined): number {
+    let depth = 0;
+    let current: ConceptNode | undefined = this;
+    const visited = new Set<ConceptNode>();
+
+    while (current) {
+      if (visited.has(current)) break; // Prevent infinite loops
+      visited.add(current);
+
+      const parent = findParent(current);
+      if (!parent) break;
+      depth++;
+      current = parent;
+    }
+
+    return depth;
+  }
+
+  /**
+   * Gets all descendant nodes (children, grandchildren, etc.) in depth-first order.
+   */
+  getAllDescendants(): ConceptNode[] {
+    const descendants: ConceptNode[] = [];
+
+    const collect = (node: ConceptNode) => {
+      for (const child of node.children) {
+        descendants.push(child);
+        collect(child);
+      }
+    };
+
+    collect(this);
+    return descendants;
+  }
+
+  /**
+   * Gets the total number of descendants (including all nested levels).
+   */
+  getDescendantCount(): number {
+    let count = 0;
+    for (const child of this.children) {
+      count += 1 + child.getDescendantCount();
+    }
+    return count;
+  }
 }

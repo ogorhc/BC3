@@ -46,24 +46,77 @@ export class DParser implements RecordParser {
       return;
     }
 
-    const lineFields = f.slice(1).filter((sub) => isNonEmpty(sub?.[0]));
+    // In BC3, a ~D record can have multiple children in a single field.
+    // Format: ~D | PARENT | CHILD1\FACTOR1\REND1\ CHILD2\FACTOR2\REND2\ ... |
+    // The tokenizer splits by \ so we get a flat array: [CHILD1, FACTOR1, REND1, CHILD2, FACTOR2, REND2, ...]
+    // We need to group them in triplets: (code, factor, performance)
+    const allFields = f.slice(1);
+    const lines: DecompositionLineInput[] = [];
 
-    const lines: DecompositionLineInput[] = lineFields.map((sub) => {
-      const code = sub[0]?.trim() ?? '';
-      const factor = sub[1]?.trim();
-      const performance = sub[2]?.trim();
+    for (const field of allFields) {
+      if (!field || field.length === 0) continue;
 
-      const { codes, raw } = parsePorcentajes(sub);
+      // Process the field in groups of 3: (code, factor, performance)
+      // Format: CODE\FACTOR\REND\CODE\FACTOR\REND\...
+      // After REND, there might be percentage codes before the next CODE
+      let i = 0;
+      while (i < field.length) {
+        const code = field[i]?.trim() ?? '';
+        if (!code) {
+          i++;
+          continue;
+        }
 
-      return {
-        code,
-        factor: isNonEmpty(factor) ? factor : undefined,
-        performance: isNonEmpty(performance) ? performance : undefined,
-        percentagesCodes: codes,
-        percentages: raw,
-        raw: sub,
-      };
-    });
+        const factor = field[i + 1]?.trim();
+        const performance = field[i + 2]?.trim();
+
+        // Look ahead to find where the next child code starts
+        // The next child code will be at position i+3+N where N is the number of percentage codes
+        // Percentage codes are typically alphanumeric (like "MEDAUX", "CI") or have special format
+        // Child codes are either numeric (like "311100") or have dots (like "I.LT04.01")
+        let percentageEnd = i + 3;
+        const percentageSub: string[] = [];
+
+        // Collect percentage codes until we find the next child code
+        while (percentageEnd < field.length) {
+          const elem = field[percentageEnd]?.trim();
+          if (!elem) break;
+
+          // Check if this element looks like a child code
+          // Child codes: numeric (6+ digits) or contain dots (like "I.LT04.01")
+          // Percentage codes: shorter alphanumeric strings
+          const looksLikeChildCode =
+            (elem.match(/^[0-9]{4,}$/) && elem.length >= 4) || // 4+ digit numbers are likely child codes
+            elem.includes('.') || // Codes with dots are child codes
+            elem.match(/^[A-Z]+\.[A-Z]/); // Pattern like "I.LT04"
+
+          if (looksLikeChildCode) {
+            // This is the next child code, stop collecting percentage codes
+            break;
+          }
+
+          // This looks like a percentage code
+          percentageSub.push(elem);
+          percentageEnd++;
+        }
+
+        const { codes, raw } = parsePorcentajes(
+          percentageSub.length > 0 ? ['', '', '', ...percentageSub] : [],
+        );
+
+        lines.push({
+          code,
+          factor: isNonEmpty(factor) ? factor : undefined,
+          performance: isNonEmpty(performance) ? performance : undefined,
+          percentagesCodes: codes,
+          percentagesRaw: raw,
+          raw: field.slice(i, percentageEnd),
+        });
+
+        // Move to next triplet: code + factor + performance + percentage codes
+        i = percentageEnd;
+      }
+    }
 
     const payload: DecompositionInput = { parent, lines };
     ctx.builder.onD(payload);

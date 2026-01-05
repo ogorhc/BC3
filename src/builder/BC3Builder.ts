@@ -204,6 +204,8 @@ export class BC3Builder {
 
       if (!parentNode) {
         // Parent concept not found - will be reported as diagnostic later
+        // This can happen if the parent code in the decomposition doesn't match
+        // the normalized code used when creating the concept node
         continue;
       }
 
@@ -217,7 +219,13 @@ export class BC3Builder {
         }
 
         // Establish relationship
+        // IMPORTANT: The same child can appear as a child of multiple parents.
+        // We add it to each parent's childCodes, and the same childNode instance
+        // will be added to multiple parents in the domain model.
         parentNode.childCodes.push(normalizedChild);
+        // Note: parentCode will be overwritten if the same child has multiple parents,
+        // but this is OK because we build the tree from parent->child relationships,
+        // not from child->parent relationships.
         childNode.parentCode = normalizedParent;
         childCodes.add(normalizedChild);
       }
