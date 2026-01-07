@@ -15,6 +15,19 @@ import { BC3ParseStore } from '../BC3ParseStore';
 import { normalizeCode } from '../store/normalizeCode';
 
 /**
+ * Parses a performance (rendimiento) value from BC3 format.
+ * In BC3, performance is stored as an integer with a dot as thousands separator.
+ * Example: "704.18" should be parsed as 70418 (not 704.18)
+ */
+function parsePerformance(value: string | undefined): number | undefined {
+  if (!value) return undefined;
+  // Remove dot (thousands separator) and parse as integer
+  const cleaned = value.replace(/\./g, '');
+  const parsed = parseInt(cleaned, 10);
+  return isNaN(parsed) ? undefined : parsed;
+}
+
+/**
  * DomainAssembler converts a BC3ParseStore (parsing layer) into a BC3Document (domain layer).
  *
  * This is the boundary between parsing and domain:
@@ -92,9 +105,7 @@ export class DomainAssembler {
           parentCode: normalizedParent,
           childCode: normalizedChild,
           factor: line.factor ? parseFloat(line.factor) : undefined,
-          performance: line.performance
-            ? parseFloat(line.performance)
-            : undefined,
+          performance: parsePerformance(line.performance),
           percentageCodes: line.percentagesCodes,
           percentageRaw: line.percentagesRaw,
         });

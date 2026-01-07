@@ -83,12 +83,16 @@ export class DParser implements RecordParser {
           if (!elem) break;
 
           // Check if this element looks like a child code
-          // Child codes: numeric (6+ digits) or contain dots (like "I.LT04.01")
-          // Percentage codes: shorter alphanumeric strings
+          // Child codes:
+          // - numeric (4+ digits) like "311100"
+          // - contain dots like "I.LT04.01"
+          // - start with % like "%MEDAUX", "%CI" (these are auxiliary child codes)
+          // Percentage codes: shorter alphanumeric strings without % prefix
           const looksLikeChildCode =
             (elem.match(/^[0-9]{4,}$/) && elem.length >= 4) || // 4+ digit numbers are likely child codes
             elem.includes('.') || // Codes with dots are child codes
-            elem.match(/^[A-Z]+\.[A-Z]/); // Pattern like "I.LT04"
+            elem.match(/^[A-Z]+\.[A-Z]/) || // Pattern like "I.LT04"
+            elem.startsWith('%'); // Codes starting with % are child codes (auxiliary concepts)
 
           if (looksLikeChildCode) {
             // This is the next child code, stop collecting percentage codes

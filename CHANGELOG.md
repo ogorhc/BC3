@@ -1,5 +1,11 @@
 # bc3
 
+## 0.6.0
+
+### Minor Changes
+
+- a4c02f5: move % concepts from root
+
 ## 0.5.1
 
 ### Patch Changes
