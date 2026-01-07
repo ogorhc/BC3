@@ -232,8 +232,17 @@ export class BC3Builder {
     }
 
     // Third pass: identify roots (concepts without parents)
+    // A root is a node that:
+    // 1. Has no parent assigned (parentCode === null)
+    // 2. Is NOT a child of any other node (!childCodes.has(code))
+    // 3. Does NOT start with '%' (auxiliary codes like %CI, %MEDAUX are not part of main hierarchy)
     const roots: string[] = [];
     for (const [code, node] of nodes.entries()) {
+      // Filter out auxiliary codes (starting with %)
+      if (code.startsWith('%')) {
+        continue;
+      }
+
       if (node.parentCode === null && !childCodes.has(code)) {
         roots.push(code);
       }

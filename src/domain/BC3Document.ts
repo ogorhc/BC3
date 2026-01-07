@@ -281,6 +281,29 @@ export class BC3Document {
   }
 
   /**
+   * Gets decomposition information (performance, factor) for a child concept from a parent.
+   * Returns undefined if the relationship doesn't exist.
+   */
+  getDecompositionInfo(
+    parentCode: string,
+    childCode: string,
+  ): { performance?: number; factor?: number } | undefined {
+    const parentNode = this.getConcept(parentCode);
+    if (!parentNode) return undefined;
+
+    for (const decomp of parentNode.decompositions) {
+      if (decomp.childCode === childCode) {
+        return {
+          performance: decomp.performance,
+          factor: decomp.factor,
+        };
+      }
+    }
+
+    return undefined;
+  }
+
+  /**
    * Gets a summary of the hierarchy structure.
    */
   getHierarchySummary(): {

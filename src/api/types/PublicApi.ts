@@ -1,4 +1,3 @@
-import { BC3ParseStore } from '../../builder/BC3ParseStore';
 import { BC3Document, Diagnostic } from '../../domain';
 
 export type ParseModel = 'strict' | 'lenient';
@@ -8,7 +7,8 @@ export interface ParseOptions {
 }
 
 export interface ParseResult {
-  document?: BC3Document; // Phase 3
-  store: BC3ParseStore; // Phase 2 output
+  /** The parsed BC3 document (domain model) */
+  document?: BC3Document;
+  /** Diagnostics collected during parsing (warnings, errors, info) */
   diagnostics: Diagnostic[];
 }
