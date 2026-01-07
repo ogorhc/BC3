@@ -1,5 +1,11 @@
 # bc3
 
+## 0.6.1
+
+### Patch Changes
+
+- 73eea96: run release workflow
+
 ## 0.6.0
 
 ### Minor Changes
