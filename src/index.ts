@@ -7,6 +7,3 @@ export * from './parsing';
 
 // Domain model (public surface)
 export * from './domain';
-
-// Utilities (optional, for convenience)
-export * from './utils/formatting';
