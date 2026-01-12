@@ -4,6 +4,14 @@ import { Entity } from './Entity';
 import { ITCodes } from './ITCode';
 import { Specification } from './Specification';
 import { Diagnostic } from './types';
+import {
+  ResourceHierarchy,
+  ResourceType,
+  ResourceTypeGroup,
+  ResourceConcept,
+  ResourceOccurrence,
+  RESOURCE_TYPE_LABELS,
+} from './types/ResourceHierarchy';
 
 /**
  * DocumentMetadata represents metadata from ~V records.
@@ -327,4 +335,169 @@ export class BC3Document {
       nodesByDepth,
     };
   }
+
+  /**
+   * Gets the resource hierarchy grouped by resource type (0-5).
+   *
+   * Structure:
+   * - Level 1: Resource type (Labor, Machinery, Materials, etc.)
+   * - Level 2: Decomposed concept codes (concepts that appear as children)
+   * - Level 3: Units of work where each decomposed concept appears (parent concepts)
+   *
+   * For each occurrence, calculates: parentQuantity × childPerformance = calculatedTotal
+   *
+   * @returns ResourceHierarchy with concepts grouped by type
+   */
+  getResourceHierarchy(): ResourceHierarchy {
+    // Cache to avoid recalculating
+    if (this._resourceHierarchyCache) {
+      return this._resourceHierarchyCache;
+    }
+
+    // Step 1: Identify all concepts that are "children" (appear in decompositions)
+    const childConcepts = new Set<ConceptNode>();
+
+    for (const node of this.conceptsByCode.values()) {
+      for (const decomp of node.decompositions) {
+        const childNode = this.getConcept(decomp.childCode);
+        if (childNode) {
+          childConcepts.add(childNode);
+        }
+      }
+    }
+
+    // Step 2: Group child concepts by type
+    const conceptsByType = new Map<ResourceType, ConceptNode[]>();
+
+    for (const childNode of childConcepts) {
+      const type = (childNode.concept.type ?? 0) as ResourceType;
+      if (!conceptsByType.has(type)) {
+        conceptsByType.set(type, []);
+      }
+      conceptsByType.get(type)!.push(childNode);
+    }
+
+    // Step 3: Build ResourceTypeGroup for each type
+    const groups = new Map<ResourceType, ResourceTypeGroup>();
+    let totalConcepts = 0;
+
+    for (const [type, childNodes] of conceptsByType.entries()) {
+      const resourceConcepts: ResourceConcept[] = [];
+
+      for (const childNode of childNodes) {
+        // Find all paths to this child concept to get all occurrences
+        // Each path represents one occurrence in the tree
+        const allPaths = this.getAllPathsToConcept(childNode.concept.codeNorm);
+        const occurrences: ResourceOccurrence[] = [];
+
+        // Extract parent from each path (parent is the second-to-last node in each path)
+        for (const path of allPaths) {
+          if (path.length < 2) continue; // Skip if no parent
+
+          const parentNode = path[path.length - 2]; // Parent is the node before the child
+          if (!parentNode) continue; // Skip if parent is undefined
+
+          // Get decomposition info (performance) directly from parent's decompositions
+          // Try both normalized code and original code to find the decomposition
+          const childCodeNorm = childNode.concept.codeNorm;
+          const childCode = childNode.concept.code;
+
+          let childPerformance: number | undefined;
+          let childFactor: number | undefined;
+
+          const decomposition = parentNode.decompositions.find(
+            (d) =>
+              d.childCode === childCodeNorm ||
+              d.childCode === childCode ||
+              d.childCode === childCode.replace(/^#+/, ''),
+          );
+
+          if (decomposition) {
+            childPerformance = decomposition.performance;
+            childFactor = decomposition.factor;
+          }
+
+          // Get parent performance from its own decomposition (where parent is a child)
+          // Look for the grandparent (parent of parent) in the path
+          let parentPerformance: number | undefined;
+          if (path.length >= 3) {
+            const grandParentNode = path[path.length - 3]; // Grandparent is two nodes before the child
+            if (grandParentNode) {
+              const parentCodeNorm = parentNode.concept.codeNorm;
+              const parentCode = parentNode.concept.code;
+
+              const parentDecomposition = grandParentNode.decompositions.find(
+                (d) =>
+                  d.childCode === parentCodeNorm ||
+                  d.childCode === parentCode ||
+                  d.childCode === parentCode.replace(/^#+/, ''),
+              );
+
+              if (parentDecomposition) {
+                parentPerformance = parentDecomposition.performance;
+              }
+            }
+          }
+
+          // Calculate: parentPerformance × childPerformance
+          const calculatedTotal =
+            parentPerformance !== undefined && childPerformance !== undefined
+              ? parentPerformance * childPerformance
+              : undefined;
+
+          occurrences.push({
+            parent: parentNode,
+            parentQuantity: parentPerformance, // Store parent performance instead of quantity
+            childPerformance,
+            calculatedTotal,
+          });
+        }
+
+        if (occurrences.length > 0) {
+          resourceConcepts.push({
+            concept: childNode,
+            occurrences,
+          });
+          totalConcepts++;
+        }
+      }
+
+      // Sort concepts by code for consistent ordering
+      resourceConcepts.sort((a, b) => {
+        const codeA = a.concept.concept.codeNorm;
+        const codeB = b.concept.concept.codeNorm;
+        return codeA.localeCompare(codeB);
+      });
+
+      groups.set(type, {
+        type,
+        typeLabel: RESOURCE_TYPE_LABELS[type],
+        concepts: resourceConcepts,
+      });
+    }
+
+    // Ensure all types 0-5 are present (even if empty)
+    for (let i = 0; i <= 5; i++) {
+      const type = i as ResourceType;
+      if (!groups.has(type)) {
+        groups.set(type, {
+          type,
+          typeLabel: RESOURCE_TYPE_LABELS[type],
+          concepts: [],
+        });
+      }
+    }
+
+    const hierarchy: ResourceHierarchy = {
+      groups,
+      totalConcepts,
+    };
+
+    // Cache the result
+    this._resourceHierarchyCache = hierarchy;
+    return hierarchy;
+  }
+
+  /** Internal cache for resource hierarchy */
+  private _resourceHierarchyCache?: ResourceHierarchy;
 }

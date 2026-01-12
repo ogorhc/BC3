@@ -105,7 +105,9 @@ export class DomainAssembler {
           parentCode: normalizedParent,
           childCode: normalizedChild,
           factor: line.factor ? parseFloat(line.factor) : undefined,
-          performance: parsePerformance(line.performance),
+          performance: line.performance
+            ? parseFloat(line.performance)
+            : undefined,
           percentageCodes: line.percentagesCodes,
           percentageRaw: line.percentagesRaw,
         });

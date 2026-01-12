@@ -1,5 +1,11 @@
 # bc3
 
+## 0.7.0
+
+### Minor Changes
+
+- 1a0846a: add resource herarchy
+
 ## 0.6.1
 
 ### Patch Changes
