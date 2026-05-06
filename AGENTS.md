@@ -104,3 +104,18 @@ Use the `skill` tool to load a skill when a task matches its description.
 | Parsing modes            | `docs/parser/parsing-modes.md`           |
 | Release process          | `docs/development/release-process.md`    |
 | Public API contract      | `docs/public-api.md`                     |
+
+## GitHub Issue Workflow
+
+For every new task:
+
+1. Fetch the GitHub issue first.
+2. Work only on the selected issue.
+3. Create a branch using the issue number (e.g. `fix/87-short-name`).
+4. Keep changes scoped to the issue.
+5. Reference the issue in commits and PR description (e.g. `Fixes #87`).
+6. Update `docs/ai-workflow/current-handover.md` with:
+   - Issue number
+   - Branch name
+   - PR link if available
+   - Next GitHub issue recommended
