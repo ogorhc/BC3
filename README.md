@@ -1,12 +1,22 @@
-# BC3
+# BC3 — FIEBDC-3 Parser for TypeScript & Node.js
 
 [![npm version](https://img.shields.io/npm/v/bc3)](https://www.npmjs.com/package/bc3)
 [![license](https://img.shields.io/npm/l/bc3)](./LICENSE)
 [![CI](https://github.com/ogorhc/BC3/actions/workflows/ci.yml/badge.svg)](https://github.com/ogorhc/BC3/actions/workflows/ci.yml)
 
-**BC3** is a zero-dependency TypeScript library for parsing and navigating **FIEBDC-3 / BC3** construction database files.
+**BC3** is a zero-dependency TypeScript parser for **FIEBDC-3 / BC3**
+construction budget files — the standard format exported by Presto,
+ARQUIMEDES, TCQ, and Spanish-speaking construction software for bills
+of quantities (BOQ), cost databases, and project budgets.
 
-It transforms `.bc3` files exported by Presto, ARQUIMEDES, TCQ, and other construction software into a structured, type-safe hierarchical model. Navigate chapters, subchapters, decomposition trees, measurements, entities, specifications, IT/BIM codes, thesauri, geographic cost overrides, and cost coefficients — all with lossless fidelity to the original file.
+```bash
+npm install bc3
+```
+
+Parse `.bc3` files into a type-safe hierarchical model — navigate
+chapters, subchapters, decomposition trees, measurements, entities,
+specifications, IT/BIM codes, geographic cost overrides, and cost
+coefficients with lossless fidelity to the original file.
 
 ## Status
 
