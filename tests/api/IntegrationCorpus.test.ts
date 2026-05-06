@@ -7,9 +7,31 @@ import { BC3 } from '../../src/api/BC3.js';
 const CORPUS_DIR = path.resolve('data/bc3-corpus/samples/real-world');
 
 describe('Integration tests — real-world corpus', () => {
+  if (!fs.existsSync(CORPUS_DIR)) {
+    it(
+      'corpus directory not found — skipping integration tests',
+      {
+        skip: 'corpus directory "data/" is not available (gitignored)',
+      },
+      () => {},
+    );
+    return;
+  }
+
   const files = fs
     .readdirSync(CORPUS_DIR)
     .filter((f) => f.endsWith('.bc3') || f.endsWith('.BC3'));
+
+  if (files.length === 0) {
+    it(
+      'no corpus files found — skipping integration tests',
+      {
+        skip: 'no .bc3 files in corpus directory',
+      },
+      () => {},
+    );
+    return;
+  }
 
   for (const file of files) {
     it(`parses ${file} without throwing`, () => {
