@@ -13,6 +13,15 @@
 - **GitHub topics** set: `bc3`, `fiebdc`, `fiebdc-3`, `construction`, `parser`, `typescript`, `nodejs`, `boq`, `cost-estimation`.
 - **Commit:** `d2510cf` on `develop`
 
+### 2026-05-06 — Fix: backslash context-sensitivity in ~V (#106)
+
+- **VParser** now reconstructs the version field by joining subfields with `\`, then splits on the **last** `\` to separate version from optional date suffix.
+- Previously relied on tokenizer's accidental subfield splitting (`f[1][0]`=version, `f[1][1]`=date). Now explicit: `raw = f[1].join('\\')`, `lastBackslash ≥ 0` → version/date split.
+- Handles version strings with embedded backslashes (e.g. `FIEBDC-3\2020\02102025` → version=`FIEBDC-3\2020`, date=`02102025`).
+- **Added 2 tests** to `tests/parsing/dispatch/parsers/VCParser.test.ts` (preserves explicit backslash, leading backslash edge case).
+- **Branch:** `fix/106-v-backslash-context`
+- Fixes #106
+
 ### 2026-05-06 — SEO P2: description, badges, "Why" block, Related Terms, repo desc
 
 - **package.json description** expanded with `FIEBDC-3/BC3`, `TypeScript parser`, `Presto`, `ARQUIMEDES`, `TCQ`, `bills of quantities`.
