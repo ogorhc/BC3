@@ -1,21 +1,43 @@
 /**
  * MeasurementDetail represents a single measurement detail line.
  */
-export interface MeasurementDetail {
+export class MeasurementDetail {
   /** Measurement type (TIPO) */
-  type?: string;
+  readonly type?: string;
   /** Comment (may include #ID_BIM references) */
-  comment?: string;
+  readonly comment?: string;
   /** Extracted BIM IDs from comment */
-  bimIds?: string[];
-  /** Units (U) */
-  units?: string;
+  readonly bimIds?: string[];
+  /** Units (U) parsed as factor — defaults to 1 if unset */
+  readonly units?: number;
   /** Length (L) */
-  length?: number;
+  readonly length?: number;
   /** Latitude/width (La) */
-  latitude?: number;
+  readonly latitude?: number;
   /** Height (A) */
-  height?: number;
+  readonly height?: number;
+  /** Computed partial measurement: length * latitude * height * units + constant */
+  readonly partial: number;
+
+  constructor(args: {
+    type?: string;
+    comment?: string;
+    bimIds?: string[];
+    units?: number;
+    length?: number;
+    latitude?: number;
+    height?: number;
+    partial: number;
+  }) {
+    this.type = args.type;
+    this.comment = args.comment;
+    this.bimIds = args.bimIds;
+    this.units = args.units;
+    this.length = args.length;
+    this.latitude = args.latitude;
+    this.height = args.height;
+    this.partial = args.partial;
+  }
 }
 
 /**

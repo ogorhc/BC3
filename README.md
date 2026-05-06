@@ -242,6 +242,7 @@ for (const d of result.diagnostics) {
 | Hierarchy reconstruction | [`docs/parser/hierarchy-reconstruction.md`](docs/parser/hierarchy-reconstruction.md)     |
 | Domain model             | [`docs/domain/model.md`](docs/domain/model.md)                                           |
 | Public API               | [`docs/public-api.md`](docs/public-api.md)                                               |
+| Usage examples           | [`docs/examples.md`](docs/examples.md)                                                   |
 | Development setup        | [`docs/development/setup.md`](docs/development/setup.md)                                 |
 | Roadmap                  | [`docs/development/work-to-issue-mapping.md`](docs/development/work-to-issue-mapping.md) |
 | ADRs                     | [`docs/decisions/index.md`](docs/decisions/index.md)                                     |
