@@ -209,9 +209,15 @@ export class BC3Builder {
       const parentNode = nodes.get(normalizedParent);
 
       if (!parentNode) {
-        // Parent concept not found - will be reported as diagnostic later
-        // This can happen if the parent code in the decomposition doesn't match
-        // the normalized code used when creating the concept node
+        // Parent concept not found for this decomposition
+        if (this.diagnostics) {
+          this.diagnostics.push({
+            level: 'warn',
+            code: 'BC3_D_MISSING_PARENT_CODE',
+            message: `~D parent code "${parentCode}" does not match any ~C concept`,
+            recordType: 'D',
+          });
+        }
         continue;
       }
 
@@ -220,7 +226,15 @@ export class BC3Builder {
         const childNode = nodes.get(normalizedChild);
 
         if (!childNode) {
-          // Child concept not found - will be reported as diagnostic later
+          // Child concept not found for this decomposition line
+          if (this.diagnostics) {
+            this.diagnostics.push({
+              level: 'warn',
+              code: 'BC3_D_MISSING_CHILD_CODE',
+              message: `~D child code "${line.code}" under parent "${normalizedParent}" does not match any ~C concept`,
+              recordType: 'D',
+            });
+          }
           continue;
         }
 
