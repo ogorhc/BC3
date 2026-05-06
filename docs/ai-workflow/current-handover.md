@@ -6,6 +6,14 @@
 
 ## Recent Changes
 
+### 2026-05-06 — Fix: ~D record dotted child code parsing (#87)
+
+- **Fixed DParser bug** where child codes containing dots (e.g. `WORKER.1a`) caused subsequent children to be misclassified as percentage codes. Root cause: `elem.includes('.')` heuristic matched decimal factor/performance values. Added decimal number exclusion and alphanumeric child code detection.
+- **Added 5 regression tests** in `tests/parsing/dispatch/parsers/DParser.test.ts`
+- **Updated** `docs/bc3-knowledge/known-edge-cases.md` with edge case #10
+- **Branch:** `fix/87-decomposition-dot-child-code`
+- Fixes #87
+
 ### 2026-05-06 — Documentation restructuring
 
 Reorganized all `docs/` content into a clear, navigable directory layout. Fixed inaccuracies found across multiple docs.
@@ -52,8 +60,9 @@ Reorganized all `docs/` content into a clear, navigable directory layout. Fixed 
 
 ## Notes
 
-- All 83 tests pass; `npm run ci` passes.
+- All 88 tests pass; `npm run ci` passes.
 - Old root-level doc stubs have been deleted. All broken references across the repo have been fixed.
+- The DParser heuristic for detecting child codes requires 4+ digit numeric codes or alphanumeric codes. Short numeric codes (1-3 digits) without letters are still treated as percentage codes — this is a pre-existing limitation, not introduced by this fix.
 
 ## Next Steps
 

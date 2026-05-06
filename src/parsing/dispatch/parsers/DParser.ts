@@ -90,8 +90,9 @@ export class DParser implements RecordParser {
           // Percentage codes: shorter alphanumeric strings without % prefix
           const looksLikeChildCode =
             (elem.match(/^[0-9]{4,}$/) && elem.length >= 4) || // 4+ digit numbers are likely child codes
-            elem.includes('.') || // Codes with dots are child codes
+            (elem.includes('.') && !/^\d+(\.\d+)?$/.test(elem)) || // Codes with dots are child codes (exclude decimal numbers)
             elem.match(/^[A-Z]+\.[A-Z]/) || // Pattern like "I.LT04"
+            (/[a-zA-Z]/.test(elem) && /\d/.test(elem)) || // Alphanumeric codes (letters + digits)
             elem.startsWith('%'); // Codes starting with % are child codes (auxiliary concepts)
 
           if (looksLikeChildCode) {
