@@ -25,6 +25,13 @@ const V_EMPTY_OPTIONALS = '~V|OBRA|FIEBDC-3/2020|||||||';
 /** Two ~V records in one file — last one should win (or first, depending on implementation) */
 const V_DUPLICATE = '~V|OBRA1|FIEBDC-3/2002|\r\n~V|OBRA2|FIEBDC-3/2020|\r\n';
 
+/** ~V with backslash embedded in version name (not a subfield separator) */
+const V_BACKSLASH_IN_VERSION =
+  '~V|OBRA|FIEBDC-3\\2020\\02102025|TestProgram|Header|||1|||';
+
+/** ~V with version field consisting only of leading backslash + date */
+const V_LEADING_BACKSLASH = '~V|OBRA|\\02102025|TestProgram|Header|||1|||';
+
 // ---------------------------------------------------------------------------
 // ~C (Concept) fixtures
 // ---------------------------------------------------------------------------
@@ -70,6 +77,18 @@ describe('VParser (~V records)', () => {
     it('versionDate is empty string when absent', () => {
       const { document } = BC3.parse(V_MINIMAL);
       assert.equal(document?.metadata?.versionDate, '');
+    });
+
+    it('preserves explicit backslash in version name (last \\ is date separator)', () => {
+      const { document } = BC3.parse(V_BACKSLASH_IN_VERSION);
+      assert.equal(document?.metadata?.version, 'FIEBDC-3\\2020');
+      assert.equal(document?.metadata?.versionDate, '02102025');
+    });
+
+    it('handles version field with only a leading backslash', () => {
+      const { document } = BC3.parse(V_LEADING_BACKSLASH);
+      assert.equal(document?.metadata?.version, '');
+      assert.equal(document?.metadata?.versionDate, '02102025');
     });
   });
 
