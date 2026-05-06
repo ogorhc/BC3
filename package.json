@@ -27,8 +27,8 @@
     "dist"
   ],
   "scripts": {
-    "test": "node --import tsx/esm --test 'tests/**/*.test.ts'",
-    "test:watch": "node --import tsx/esm --test --watch 'tests/**/*.test.ts'",
+    "test": "node --import tsx/esm --test $(find tests -name '*.test.ts' -type f)",
+    "test:watch": "node --import tsx/esm --test --watch $(find tests -name '*.test.ts' -type f)",
     "dev:build": "tsup src/index.ts --format esm,cjs --dts --sourcemap --clean --watch",
     "dev:tokenize": " npm run build && node scripts/tokenize.mjs ./scripts/file.bc3",
     "ci": "npm run build && npm run check-format",
