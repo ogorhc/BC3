@@ -13,6 +13,15 @@
 - **GitHub topics** set: `bc3`, `fiebdc`, `fiebdc-3`, `construction`, `parser`, `typescript`, `nodejs`, `boq`, `cost-estimation`.
 - **Commit:** `d2510cf` on `develop`
 
+### 2026-05-06 — Chore: resolve remaining issues #122–#133
+
+- **#122**: Added `fieldIndex`/`subfieldIndex` optional properties to `Diagnostic` type.
+- **#129**: Added `tests/api/IntegrationCorpus.test.ts` — parses all 7 real-world corpus files (Latin-1 decode, lenient mode). Validates hierarchy summary on each. 7 tests pass.
+- **#131**: Created `docs/examples.md` with full usage examples (parse string, parse file, inspect tree, measurements, coefficients, entities, cost overrides, attachments).
+- **#123, #124, #133**: Closed as not planned (perf profiling, streaming parser, automated publish).
+- **#132**: Already documented (release-process.md + changesets).
+- **Branch:** `chore/remaining-issues`
+
 ### 2026-05-06 — Feature: Expression evaluator for measurement details (#88)
 
 - **`evaluatePartial()`** utility in `src/utils/expressionEvaluator.ts` — computes `a * b * c * d + p` from measurement dimensions (length, latitude, height, units). Missing dimensions default to 1.
@@ -168,10 +177,9 @@ Reorganized all `docs/` content into a clear, navigable directory layout. Fixed 
 
 ## Notes
 
-- All 140 tests pass; `npm run ci` passes.
-- All observed corpus record types (14) are now implemented (15 parsers including ~N/~B/~Y which have zero corpus occurrences but are spec types).
-- Old root-level doc stubs have been deleted. All broken references across the repo have been fixed.
-- The DParser heuristic for detecting child codes requires 4+ digit numeric codes or alphanumeric codes. Short numeric codes (1-3 digits) without letters are still treated as percentage codes — this is a pre-existing limitation, not introduced by this fix.
+- All 147 tests pass; `npm run ci` passes.
+- 1 open issue: #134 (Milestone v1.0.0 MVP release).
+- All parser bugs resolved. All observed corpus record types implemented. Task board clean.
 
 ## Next Steps
 
