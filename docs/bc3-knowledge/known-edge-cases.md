@@ -105,3 +105,14 @@ The first digit group is `-9` (negative). The digit count fields in ~K specify d
 **File:** `250617_Modificado2_v10.BC3`
 
 Some generators use uppercase `.BC3` file extension. The file content is identical to `.bc3` files.
+
+## 10. Dotted child codes in ~D records
+
+**Reproduction:** `https://github.com/janplancraft/bc3-bug-reproduction`
+
+Child concept codes containing dots (e.g. `WORKER.1a`, `I.LT04.01`) trigger an ambiguous subfield group detection. The DParser heuristic used `elem.includes('.')` to detect the next child code boundary, but decimal factor/performance values also contain dots (e.g. `1.200`, `0.500`). This caused subsequent children to be misclassified as percentage codes.
+
+**Resolution:** Fixed in the DParser lookahead heuristic:
+
+- Exclude decimal numbers (`/^\d+(\.\d+)?$/`) from the dot-based child code detection
+- Add alphanumeric detection (`/[a-zA-Z]/.test(elem) && /\d/.test(elem)`) for child codes without dots like `MAT01`, `WORKER2b`
