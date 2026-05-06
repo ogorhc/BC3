@@ -13,6 +13,17 @@
 - **GitHub topics** set: `bc3`, `fiebdc`, `fiebdc-3`, `construction`, `parser`, `typescript`, `nodejs`, `boq`, `cost-estimation`.
 - **Commit:** `d2510cf` on `develop`
 
+### 2026-05-06 — Feature: Expression evaluator for measurement details (#88)
+
+- **`evaluatePartial()`** utility in `src/utils/expressionEvaluator.ts` — computes `a * b * c * d + p` from measurement dimensions (length, latitude, height, units). Missing dimensions default to 1.
+- **`MeasurementDetail`** promoted from interface to class with `partial` computed property.
+- **DomainAssembler** now calls `evaluatePartial()` when constructing `MeasurementDetail` instances.
+- **10 unit tests** in `tests/utils/expressionEvaluator.test.ts`.
+- **4 integration tests** in `tests/api/ExpressionEvaluator.test.ts`.
+- 140 tests pass.
+- **Branch:** `feat/88-expression-evaluator`
+- Fixes #88
+
 ### 2026-05-06 — Feature: Implement ~G parser, remove ~H references (#108, #109)
 
 - **GParser** implemented — extracts concept code + filename from `~G|code|filename.ext\|`.
@@ -157,7 +168,7 @@ Reorganized all `docs/` content into a clear, navigable directory layout. Fixed 
 
 ## Notes
 
-- All 126 tests pass; `npm run ci` passes.
+- All 140 tests pass; `npm run ci` passes.
 - All observed corpus record types (14) are now implemented (15 parsers including ~N/~B/~Y which have zero corpus occurrences but are spec types).
 - Old root-level doc stubs have been deleted. All broken references across the repo have been fixed.
 - The DParser heuristic for detecting child codes requires 4+ digit numeric codes or alphanumeric codes. Short numeric codes (1-3 digits) without letters are still treated as percentage codes — this is a pre-existing limitation, not introduced by this fix.
