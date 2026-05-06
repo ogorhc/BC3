@@ -6,6 +6,14 @@
 
 ## Recent Changes
 
+### 2026-05-06 — Test: add regression tests for untested parsers (#102)
+
+- **Added 17 regression tests** covering ~T, ~M, ~E, ~A, ~X, ~L, ~N, ~B, ~Y, and UnknownRecordParser
+- Test file: `tests/parsing/dispatch/parsers/ParserRegression.test.ts`
+- All parsers now have at least basic fixture coverage
+- **Branch:** `test/102-regression-untested-parsers`
+- Fixes #102
+
 ### 2026-05-06 — Docs: ISO-8859-1 encoding contract (#100)
 
 - **Documented** in `public-api.md` that ISO-8859-1 decoding is the caller's responsibility (not the library's). All corpus files use Latin-1 — callers must decode before passing to `BC3.parse()` (as demonstrated in `scripts/tokenize.mjs`)
@@ -108,15 +116,15 @@ Reorganized all `docs/` content into a clear, navigable directory layout. Fixed 
 
 ## Notes
 
-- All 103 tests pass; `npm run ci` passes.
+- All 119 tests pass; `npm run ci` passes.
 - Old root-level doc stubs have been deleted. All broken references across the repo have been fixed.
 - The DParser heuristic for detecting child codes requires 4+ digit numeric codes or alphanumeric codes. Short numeric codes (1-3 digits) without letters are still treated as percentage codes — this is a pre-existing limitation, not introduced by this fix.
 
 ## Next Steps
 
-1. **Regression tests for untested parsers** — 10 of 13 parsers have no dedicated tests.
-2. **Null byte stripping preprocessor** — unblocks Excesos-Mod.
-3. **Backslash context-sensitivity in ~V** — `FIEBDC-3/2020\02102025` uses `\` as date separator.
+1. **Null byte stripping preprocessor** — unblocks Excesos-Mod.
+2. **Backslash context-sensitivity in ~V** — `FIEBDC-3/2020\02102025` uses `\` as date separator.
+3. **Implement ~G parser** — image/graphic attachment (1 occurrence).
 
 ---
 
