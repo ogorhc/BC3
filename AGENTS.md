@@ -119,3 +119,15 @@ For every new task:
    - Branch name
    - PR link if available
    - Next GitHub issue recommended
+
+## Next Issue Workflow
+
+When the user says "next", follow `.ai/playbooks/implement-next-issue.md`.
+
+Use:
+
+- `docs/development/work-to-issue-mapping.md` as the roadmap
+- `docs/ai-workflow/current-handover.md` as the current state
+- GitHub Issues/Project as execution tracking
+
+Always work on one issue per branch and one PR per issue.

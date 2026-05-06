@@ -9,22 +9,22 @@ Audit of BC3 record-type parsers, their connection to the domain model, and gaps
 
 ## Implemented parsers (14)
 
-| Type    | Parser file              | BC3 meaning                 | Connected to domain model                                       | Data dropped                                             |
-| ------- | ------------------------ | --------------------------- | --------------------------------------------------------------- | -------------------------------------------------------- |
-| `~V`    | `VParser.ts`             | Version / metadata          | Full — `DocumentMetadata` on `BC3Document`                      | —                                                        |
-| `~K`    | `KParser.ts`             | Cost coefficients           | `store.decimals` only                                           | `store.decimals` is **not transferred** to `BC3Document` |
-| `~C`    | `CParser.ts`             | Concept definition          | Full — `Concept → ConceptNode`                                  | `ConceptInput.codes` alias array                         |
-| `~D`    | `DParser.ts`             | Decomposition (structured)  | Full — `Decomposition[]` on parent `ConceptNode`                | `DecompositionLineInput.raw`                             |
-| `~T`    | `TParser.ts`             | Descriptive text            | Full — stored as `Concept.text`                                 | —                                                        |
-| `~M`    | `MParser.ts`             | Measurement                 | Full — `Measurement[]` on `ConceptNode`                         | `rawFields`, detail `.raw`                               |
-| `~N`    | `NParser.ts`             | Notes / measurement variant | Full — merged into `measurements` array (same as `~M`)          | `rawFields`, detail `.raw`                               |
-| `~B`    | `BParser.ts`             | Code rename                 | Applied as mutation to `concepts`/`decompositions`/`texts` keys | Original mapping is **not surfaced**                     |
-| `~Y`    | `YParser.ts`             | Layout / decomp variant     | Full — appends to same `decompositions` map as `~D`             | —                                                        |
-| `~L`    | `LParser.ts`             | Specification sections      | Full — `Specification` on `ConceptNode` or `BC3Document`        | Per-concept map dropped after assembly                   |
-| `~X`    | `XParser.ts`             | IT codes / BIM / LCA        | Full — `ITCodes` on `ConceptNode` or `BC3Document`              | Per-concept map dropped after assembly                   |
-| `~E`    | `EParser.ts`             | Entity                      | Full — `entities: Map<string, Entity>` on `BC3Document`         | —                                                        |
-| `~A`    | `AParser.ts`             | Thesaurus                   | Full — `Thesaurus` on `ConceptNode`                             | Per-concept map dropped after assembly                   |
-| Unknown | `UnknownRecordParser.ts` | Catch-all                   | Diagnostic only (lenient) / throw (strict)                      | Record content **not preserved**                         |
+| Type    | Parser file              | BC3 meaning                 | Connected to domain model                                       | Data dropped                           |
+| ------- | ------------------------ | --------------------------- | --------------------------------------------------------------- | -------------------------------------- |
+| `~V`    | `VParser.ts`             | Version / metadata          | Full — `DocumentMetadata` on `BC3Document`                      | —                                      |
+| `~K`    | `KParser.ts`             | Cost coefficients           | Full — `Coefficients` on `BC3Document`                          | —                                      |
+| `~C`    | `CParser.ts`             | Concept definition          | Full — `Concept → ConceptNode`                                  | `ConceptInput.codes` alias array       |
+| `~D`    | `DParser.ts`             | Decomposition (structured)  | Full — `Decomposition[]` on parent `ConceptNode`                | `DecompositionLineInput.raw`           |
+| `~T`    | `TParser.ts`             | Descriptive text            | Full — stored as `Concept.text`                                 | —                                      |
+| `~M`    | `MParser.ts`             | Measurement                 | Full — `Measurement[]` on `ConceptNode`                         | `rawFields`, detail `.raw`             |
+| `~N`    | `NParser.ts`             | Notes / measurement variant | Full — merged into `measurements` array (same as `~M`)          | `rawFields`, detail `.raw`             |
+| `~B`    | `BParser.ts`             | Code rename                 | Applied as mutation to `concepts`/`decompositions`/`texts` keys | Original mapping is **not surfaced**   |
+| `~Y`    | `YParser.ts`             | Layout / decomp variant     | Full — appends to same `decompositions` map as `~D`             | —                                      |
+| `~L`    | `LParser.ts`             | Specification sections      | Full — `Specification` on `ConceptNode` or `BC3Document`        | Per-concept map dropped after assembly |
+| `~X`    | `XParser.ts`             | IT codes / BIM / LCA        | Full — `ITCodes` on `ConceptNode` or `BC3Document`              | Per-concept map dropped after assembly |
+| `~E`    | `EParser.ts`             | Entity                      | Full — `entities: Map<string, Entity>` on `BC3Document`         | —                                      |
+| `~A`    | `AParser.ts`             | Thesaurus                   | Full — `Thesaurus` on `ConceptNode`                             | Per-concept map dropped after assembly |
+| Unknown | `UnknownRecordParser.ts` | Catch-all                   | Diagnostic only (lenient) / throw (strict)                      | Record content **not preserved**       |
 
 ---
 
@@ -52,7 +52,6 @@ Audit of BC3 record-type parsers, their connection to the domain model, and gaps
 
 | Parsed data                                                                                                  | Where parsed                         | Where lost                                                      |
 | ------------------------------------------------------------------------------------------------------------ | ------------------------------------ | --------------------------------------------------------------- |
-| `~K` coefficients (`legacy`, `full`, `raw`)                                                                  | `KParser` → `store.decimals`         | `DomainAssembler.buildDocument()` never reads `store.decimals`  |
 | Concept aliases (`~C` field 0 subfields 1+)                                                                  | `CParser` → `ConceptInput.codes`     | `DomainAssembler` Pass 1 only uses primary `code`               |
 | Raw field strings (`DecompositionLineInput.raw`, `MeasurementInput.rawFields`, `MeasurementDetailInput.raw`) | All parsers                          | `DomainAssembler` never maps them to domain types               |
 | `store.source` / `store.raw`                                                                                 | `BC3Builder.init()`                  | Never transferred to `BC3Document`                              |
@@ -63,10 +62,9 @@ Audit of BC3 record-type parsers, their connection to the domain model, and gaps
 
 ## Domain model gaps: types that exist but are never populated
 
-| Domain type       | Defined at                 | Why empty                                                                                                  |
-| ----------------- | -------------------------- | ---------------------------------------------------------------------------------------------------------- |
-| `Attachment`      | `src/domain/Attachment.ts` | `DomainAssembler` never creates any `Attachment` instances; `BC3Document.attachments` is always `[]`       |
-| `~K` coefficients | No domain type exists      | The builder stores `KDecimalsInput` but there is no `Coefficients` / `Decimals` domain class to receive it |
+| Domain type  | Defined at                 | Why empty                                                                                            |
+| ------------ | -------------------------- | ---------------------------------------------------------------------------------------------------- |
+| `Attachment` | `src/domain/Attachment.ts` | `DomainAssembler` never creates any `Attachment` instances; `BC3Document.attachments` is always `[]` |
 
 ---
 
