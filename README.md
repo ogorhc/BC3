@@ -1,7 +1,9 @@
 # BC3 — FIEBDC-3 Parser for TypeScript & Node.js
 
 [![npm version](https://img.shields.io/npm/v/bc3)](https://www.npmjs.com/package/bc3)
+[![npm downloads](https://img.shields.io/npm/dw/bc3)](https://www.npmjs.com/package/bc3)
 [![license](https://img.shields.io/npm/l/bc3)](./LICENSE)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.9-blue)](https://www.typescriptlang.org/)
 [![CI](https://github.com/ogorhc/BC3/actions/workflows/ci.yml/badge.svg)](https://github.com/ogorhc/BC3/actions/workflows/ci.yml)
 
 **BC3** is a zero-dependency TypeScript parser for **FIEBDC-3 / BC3**
@@ -18,9 +20,24 @@ chapters, subchapters, decomposition trees, measurements, entities,
 specifications, IT/BIM codes, geographic cost overrides, and cost
 coefficients with lossless fidelity to the original file.
 
+## Why BC3
+
+FIEBDC-3 (also called **BC3** or **Formato BC3**) is the standard exchange
+format for construction budgets in Spain and Latin America. Software like
+**Presto**, **ARQUIMEDES**, and **TCQ** exports `.bc3` files — but no
+open-source TypeScript/JavaScript library could parse them into a usable
+data structure. BC3 fills that gap.
+
+- **Parse `.bc3` files** from any FIEBDC-3 edition (2002–2020) out of the box
+- **Walk chapters, subchapters, and decompositions** as a typed tree
+- **Extract prices, measurements, BIM codes, cost overrides, entities,**
+  **and coefficients** from every record type in the corpus
+- **Zero runtime dependencies** — works in Node.js, Deno, and the browser
+- **Lossless fidelity** to the original file; no data discarded
+
 ## Status
 
-**Active development** — 14 of 16 record types parsed, 100% of observed corpus types supported, 119 regression tests.
+**Active development** — 14 of 16 record types parsed, 100% of observed corpus types supported, 120 regression tests.
 
 Current version: `v0.7.0`
 
@@ -235,6 +252,24 @@ for (const d of result.diagnostics) {
 - Branch naming: `feat/`, `fix/`, `test/`, `docs/`, `chore/` prefixed with issue number
 - Changesets for versioning; automated npm publish on merge to `main`
 - `npm run ci` gates all PRs: build + format check
+
+## Related Terms
+
+| English                            | Español                                   |
+| ---------------------------------- | ----------------------------------------- |
+| bill of quantities (BOQ)           | presupuesto, mediciones                   |
+| cost database                      | base de precios, banco de precios, cuadro |
+| construction budget                | presupuesto de obra, proyecto             |
+| cost estimation                    | valoración, estimación de costes          |
+| decomposition, work breakdown      | descomposición, descompuestos             |
+| FIEBDC-3, BC3, Formato BC3         | FIEBDC-3, BC3, Formato BC3                |
+| Presto, ARQUIMEDES, TCQ            | Presto, ARQUIMEDES, TCQ                   |
+| TypeScript parser, Node.js library | librería TypeScript, parser Node.js       |
+| concept tree, hierarchy            | árbol de conceptos, jerarquía             |
+| overhead, indirect costs           | costes indirectos, gastos generales       |
+| geographic cost override           | cuadro de precios geográfico              |
+| measurements, quantities           | cantidades, líneas de medición            |
+| price list, unit prices            | lista de precios, precios unitarios       |
 
 ## License
 

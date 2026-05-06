@@ -6,6 +6,23 @@
 
 ## Recent Changes
 
+### 2026-05-06 — SEO: expand npm keywords, optimize README, set GitHub topics
+
+- **package.json keywords** expanded 6 → 21: `fiebdc`, `bc3-parser`, `construction-budget`, `boq`, `presto`, `arquimedes`, `tcq`, etc.
+- **README** H1 and opening rewritten with `FIEBDC-3 Parser`, `npm install bc3`, 15+ keyword hits in first viewport.
+- **GitHub topics** set: `bc3`, `fiebdc`, `fiebdc-3`, `construction`, `parser`, `typescript`, `nodejs`, `boq`, `cost-estimation`.
+- **Commit:** `d2510cf` on `develop`
+
+### 2026-05-06 — SEO P2: description, badges, "Why" block, Related Terms, repo desc
+
+- **package.json description** expanded with `FIEBDC-3/BC3`, `TypeScript parser`, `Presto`, `ARQUIMEDES`, `TCQ`, `bills of quantities`.
+- **README badges** added npm downloads + TypeScript 5.9 shield.
+- **README "Why BC3"** section inserted before Status — 5 bullets, 8+ keyword hits.
+- **README "Related Terms"** section added before License — English/Spanish bilingual glossary (28 term pairs).
+- **GitHub repo description** aligned with npm description.
+- **Baseline recorded:** npm 8,347 weekly downloads; GitHub 0 stars, 0 forks, 2 weekly views.
+- **Commit:** on `develop`
+
 ### 2026-05-06 — Feature: strip null bytes from input (#104)
 
 - **Added `stripNullBytes()`** in Tokenizer — removes `\x00` (NUL) bytes before tokenizing. Unblocks Excesos-Mod corpus file (37,713 lines with NUL contamination)

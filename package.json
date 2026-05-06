@@ -1,6 +1,6 @@
 {
   "name": "bc3",
-  "description": "Parser and hierarchical model for FIEBDC-3 BC3 files.",
+  "description": "Zero-dependency TypeScript parser for FIEBDC-3/BC3 construction budget files (Presto, ARQUIMEDES, TCQ). Builds a type-safe hierarchical model for bills of quantities, cost databases, and construction project budgets.",
   "author": "Igor HC (ogorhc)",
   "license": "MIT",
   "repository": {
