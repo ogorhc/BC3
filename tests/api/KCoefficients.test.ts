@@ -13,6 +13,12 @@ const WITHOUT_K_BC3 = [
   '~C|01||Concept|||0|',
 ].join('\r\n');
 
+const NEGATIVE_DIGIT_K_BC3 = [
+  '~V|O|FIEBDC-3/2012||||||',
+  '~K|-9\\0\\0\\0\\0\\0\\0\\0||0\\0\\0\\0\\0\\0\\0\\0\\0\\0\\0\\0\\0\\|',
+  '~C|01||Concept|||0|',
+].join('\r\n');
+
 describe('~K coefficient data in BC3Document', () => {
   it('exposes coefficients when ~K record is present', () => {
     const result = BC3.parse(WITH_K_BC3, { mode: 'lenient' });
@@ -41,5 +47,14 @@ describe('~K coefficient data in BC3Document', () => {
     assert.ok(result.document);
     assert.ok(result.document.coefficients);
     assert.ok(result.document.coefficients.legacy.length > 0);
+  });
+
+  it('handles negative digit count values (VQUISI)', () => {
+    const result = BC3.parse(NEGATIVE_DIGIT_K_BC3, { mode: 'lenient' });
+    assert.ok(result.document);
+    assert.ok(result.document.coefficients);
+
+    assert.equal(result.document.coefficients.legacy[0], '-9');
+    assert.equal(result.document.coefficients.legacy.length, 8);
   });
 });
