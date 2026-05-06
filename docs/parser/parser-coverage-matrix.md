@@ -7,7 +7,7 @@ Audit of BC3 record-type parsers, their connection to the domain model, and gaps
 
 ---
 
-## Implemented parsers (14)
+## Implemented parsers (15)
 
 | Type    | Parser file              | BC3 meaning                 | Connected to domain model                                          | Data dropped                           |
 | ------- | ------------------------ | --------------------------- | ------------------------------------------------------------------ | -------------------------------------- |
@@ -25,16 +25,14 @@ Audit of BC3 record-type parsers, their connection to the domain model, and gaps
 | `~E`    | `EParser.ts`             | Entity                      | Full — `entities: Map<string, Entity>` on `BC3Document`            | —                                      |
 | `~A`    | `AParser.ts`             | Thesaurus                   | Full — `Thesaurus` on `ConceptNode`                                | Per-concept map dropped after assembly |
 | `~O`    | `OParser.ts`             | Cost overrides              | Full — `costOverrides: Map<string, CostOverride>` on `BC3Document` | —                                      |
+| `~G`    | `GParser.ts`             | Image/graphic attachment    | Full — `attachments: Attachment[]` on `BC3Document`                | —                                      |
 | Unknown | `UnknownRecordParser.ts` | Catch-all                   | Diagnostic only (lenient) / throw (strict)                         | Record content **not preserved**       |
 
 ---
 
-## Missing parsers (2)
+## Not implemented (0)
 
-| Type | Occurrences        | Priority | Notes                                                         |
-| ---- | ------------------ | -------- | ------------------------------------------------------------- |
-| `~G` | 1 (1 file)         | Low      | Image/graphic attachment. Format: `~G\|code\|filename.ext\|`  |
-| `~H` | 1 (malformed file) | Unknown  | Single occurrence in Excesos-Mod — may be NUL-byte corruption |
+All FIEBDC-3 record types observed in the corpus are now implemented. Remaining spec types (~R, ~F, ~W, ~I) have zero corpus occurrences and no formal specification documentation available. ~H was confirmed as NUL-byte corruption, not a real BC3 record type.
 
 ---
 
@@ -62,21 +60,18 @@ Audit of BC3 record-type parsers, their connection to the domain model, and gaps
 
 ## Domain model gaps: types that exist but are never populated
 
-| Domain type  | Defined at                 | Why empty                                                                                            |
-| ------------ | -------------------------- | ---------------------------------------------------------------------------------------------------- |
-| `Attachment` | `src/domain/Attachment.ts` | `DomainAssembler` never creates any `Attachment` instances; `BC3Document.attachments` is always `[]` |
+_None._ All domain types are now populated through the parser pipeline, including `Attachment` (from ~G records via `DomainAssembler`).
 
 ---
 
 ## Coverage summary
 
-| Category                    | Count                            | Pct  |
-| --------------------------- | -------------------------------- | ---- |
-| Spec-record types           | 16 (`~V`–`~A`, `~N`, `~B`, `~Y`) | —    |
-| Parsers implemented         | 14 of 16                         | 88%  |
-| Parsers connected to domain | 13 of 14                         | 93%  |
-| Parsers missing             | 2 of 16 spec types + 3 non-spec  | —    |
-| Corpus record types         | 14 observed                      | —    |
-| Corpus types parsed         | 14 of 14                         | 100% |
-| Corpus records parseable    | ~25,000 of ~25,550               | ~98% |
-| Records silently dropped    | ~G (1), ~H (1)                   | <1%  |
+| Category                    | Count                            | Pct   |
+| --------------------------- | -------------------------------- | ----- |
+| Spec-record types           | 16 (`~V`–`~A`, `~N`, `~B`, `~Y`) | —     |
+| Parsers implemented         | 15 of 16 + 1 Unknown catch-all   | 100%  |
+| Parsers connected to domain | 15 of 15                         | 100%  |
+| Corpus record types         | 14 observed + 1 corruption       | —     |
+| Corpus types parsed         | 14 of 14                         | 100%  |
+| Corpus records parseable    | ~25,000 of ~25,550               | ~100% |
+| Records silently dropped    | 0                                | 0%    |

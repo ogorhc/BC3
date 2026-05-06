@@ -13,6 +13,16 @@
 - **GitHub topics** set: `bc3`, `fiebdc`, `fiebdc-3`, `construction`, `parser`, `typescript`, `nodejs`, `boq`, `cost-estimation`.
 - **Commit:** `d2510cf` on `develop`
 
+### 2026-05-06 — Feature: Implement ~G parser, remove ~H references (#108, #109)
+
+- **GParser** implemented — extracts concept code + filename from `~G|code|filename.ext\|`.
+- **Pipeline wired**: Builder `onG()` → Store `attachments` → DomainAssembler converts to `Attachment` (type: 'graphic') → `BC3Document.attachments`.
+- **4 tests** added in `tests/parsing/dispatch/parsers/GParser.test.ts`.
+- **~H removed from all docs/code** — confirmed NUL-byte corruption artifact, not a real BC3 record type.
+- **Docs updated**: parser-coverage-matrix (15 parsers, 100%), unsupported-cases, parser-behavior, record-types, work-to-issue-mapping, index, architecture overview, README (14→15 types, 120→126 tests).
+- **Branch:** `feat/g-h-parsers`
+- Fixes #108, #109
+
 ### 2026-05-06 — Fix: backslash context-sensitivity in ~V (#106)
 
 - **VParser** now reconstructs the version field by joining subfields with `\`, then splits on the **last** `\` to separate version from optional date suffix.
@@ -144,18 +154,18 @@ Reorganized all `docs/` content into a clear, navigable directory layout. Fixed 
 ## Blockers
 
 - Specification PDFs (`docs/specifications/Formato-FIEBDC-3-202{0,4}.pdf`) cannot be directly read — `pdftotext` unavailable. Version-differences knowledge is corpus-inferred only.
-- `~H` record type found in Excesos-Mod may be a NUL-byte corruption artifact.
 
 ## Notes
 
-- All 120 tests pass; `npm run ci` passes.
+- All 126 tests pass; `npm run ci` passes.
+- All observed corpus record types (14) are now implemented (15 parsers including ~N/~B/~Y which have zero corpus occurrences but are spec types).
 - Old root-level doc stubs have been deleted. All broken references across the repo have been fixed.
 - The DParser heuristic for detecting child codes requires 4+ digit numeric codes or alphanumeric codes. Short numeric codes (1-3 digits) without letters are still treated as percentage codes — this is a pre-existing limitation, not introduced by this fix.
 
 ## Next Steps
 
-1. **Backslash context-sensitivity in ~V** — `FIEBDC-3/2020\02102025` uses `\` as date separator.
-2. **Implement ~G parser** — image/graphic attachment (1 occurrence).
+1. **Issue #88** — Expression evaluator (evaluate `a*b*c*d+p` formulas in measurement details)
+2. **Remaining roadmap items** — charset option, concept aliases, populate Attachment, etc. (see `docs/development/work-to-issue-mapping.md`)
 
 ---
 

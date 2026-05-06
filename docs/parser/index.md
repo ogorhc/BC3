@@ -41,4 +41,4 @@ Input string
 
 ### Not yet implemented
 
-`~O` (cost override), `~G`, `~H` — see `docs/bc3-knowledge/unsupported-cases.md`.
+`~O` (cost override), `~G` — see `docs/bc3-knowledge/unsupported-cases.md`.

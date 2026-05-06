@@ -37,7 +37,7 @@ data structure. BC3 fills that gap.
 
 ## Status
 
-**Active development** — 14 of 16 record types parsed, 100% of observed corpus types supported, 120 regression tests.
+**Active development** — 15 of 16 record types parsed, 100% of observed corpus types supported, 126 regression tests.
 
 Current version: `v0.7.0`
 
@@ -72,7 +72,7 @@ if (result.document) {
 
 ### Parsing
 
-- **14 record-type parsers** — `~V` through `~O`, plus `UnknownRecordParser`
+- **15 record-type parsers** — `~V` through `~G`, plus `UnknownRecordParser`
 - **Real-world corpus support** — tested against 7 BC3 files from Presto, ARQUIMEDES, and TCQ spanning FIEBDC-3/2002–2020
 - **Multiline ~D records** — ARQUIMEDES continuation lines parsed correctly
 - **Dotted child codes** — `WORKER.1a`, `I.LT04.01` handled correctly in decompositions

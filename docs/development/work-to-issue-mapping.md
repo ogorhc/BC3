@@ -17,11 +17,10 @@ The BC3 GitHub Project tracked Phases 0–3 (Setup → Architecture → Pipeline
 
 ### A. Missing parsers (corpus-inferred types)
 
-| Finding                                            | Severity    | Existing issue? | Proposed issue                                   |
-| -------------------------------------------------- | ----------- | --------------- | ------------------------------------------------ |
-| `~O` — 517 occurrences, cost overrides by location | High        | None            | `[Feature]: Parse ~O records (cost overrides)`   |
-| `~G` — 1 occurrence, image/graphic attachment      | Low         | None            | `[Feature]: Parse ~G records (image attachment)` |
-| `~H` — 1 occurrence, possibly corruption           | Investigate | None            | `[Feature]: Investigate ~H record type`          |
+| Finding                                            | Severity | Existing issue? | Proposed issue                                   |
+| -------------------------------------------------- | -------- | --------------- | ------------------------------------------------ |
+| `~O` — 517 occurrences, cost overrides by location | High     | None            | `[Feature]: Parse ~O records (cost overrides)`   |
+| `~G` — 1 occurrence, image/graphic attachment      | Low      | None            | `[Feature]: Parse ~G records (image attachment)` |
 
 ### B. Parsed but disconnected
 

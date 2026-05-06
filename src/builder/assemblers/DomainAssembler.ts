@@ -259,6 +259,20 @@ export class DomainAssembler {
 
     // Build entities
     const entities = new Map<string, Entity>();
+
+    // Build attachments from ~G records
+    const attachments: Attachment[] = [];
+    for (const g of store.attachments ?? []) {
+      if (!g.conceptCode || !g.filename) continue;
+      attachments.push(
+        new Attachment({
+          conceptCode: normalizeCode(g.conceptCode),
+          type: 'graphic',
+          url: g.filename,
+        }),
+      );
+    }
+
     for (const [entityCode, eInput] of store.entities.entries()) {
       const entity = new Entity({
         entityCode,
@@ -348,6 +362,7 @@ export class DomainAssembler {
       metadata,
       roots: rootNodes,
       conceptsByCode: conceptNodes,
+      attachments,
       entities,
       specificationsDictionary,
       itCodesDictionary,

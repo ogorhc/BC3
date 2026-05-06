@@ -46,7 +46,6 @@ Catalog of FIEBDC-3 record types observed in the real-world corpus, cross-refere
 | ---- | --------------------------- | ----------- | --------------------------------------------------------------------------------------- |
 | `~O` | 19-026, 21-028, Excesos-Mod | 517 total   | Observations / geographic cost overrides: `~O\|concept\location\price\location\price\|` |
 | `~G` | 19-026                      | 1           | Image/graphic attachment: `~G\|concept\|filename.ext\|`                                 |
-| `~H` | Excesos-Mod                 | 1           | Unknown — single occurrence in malformed file                                           |
 
 ## Spec types absent from corpus
 
