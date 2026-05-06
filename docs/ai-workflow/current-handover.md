@@ -6,6 +6,14 @@
 
 ## Recent Changes
 
+### 2026-05-06 — Fix: ~D records emit diagnostics for unmatched codes (#96)
+
+- **Added warn-level diagnostics** in `BC3Builder.assembleHierarchy()` when ~D parent or child code does not match any ~C concept
+- Previously these were silently skipped — now emit `BC3_D_MISSING_PARENT_CODE` and `BC3_D_MISSING_CHILD_CODE`
+- **Added 3 regression tests** in `tests/api/DSilentDiagnostics.test.ts`
+- **Branch:** `fix/96-d-silent-diagnostics`
+- Fixes #96
+
 ### 2026-05-06 — Feature: parse ~O records (#94)
 
 - **Created `CostOverride` domain class** with `conceptCode` + `locations[]` (`CostLocation: { location, price }`)
@@ -88,17 +96,17 @@ Reorganized all `docs/` content into a clear, navigable directory layout. Fixed 
 
 ## Notes
 
-- All 99 tests pass; `npm run ci` passes.
+- All 102 tests pass; `npm run ci` passes.
 - Old root-level doc stubs have been deleted. All broken references across the repo have been fixed.
 - The DParser heuristic for detecting child codes requires 4+ digit numeric codes or alphanumeric codes. Short numeric codes (1-3 digits) without letters are still treated as percentage codes — this is a pre-existing limitation, not introduced by this fix.
 
 ## Next Steps
 
-1. **Fix ~D silent diagnostics** — ~D records silently skip children with unmatched codes. See work-to-issue-mapping.md Priority 1 #3.
-2. **Fix KParser negative digit counts** — VQUISI has `-9` as first digit count. See work-to-issue-mapping.md Priority 1 #4.
-3. **ISO-8859-1 encoding support** — all corpus files are Latin-1.
-4. **Regression tests for untested parsers** — 10 of 13 parsers have no dedicated tests.
-5. **Null byte stripping preprocessor** — unblocks Excesos-Mod.
+1. **Fix KParser negative digit counts** — VQUISI has `-9` as first digit count. See work-to-issue-mapping.md Priority 1 #4.
+2. **ISO-8859-1 encoding support** — all corpus files are Latin-1.
+3. **Regression tests for untested parsers** — 10 of 13 parsers have no dedicated tests.
+4. **Null byte stripping preprocessor** — unblocks Excesos-Mod.
+5. **Backslash context-sensitivity in ~V** — `FIEBDC-3/2020\02102025` uses `\` as date separator.
 
 ---
 
