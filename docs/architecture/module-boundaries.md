@@ -66,58 +66,51 @@ Future importers may include:
 
 ---
 
-## 4. Proposed folder structure
+## 4. Actual folder structure
+
+> The implemented structure differs from the original design spec. This reflects the real codebase as of v0.7.0.
 
 ```text
 src/
-  index.ts
+  index.ts                    # Barrel export
 
   api/
-    bc3.ts              # Public API façade (BC3.parse, BC3.from)
-    types.ts            # Public options and return types
+    BC3.ts                    # Public façade: BC3.parse()
+    types/PublicApi.ts        # ParseOptions, ParseResult
 
   importers/
-    bc3-text/
-      importer.ts       # BC3 text import orchestration
-      options.ts        # Importer-specific options
-
-  domain/
-    document.ts         # BC3Document aggregate
-    concept.ts          # Concept entity + hierarchy node
-    decomposition.ts    # Decomposition entities
-    measurement.ts      # Measurement entities
-    attachments.ts      # Attachments / resources
-    diagnostics.ts      # Diagnostics model
+    StringImporter.ts         # Adapts string input for parsing
+    types/
 
   parsing/
-    tokenizer/
-      tokenizer.ts      # Record and field tokenization
-      tokens.ts         # Token definitions
-
-    dispatcher/
-      dispatcher.ts     # Strategy selection
-      registry.ts       # Strategy registration
-
-    strategies/
-      v.parser.ts       # ~V
-      k.parser.ts       # ~K
-      c.parser.ts       # ~C
-      d.parser.ts       # ~D
-      m.parser.ts       # ~M
-
-    context/
-      parse-context.ts  # Shared parsing state
+    Tokenizer.ts              # Record/field/subfield tokenization
+    parseBC3.ts               # Orchestration: tokenize + dispatch + assemble
+    dispatch/
+      RecordDispatcher.ts     # Routes records to strategy parsers
+      parsers/
+        VParser.ts ... AParser.ts   # 13 record-type parsers
+        UnknownRecordParser.ts      # Fallback
+        createDefaultParsers.ts     # Registry factory
+      types/
+        ParseContext.ts       # { options, diagnostics, builder }
+        RecordParser.ts       # interface: parse(record, ctx): void
+    types/
+      RawRecord.ts            # { type, index, raw, fields: string[][] }
 
   builder/
-    builder.ts          # Domain construction orchestrator
-    hierarchy.ts        # Composite hierarchy helpers
-    resolvers.ts        # Deferred reference resolution
+    BC3Builder.ts             # Builder: onV(), onC(), onD(), ...
+    BC3ParseStore.ts          # Intermediate store
+    assemblers/
+      DomainAssembler.ts      # store → BC3Document
+
+  domain/
+    BC3Document.ts            # Root aggregate
+    ConceptNode.ts            # Composite tree node
+    Decomposition.ts, Measurement.ts, Attachment.ts, Entity.ts ...
+    types/                    # Concept, Diagnostic, Money, Units, ...
 
   utils/
     strings.ts
-    numbers.ts
-    dates.ts
-    charset.ts
 ```
 
 ---

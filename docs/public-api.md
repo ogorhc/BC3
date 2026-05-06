@@ -4,6 +4,16 @@ This document defines the **public API** of the `bc3` library: entry points, inp
 
 The API must remain stable over time. Internal modules (importers/parsing/builder) may evolve without breaking consumers.
 
+> **What is actually implemented (as of v0.7.0):**
+>
+> ```ts
+> BC3.parse(input: string, options?: { mode?: 'strict' | 'lenient' }): ParseResult
+> ```
+>
+> `ParseResult` has `{ document: BC3Document; diagnostics: Diagnostic[] }`.
+>
+> Sections below marked **[ASPIRATIONAL]** describe design goals that are **not yet implemented**.
+
 ---
 
 ## 1. Guiding principles
@@ -24,14 +34,14 @@ The API must remain stable over time. Internal modules (importers/parsing/builde
 
 **Input forms** (initial scope):
 
-- `string` (raw BC3 text)
-- `Uint8Array` / `ArrayBuffer` (for file buffers; charset handling is importer-specific)
+- `string` (raw BC3 text) — **implemented**
+- `Uint8Array` / `ArrayBuffer` (for file buffers; charset handling is importer-specific) — **[ASPIRATIONAL]**
 
 **Options**:
 
-- `mode`: `'strict' | 'lenient'` (default: `'lenient'`)
-- `charset`: `'auto' | 'ansi' | '850' | '437'` (default: `'auto'`)
-- `collectRawRecords`: `boolean` (default: `false`) — whether to keep raw record tokens
+- `mode`: `'strict' | 'lenient'` (default: `'lenient'`) — **implemented**
+- `charset`: `'auto' | 'ansi' | '850' | '437'` (default: `'auto'`) — **[ASPIRATIONAL]** not implemented; callers must decode to string
+- `collectRawRecords`: `boolean` (default: `false`) — **[ASPIRATIONAL]** not implemented
 
 **Return**: `BC3ParseResult`
 
@@ -51,11 +61,11 @@ This is optimal for:
 - deterministic behavior
 - easier unit testing
 
-### Optional async variants
+### Optional async variants [ASPIRATIONAL]
 
 Async support can be added without changing the sync API:
 
-- `BC3.parseAsync(input, options?)`
+- `BC3.parseAsync(input, options?)` — **not implemented**
 
 Use cases:
 
@@ -72,9 +82,9 @@ The parsing result is a structured object, not only the document, to ensure diag
 
 Contains:
 
-- `document`: `BC3Document`
-- `diagnostics`: `BC3Diagnostics` (warnings/errors)
-- `stats` (optional): parse statistics (record counts, duration)
+- `document`: `BC3Document` — **implemented**
+- `diagnostics`: `Diagnostic[]` (warnings/errors) — **implemented**
+- `stats` (optional): parse statistics (record counts, duration) — **[ASPIRATIONAL]** not implemented
 
 ---
 
@@ -84,12 +94,16 @@ Contains:
 
 Publicly exposed as a read-only domain aggregate.
 
-Expected access patterns:
+Expected access patterns (implemented):
 
 - `document.metadata` (from ~V)
-- `document.root` (root concept, if available)
-- `document.conceptsByCode` (lookup)
-- `document.hierarchy` (chapters/items tree)
+- `document.roots` — top-level `ConceptNode[]`
+- `document.conceptsByCode` — `Map<string, ConceptNode>` keyed by normalized code
+
+Expected access patterns (aspirational / not yet exposed):
+
+- `document.root` (single root concept, if available) — **[ASPIRATIONAL]**
+- `document.hierarchy` (chapters/items tree) — **[ASPIRATIONAL]**
 
 ---
 
@@ -125,11 +139,11 @@ Internal implementation details must not be exported:
 
 ---
 
-## 8. Future extensibility (importers)
+## 8. Future extensibility (importers) [ASPIRATIONAL]
 
 To support future import sources without breaking changes, the API can evolve to:
 
-- `BC3.from(source, options?)`
+- `BC3.from(source, options?)` — **not implemented**
 
 Where `source` may represent:
 
@@ -146,8 +160,8 @@ However, the initial stable contract remains:
 
 ## 9. Summary
 
-- Primary API: `BC3.parse(input, options?)` (sync)
-- Optional future: `BC3.parseAsync(...)`
-- Return: structured result (`document + diagnostics + stats`)
+- Primary API: `BC3.parse(input: string, options?: { mode? }): ParseResult` (sync) — **implemented**
+- Optional future: `BC3.parseAsync(...)` — **[ASPIRATIONAL]**
+- Return: `{ document: BC3Document; diagnostics: Diagnostic[] }` — `stats` is aspirational
 - Mode: strict vs lenient
 - Keep internal implementation private

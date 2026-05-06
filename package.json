@@ -27,6 +27,8 @@
     "dist"
   ],
   "scripts": {
+    "test": "node --import tsx/esm --test $(find tests -name '*.test.ts' -type f)",
+    "test:watch": "node --import tsx/esm --test --watch $(find tests -name '*.test.ts' -type f)",
     "dev:build": "tsup src/index.ts --format esm,cjs --dts --sourcemap --clean --watch",
     "dev:tokenize": " npm run build && node scripts/tokenize.mjs ./scripts/file.bc3",
     "ci": "npm run build && npm run check-format",
@@ -55,6 +57,7 @@
     "lint-staged": "16.2.7",
     "prettier": "^3.7.4",
     "tsup": "8.5.1",
+    "tsx": "4.21.0",
     "typescript": "5.9.3"
   },
   "lint-staged": {

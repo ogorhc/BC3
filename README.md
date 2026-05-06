@@ -175,19 +175,19 @@ if (decompInfo) {
 
 The core architecture and design decisions are documented in:
 
-- [**Grammar rules**](docs/grammar.md)
+- [**Grammar rules**](docs/parser/grammar.md)
   BC3 lexical rules: record delimiters, fields, subfields, and whitespace handling.
 
-- [**Domain model**](docs/domain-model.md)
+- [**Domain model**](docs/domain/model.md)
   Core entities: `BC3Document`, `Concept`, `Decomposition`, `Measurement`, attachments.
 
-- [**Parsing modes**](docs/parsing-modes.md)
+- [**Parsing modes**](docs/parser/parsing-modes.md)
   Strict vs lenient parsing, warnings, errors, and diagnostics strategy.
 
-- [**Design patterns**](docs/design-patterns.md)
+- [**Design patterns**](docs/architecture/design-patterns.md)
   Builder, Strategy, and Composite responsibilities and interactions.
 
-- [**Module boundaries**](docs/module-boundaries.md)
+- [**Module boundaries**](docs/architecture/module-boundaries.md)
   Folder structure, importers, parsing pipeline, and dependency rules.
 
 - [**Public API**](docs/public-api.md)

@@ -24,9 +24,19 @@ Thumbs.db
 .vscode
 .idea
 
-# scripts
+# temp scripts
 /scripts
 
-# rules
-/.cursor
-.cursorrules
+# private corpus and specs
+data/
+docs/specifications/
+
+# AI cache only
+.ai/cache/
+.ai/tmp/
+
+# Cursor cache
+.cursor/cache/
+
+# agent temp
+.agents/cache/
