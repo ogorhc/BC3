@@ -164,8 +164,8 @@ Reorganized all `docs/` content into a clear, navigable directory layout. Fixed 
 
 ## Next Steps
 
-1. **Task hygiene** — Close stale/duplicate issues, sync GitHub Projects, ensure issues reflect shipped work.
-2. **Remaining roadmap items** — Expression evaluator (#88), charset option, concept aliases, etc. (see `docs/development/work-to-issue-mapping.md`).
+1. **Issue #88** — Expression evaluator (evaluate `a*b*c*d+p` formulas in measurement details)
+2. **Remaining roadmap items** — charset option, concept aliases, populate Attachment, etc. (see `docs/development/work-to-issue-mapping.md`)
 
 ---
 
