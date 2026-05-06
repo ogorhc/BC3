@@ -175,8 +175,8 @@ Reorganized all `docs/` content into a clear, navigable directory layout. Fixed 
 
 ## Next Steps
 
-1. **Issue #88** — Expression evaluator (evaluate `a*b*c*d+p` formulas in measurement details)
-2. **Remaining roadmap items** — charset option, concept aliases, populate Attachment, etc. (see `docs/development/work-to-issue-mapping.md`)
+1. **Merge open PRs** — `feat/88-expression-evaluator`, `feat/g-h-parsers`, `fix/106-v-backslash-context`, `feat/104-null-byte-stripping` are ready.
+2. **Remaining open issues** (7): #122 (diagnostics model), #123 (perf profiling), #124 (streaming parser), #129 (integration tests), #131 (usage examples), #132/#133 (CI/release), #134 (v1.0.0 milestone).
 
 ---
 
