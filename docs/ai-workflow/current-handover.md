@@ -6,6 +6,12 @@
 
 ## Recent Changes
 
+### 2026-05-06 — Docs: ISO-8859-1 encoding contract (#100)
+
+- **Documented** in `public-api.md` that ISO-8859-1 decoding is the caller's responsibility (not the library's). All corpus files use Latin-1 — callers must decode before passing to `BC3.parse()` (as demonstrated in `scripts/tokenize.mjs`)
+- **Branch:** `feat/100-latin1-encoding-support`
+- Fixes #100
+
 ### 2026-05-06 — Fix: verify KParser handles negative digit counts (#98)
 
 - **Added test** for `-9` digit count (VQUISI corpus pattern). KParser stores subfields as strings — no code change needed
@@ -108,10 +114,9 @@ Reorganized all `docs/` content into a clear, navigable directory layout. Fixed 
 
 ## Next Steps
 
-1. **ISO-8859-1 encoding support** — all corpus files are Latin-1.
-2. **Regression tests for untested parsers** — 10 of 13 parsers have no dedicated tests.
-3. **Null byte stripping preprocessor** — unblocks Excesos-Mod.
-4. **Backslash context-sensitivity in ~V** — `FIEBDC-3/2020\02102025` uses `\` as date separator.
+1. **Regression tests for untested parsers** — 10 of 13 parsers have no dedicated tests.
+2. **Null byte stripping preprocessor** — unblocks Excesos-Mod.
+3. **Backslash context-sensitivity in ~V** — `FIEBDC-3/2020\02102025` uses `\` as date separator.
 
 ---
 
