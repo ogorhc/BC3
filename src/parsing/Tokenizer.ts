@@ -25,6 +25,10 @@ function stripEofMarker(input: string): string {
   return eof >= 0 ? input.slice(0, eof) : input;
 }
 
+function stripNullBytes(input: string): string {
+  return input.replace(/\x00/g, '');
+}
+
 function isWsCharCode(code: number): boolean {
   return WHITESPACE_CHAR_CODES.includes(code);
 }
@@ -121,7 +125,7 @@ export class Tokenizer implements TokenizerInterface {
     const trimBoth = options.trimAroundSeparators ?? true;
     const lenient = options.lenient ?? true;
 
-    const src = stripEofMarker(input);
+    const src = stripEofMarker(stripNullBytes(input));
     const recordStarts = findRecordStarts(src, lenient);
 
     const records: RawRecord[] = [];
