@@ -7,7 +7,7 @@
 
 Real-world BC3 files produced by commercial software (ARQUIMEDES, Presto, TCQ, CYPE) frequently contain:
 
-- Non-standard record types (`~O`, `~G`, `~H`)
+- Non-standard record types (`~O`, `~G`)
 - Fields with unexpected formats
 - Missing optional fields
 - Encoding issues when read as UTF-8

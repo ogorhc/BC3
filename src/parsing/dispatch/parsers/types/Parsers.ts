@@ -138,3 +138,8 @@ export interface OInput {
   conceptCode: string;
   locations: CostLocationInput[];
 }
+
+export interface GInput {
+  conceptCode: string;
+  filename: string;
+}

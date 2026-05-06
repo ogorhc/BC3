@@ -7,6 +7,7 @@ import {
   ConceptInput,
   DecompositionInput,
   EInput,
+  GInput,
   KDecimalsInput,
   LInput,
   MeasurementInput,
@@ -39,6 +40,7 @@ export class BC3Builder {
   private entities: Map<string, EInput> = new Map(); // entityCode -> EInput
   private thesaurus: Map<string, AInput> = new Map(); // conceptCode -> AInput
   private costOverrides: Map<string, OInput> = new Map(); // conceptCode -> OInput
+  private attachments: GInput[] = [];
 
   private codeChanges: Map<string, string> = new Map();
 
@@ -117,6 +119,10 @@ export class BC3Builder {
 
   onO(input: OInput): void {
     this.costOverrides.set(input.conceptCode, input);
+  }
+
+  onG(input: GInput): void {
+    this.attachments.push(input);
   }
 
   private applyCodeChanges(): void {
@@ -307,6 +313,7 @@ export class BC3Builder {
       entities: this.entities,
       thesaurus: this.thesaurus,
       costOverrides: this.costOverrides,
+      attachments: this.attachments,
       nodes,
       roots,
     });
