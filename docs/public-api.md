@@ -12,6 +12,14 @@ The API must remain stable over time. Internal modules (importers/parsing/builde
 >
 > `ParseResult` has `{ document: BC3Document; diagnostics: Diagnostic[] }`.
 >
+> **Encoding:** `BC3.parse()` accepts a UTF-16 JavaScript string. All real-world BC3 corpus files use ISO-8859-1 (Latin-1) encoding. Callers must decode before parsing:
+>
+> ```ts
+> // Node.js
+> const input = fs.readFileSync('file.bc3', 'latin1');
+> const result = BC3.parse(input, { mode: 'lenient' });
+> ```
+>
 > Sections below marked **[ASPIRATIONAL]** describe design goals that are **not yet implemented**.
 
 ---
