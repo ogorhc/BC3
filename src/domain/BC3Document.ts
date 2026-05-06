@@ -1,4 +1,5 @@
 import { Attachment } from './Attachment';
+import { Coefficients } from './Coefficients';
 import { ConceptNode } from './ConceptNode';
 import { Entity } from './Entity';
 import { ITCodes } from './ITCode';
@@ -62,6 +63,9 @@ export class BC3Document {
   /** IT codes dictionary (IT codes definitions) */
   readonly itCodesDictionary?: ITCodes;
 
+  /** Cost coefficients from ~K record */
+  readonly coefficients?: Coefficients;
+
   /** Diagnostics collected during parsing */
   readonly diagnostics: Diagnostic[];
 
@@ -73,6 +77,7 @@ export class BC3Document {
     entities?: Map<string, Entity>;
     specificationsDictionary?: Specification;
     itCodesDictionary?: ITCodes;
+    coefficients?: Coefficients;
     diagnostics: Diagnostic[];
   }) {
     this.metadata = args.metadata;
@@ -82,6 +87,7 @@ export class BC3Document {
     this.entities = args.entities ?? new Map();
     this.specificationsDictionary = args.specificationsDictionary;
     this.itCodesDictionary = args.itCodesDictionary;
+    this.coefficients = args.coefficients;
     this.diagnostics = args.diagnostics;
   }
 

@@ -2,7 +2,7 @@
 
 Edge cases discovered in the real-world BC3 corpus that deviate from the standard single-line, ASCII, well-formed BC3 model.
 
-## 1. Multiline ~D records (ARQUIMEDES generator)
+## 1. Multiline ~D records (ARQUIMEDES generator) — partially fixed
 
 **File:** `PRESUPUESTO-VQUISI.bc3` (FIEBDC-3/2012, ARQUIMEDES)
 
@@ -18,7 +18,9 @@ Edge cases discovered in the real-world BC3 corpus that deviate from the standar
 
 **Impact:** 3,897 continuation lines (62% of total lines). The parser's tokenizer currently uses `~` as record boundary — continuation lines starting without `~` would be discarded as garbage or attached to the next record.
 
-**Mitigation:** Tokenizer must recognize `|` or `\` at line-start as continuation of the previous record, OR the multiline ~D must be collapsed before tokenization.
+**Resolution (2026-05-06):** The tokenizer correctly includes continuation lines in the record body (they fall between `~` markers). The fix was in DParser: ARQUEMEDES multiline format omits performance/rendimiento values, emitting only code+factor (2 subfields per child instead of 3). DParser now detects when the performance slot contains a child code and backs up to treat it as the next child's code. 3 of 3 children now parse correctly in tested fixtures.
+
+**Remaining:** Excesos-Mod has 34,858 multiline continuation lines mixed with NUL bytes — this file still requires null-byte stripping.
 
 ## 2. Null byte contamination
 

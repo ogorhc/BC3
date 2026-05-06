@@ -6,6 +6,25 @@
 
 ## Recent Changes
 
+### 2026-05-06 — Fix: ~K coefficient data exposed in BC3Document (#92)
+
+- **Created `Coefficients` domain class** in `src/domain/Coefficients.ts` holding `legacy`, `full`, `raw` from `KDecimalsInput`
+- **Added `coefficients` property** to `BC3Document`
+- **Updated `DomainAssembler`** to build `Coefficients` from `store.decimals` and pass to document constructor
+- **Added 3 regression tests** in `tests/api/KCoefficients.test.ts`
+- **Branch:** `fix/92-connect-k-coefficients`
+- Fixes #92 — ~K data was parsed but silently lost; now accessible on `document.coefficients`
+
+### 2026-05-06 — Fix: multiline ~D records from ARQUIMEDES generator
+
+- **Fixed DParser** to handle ARQUEMEDES multiline format where continuation lines omit performance/rendimiento values (2 subfields per child instead of 3)
+- DParser now detects when the performance slot contains a child code and backs up to consume it as the next child's code
+- Extracted `looksLikeChildCode` into a shared private method
+- **Added 4 integration tests** in `tests/parsing/dispatch/parsers/DParser.multiline.test.ts`
+- **Updated** `docs/bc3-knowledge/known-edge-cases.md` edge case #1 — now partially resolved
+- **Branch:** `fix/multiline-d-tokenizer`
+- 92 tests pass, CI clean
+
 ### 2026-05-06 — Fix: ~D record dotted child code parsing (#87)
 
 - **Fixed DParser bug** where child codes containing dots (e.g. `WORKER.1a`) caused subsequent children to be misclassified as percentage codes. Root cause: `elem.includes('.')` heuristic matched decimal factor/performance values. Added decimal number exclusion and alphanumeric child code detection.
@@ -60,17 +79,17 @@ Reorganized all `docs/` content into a clear, navigable directory layout. Fixed 
 
 ## Notes
 
-- All 88 tests pass; `npm run ci` passes.
+- All 95 tests pass; `npm run ci` passes.
 - Old root-level doc stubs have been deleted. All broken references across the repo have been fixed.
 - The DParser heuristic for detecting child codes requires 4+ digit numeric codes or alphanumeric codes. Short numeric codes (1-3 digits) without letters are still treated as percentage codes — this is a pre-existing limitation, not introduced by this fix.
 
 ## Next Steps
 
-1. **Phase 1: Fix multiline `~D` record handling** — ARQUIMEDES emits continuation lines without `~` prefix (3,897 dropped in VQUISI). Add fixture tests, then fix tokenizer. See `docs/bc3-knowledge/known-edge-cases.md` edge case #2.
-2. **Phase 2: Implement `~O` parser** — 517 occurrences across 3 files. See `docs/bc3-knowledge/unsupported-cases.md`.
-3. **Phase 3: ISO-8859-1 encoding support** — all corpus files are Latin-1; document API contract, optionally add Buffer decode helper.
-4. **Phase 4: Null byte stripping preprocessor** — unblocks Excesos-Mod.
-5. **Phase 5: Backslash context-sensitivity in `~V`** — `FIEBDC-3/2020\02102025` uses `\` as date separator; current VParser accidentally works.
+1. **Implement `~O` parser** — 517 occurrences across 3 files. See `docs/bc3-knowledge/unsupported-cases.md` and `docs/development/work-to-issue-mapping.md` Priority 2.
+2. **Fix ~D silent diagnostics** — ~D records silently skip children with unmatched codes. See work-to-issue-mapping.md Priority 1 #3.
+3. **Fix KParser negative digit counts** — VQUISI has `-9` as first digit count. See work-to-issue-mapping.md Priority 1 #4.
+4. **ISO-8859-1 encoding support** — all corpus files are Latin-1.
+5. **Regression tests for untested parsers** — 10 of 13 parsers have no dedicated tests.
 
 ---
 

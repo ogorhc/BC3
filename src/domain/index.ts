@@ -1,5 +1,6 @@
 export * from './Attachment';
 export * from './BC3Document';
+export * from './Coefficients';
 export * from './ConceptNode';
 export * from './Decomposition';
 export * from './Entity';

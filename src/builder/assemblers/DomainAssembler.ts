@@ -1,5 +1,6 @@
 import { Attachment } from '../../domain/Attachment';
 import { BC3Document } from '../../domain/BC3Document';
+import { Coefficients } from '../../domain/Coefficients';
 import { ConceptNode } from '../../domain/ConceptNode';
 import { Decomposition } from '../../domain/Decomposition';
 import { Entity, EntityContact } from '../../domain/Entity';
@@ -311,6 +312,15 @@ export class DomainAssembler {
         }
       : undefined;
 
+    // Build coefficients from ~K record
+    const coefficients = store.decimals
+      ? new Coefficients({
+          legacy: store.decimals.legacy,
+          full: store.decimals.full,
+          raw: store.decimals.raw,
+        })
+      : undefined;
+
     return new BC3Document({
       metadata,
       roots: rootNodes,
@@ -318,6 +328,7 @@ export class DomainAssembler {
       entities,
       specificationsDictionary,
       itCodesDictionary,
+      coefficients,
       diagnostics: store.diagnostics ?? [],
     });
   }
