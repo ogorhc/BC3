@@ -6,6 +6,15 @@
 
 ## Recent Changes
 
+### 2026-05-06 — Feature: parse ~O records (#94)
+
+- **Created `CostOverride` domain class** with `conceptCode` + `locations[]` (`CostLocation: { location, price }`)
+- **Created `OParser`** — splits location\price pairs from ~O records
+- **Added full pipeline**: builder `onO()` → `BC3ParseStore.costOverrides` → `DomainAssembler` pass → `BC3Document.costOverrides`
+- **Added 4 regression tests** in `tests/api/OParser.test.ts`
+- **Branch:** `feat/94-parse-o-records`
+- Fixes #94 — 517 ~O records across 3 corpus files now parse into domain model
+
 ### 2026-05-06 — Fix: ~K coefficient data exposed in BC3Document (#92)
 
 - **Created `Coefficients` domain class** in `src/domain/Coefficients.ts` holding `legacy`, `full`, `raw` from `KDecimalsInput`
@@ -79,17 +88,17 @@ Reorganized all `docs/` content into a clear, navigable directory layout. Fixed 
 
 ## Notes
 
-- All 95 tests pass; `npm run ci` passes.
+- All 99 tests pass; `npm run ci` passes.
 - Old root-level doc stubs have been deleted. All broken references across the repo have been fixed.
 - The DParser heuristic for detecting child codes requires 4+ digit numeric codes or alphanumeric codes. Short numeric codes (1-3 digits) without letters are still treated as percentage codes — this is a pre-existing limitation, not introduced by this fix.
 
 ## Next Steps
 
-1. **Implement `~O` parser** — 517 occurrences across 3 files. See `docs/bc3-knowledge/unsupported-cases.md` and `docs/development/work-to-issue-mapping.md` Priority 2.
-2. **Fix ~D silent diagnostics** — ~D records silently skip children with unmatched codes. See work-to-issue-mapping.md Priority 1 #3.
-3. **Fix KParser negative digit counts** — VQUISI has `-9` as first digit count. See work-to-issue-mapping.md Priority 1 #4.
-4. **ISO-8859-1 encoding support** — all corpus files are Latin-1.
-5. **Regression tests for untested parsers** — 10 of 13 parsers have no dedicated tests.
+1. **Fix ~D silent diagnostics** — ~D records silently skip children with unmatched codes. See work-to-issue-mapping.md Priority 1 #3.
+2. **Fix KParser negative digit counts** — VQUISI has `-9` as first digit count. See work-to-issue-mapping.md Priority 1 #4.
+3. **ISO-8859-1 encoding support** — all corpus files are Latin-1.
+4. **Regression tests for untested parsers** — 10 of 13 parsers have no dedicated tests.
+5. **Null byte stripping preprocessor** — unblocks Excesos-Mod.
 
 ---
 

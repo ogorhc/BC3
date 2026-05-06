@@ -10,6 +10,7 @@ import {
   KDecimalsInput,
   LInput,
   MeasurementInput,
+  OInput,
   TextInput,
   VersionPropertyInput,
   XInput,
@@ -37,6 +38,7 @@ export class BC3Builder {
   private itCodesDictionary: XInput | undefined; // dictionary mode
   private entities: Map<string, EInput> = new Map(); // entityCode -> EInput
   private thesaurus: Map<string, AInput> = new Map(); // conceptCode -> AInput
+  private costOverrides: Map<string, OInput> = new Map(); // conceptCode -> OInput
 
   private codeChanges: Map<string, string> = new Map();
 
@@ -111,6 +113,10 @@ export class BC3Builder {
 
   onA(input: AInput): void {
     this.thesaurus.set(input.conceptCode, input);
+  }
+
+  onO(input: OInput): void {
+    this.costOverrides.set(input.conceptCode, input);
   }
 
   private applyCodeChanges(): void {
@@ -286,6 +292,7 @@ export class BC3Builder {
       itCodesDictionary: this.itCodesDictionary,
       entities: this.entities,
       thesaurus: this.thesaurus,
+      costOverrides: this.costOverrides,
       nodes,
       roots,
     });
