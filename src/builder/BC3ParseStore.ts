@@ -21,6 +21,7 @@ export class BC3ParseStore {
   readonly itCodesDictionary: BC3ParseStoreData['itCodesDictionary'];
   readonly entities: BC3ParseStoreData['entities'];
   readonly thesaurus: BC3ParseStoreData['thesaurus'];
+  readonly costOverrides: BC3ParseStoreData['costOverrides'];
 
   /** Map of normalized codes to ParseNode */
   readonly nodes: Map<string, ParseNode>;
@@ -46,6 +47,7 @@ export class BC3ParseStore {
     this.itCodesDictionary = data.itCodesDictionary;
     this.entities = data.entities ?? new Map();
     this.thesaurus = data.thesaurus ?? new Map();
+    this.costOverrides = data.costOverrides ?? new Map();
 
     // Initialize nodes and roots from data or empty
     this.nodes = data.nodes ?? new Map();

@@ -7,6 +7,7 @@ import { KParser } from './KParser';
 import { LParser } from './LParser';
 import { MParser } from './MParser';
 import { NParser } from './NParser';
+import { OParser } from './OParser';
 import { RecordParser } from './types/RecordParser';
 import { TParser } from './TParser';
 import { UnknownRecordParser } from './UnknownRecordParser';
@@ -19,6 +20,7 @@ export function createDefaultParsers(): RecordParser[] {
     new VParser(),
     new KParser(),
     new CParser(),
+    new OParser(),
     new DParser(),
     new TParser(),
     new MParser(),

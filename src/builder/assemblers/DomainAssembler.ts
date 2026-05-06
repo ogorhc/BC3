@@ -2,6 +2,7 @@ import { Attachment } from '../../domain/Attachment';
 import { BC3Document } from '../../domain/BC3Document';
 import { Coefficients } from '../../domain/Coefficients';
 import { ConceptNode } from '../../domain/ConceptNode';
+import { CostLocation, CostOverride } from '../../domain/CostOverride';
 import { Decomposition } from '../../domain/Decomposition';
 import { Entity, EntityContact } from '../../domain/Entity';
 import { ITCode, ITCodes } from '../../domain/ITCode';
@@ -234,6 +235,28 @@ export class DomainAssembler {
       node.setThesaurus(thesaurus);
     }
 
+    // Ninth pass: build CostOverride objects from ~O records
+    const costOverrides = new Map<string, CostOverride>();
+    for (const [conceptCode, oInput] of store.costOverrides.entries()) {
+      const normalizedCode = normalizeCode(conceptCode);
+      const locations: CostLocation[] = [];
+
+      for (const loc of oInput.locations) {
+        const price = parseFloat(loc.price);
+        if (loc.location && !isNaN(price)) {
+          locations.push({ location: loc.location, price });
+        }
+      }
+
+      costOverrides.set(
+        normalizedCode,
+        new CostOverride({
+          conceptCode: normalizedCode,
+          locations,
+        }),
+      );
+    }
+
     // Build entities
     const entities = new Map<string, Entity>();
     for (const [entityCode, eInput] of store.entities.entries()) {
@@ -329,6 +352,7 @@ export class DomainAssembler {
       specificationsDictionary,
       itCodesDictionary,
       coefficients,
+      costOverrides,
       diagnostics: store.diagnostics ?? [],
     });
   }

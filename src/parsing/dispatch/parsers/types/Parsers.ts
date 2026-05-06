@@ -128,3 +128,13 @@ export interface AInput {
   conceptCode: string;
   thesaurusKeys: string[];
 }
+
+export interface CostLocationInput {
+  location: string;
+  price: string;
+}
+
+export interface OInput {
+  conceptCode: string;
+  locations: CostLocationInput[];
+}

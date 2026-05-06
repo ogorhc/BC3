@@ -4,7 +4,7 @@ Record types and structural patterns found in the real-world corpus that the cur
 
 ## Unsupported record types
 
-### ~O — Observations / Geographic Cost Overrides
+### ~O — Observations / Geographic Cost Overrides — IMPLEMENTED (2026-05-06)
 
 **Occurrences:** 517 across 3 files (19-026: 296, 21-028: 206, Excesos-Mod: 15)
 
@@ -22,13 +22,7 @@ Record types and structural patterns found in the real-world corpus that the cur
 
 **Semantics:** Provides location-specific cost adjustments for a concept. Each pair is `location_name\price`. Used for regionalized budgeting where labor/material costs vary by autonomous community in Spain.
 
-**Priority:** High — 517 records is significant.
-
-**Implementation notes:**
-
-- Domain type needed: `CostOverride` with concept code + array of `{ location: string, price: number }` pairs
-- Parser: split the value field on `\`, validate even number of sub-elements
-- Builder: store in BC3ParseStore, DomainAssembler maps to BC3Document
+**Status:** Implemented. OParser splits location\price pairs, stored as `CostOverride` on `BC3Document.costOverrides` (Map keyed by concept code).
 
 ### ~G — Image/Graphic Attachment
 
@@ -108,12 +102,12 @@ The `\` in `FIEBDC-3/2020\02102025` should not be treated as a subfield separato
 
 ## Progressive support strategy
 
-| Phase | What                          | Rationale                        |
-| ----- | ----------------------------- | -------------------------------- |
-| 1     | Multiline ~D handling         | Blocks VQUISI + Excesos-Mod      |
-| 2     | ~O record type                | 517 occurrences, clear semantics |
-| 3     | ISO-8859-1 support            | Blocks all files                 |
-| 4     | Null byte stripping           | Unblocks Excesos-Mod             |
-| 5     | Backslash context sensitivity | Cleaner version parsing          |
-| 6     | ~G record type                | Low priority, 1 occurrence       |
-| 7     | ~H investigation              | Possible corruption artifact     |
+| Phase | What                          | Status  |
+| ----- | ----------------------------- | ------- |
+| 1     | Multiline ~D handling         | Done    |
+| 2     | ~O record type                | Done    |
+| 3     | ISO-8859-1 support            | Pending |
+| 4     | Null byte stripping           | Pending |
+| 5     | Backslash context sensitivity | Pending |
+| 6     | ~G record type                | Pending |
+| 7     | ~H investigation              | Pending |
