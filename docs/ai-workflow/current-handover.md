@@ -6,6 +6,12 @@
 
 ## Recent Changes
 
+### 2026-05-06 — Feature: strip null bytes from input (#104)
+
+- **Added `stripNullBytes()`** in Tokenizer — removes `\x00` (NUL) bytes before tokenizing. Unblocks Excesos-Mod corpus file (37,713 lines with NUL contamination)
+- **Branch:** `feat/104-null-byte-stripping`
+- Fixes #104
+
 ### 2026-05-06 — Test: add regression tests for untested parsers (#102)
 
 - **Added 17 regression tests** covering ~T, ~M, ~E, ~A, ~X, ~L, ~N, ~B, ~Y, and UnknownRecordParser
@@ -116,15 +122,14 @@ Reorganized all `docs/` content into a clear, navigable directory layout. Fixed 
 
 ## Notes
 
-- All 119 tests pass; `npm run ci` passes.
+- All 120 tests pass; `npm run ci` passes.
 - Old root-level doc stubs have been deleted. All broken references across the repo have been fixed.
 - The DParser heuristic for detecting child codes requires 4+ digit numeric codes or alphanumeric codes. Short numeric codes (1-3 digits) without letters are still treated as percentage codes — this is a pre-existing limitation, not introduced by this fix.
 
 ## Next Steps
 
-1. **Null byte stripping preprocessor** — unblocks Excesos-Mod.
-2. **Backslash context-sensitivity in ~V** — `FIEBDC-3/2020\02102025` uses `\` as date separator.
-3. **Implement ~G parser** — image/graphic attachment (1 occurrence).
+1. **Backslash context-sensitivity in ~V** — `FIEBDC-3/2020\02102025` uses `\` as date separator.
+2. **Implement ~G parser** — image/graphic attachment (1 occurrence).
 
 ---
 

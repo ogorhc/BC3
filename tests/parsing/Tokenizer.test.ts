@@ -220,5 +220,12 @@ describe('Tokenizer', () => {
       const records = tokenize('~V|A|\n~C|B|\n');
       assert.equal(records.length, 2);
     });
+
+    it('strips null bytes from input', () => {
+      const records = tokenize('~V|\x00A|\r\n\x00~C|B\x00|\r\n');
+      assert.equal(records.length, 2);
+      assert.equal(records[0]!.type, 'V');
+      assert.equal(records[1]!.type, 'C');
+    });
   });
 });
