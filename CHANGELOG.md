@@ -1,5 +1,11 @@
 # bc3
 
+## 1.1.0
+
+### Minor Changes
+
+- b563512: add record count and summary
+
 ## 1.0.1
 
 ### Patch Changes

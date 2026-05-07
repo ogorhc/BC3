@@ -1,4 +1,5 @@
 import { Diagnostic } from '../domain/types';
+import { RecordCounts } from '../domain/types/RecordCounts';
 import { ImporterSource } from '../importers';
 
 import {
@@ -24,6 +25,8 @@ export class BC3Builder {
   private source: ImporterSource | null = null;
   private raw: string | null = null;
   private diagnostics: Diagnostic[] | null = null;
+
+  private recordCounts: RecordCounts | undefined;
 
   private meta: VersionPropertyInput | undefined;
   private decimals: KDecimalsInput | undefined;
@@ -168,6 +171,10 @@ export class BC3Builder {
   private remapCode(code: string): string {
     const mapped = this.codeChanges.get(code);
     return mapped === undefined ? code : mapped;
+  }
+
+  setRecordCounts(counts: RecordCounts): void {
+    this.recordCounts = counts;
   }
 
   private remapRelation(rawCode: string): string {
@@ -316,6 +323,7 @@ export class BC3Builder {
       attachments: this.attachments,
       nodes,
       roots,
+      recordCounts: this.recordCounts,
     });
   }
 }
