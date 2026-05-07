@@ -115,4 +115,4 @@ See [module-boundaries.md](./module-boundaries.md).
 - `stats` in `ParseResult` — not implemented
 - `BC3.from()` generic source factory — not implemented
 - Streaming / partial parsing — not implemented
-- `~O`, `~G`, `~H` parsers — not implemented (see `docs/bc3-knowledge/unsupported-cases.md`)
+- `~O`, `~G` — now implemented (see `docs/bc3-knowledge/unsupported-cases.md`)

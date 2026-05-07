@@ -4,6 +4,7 @@ import {
   ConceptInput,
   DecompositionLineInput,
   EInput,
+  GInput,
   KDecimalsInput,
   LInput,
   MeasurementInput,
@@ -35,6 +36,7 @@ export interface BC3ParseStoreData {
   entities: Map<string, EInput>;
   thesaurus: Map<string, AInput>;
   costOverrides: Map<string, OInput>;
+  attachments?: GInput[];
 
   nodes?: Map<string, ParseNode>;
   roots?: string[];

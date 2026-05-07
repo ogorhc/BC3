@@ -69,7 +69,7 @@ Metadata: `data/bc3-corpus/metadata/samples.index.json`
 - `docs/bc3-knowledge/version-differences.md` — FIEBDC-3 evolution
 - `docs/bc3-knowledge/known-edge-cases.md` — 9 documented edge cases
 - `docs/bc3-knowledge/parser-behavior.md` — current parser capabilities and gaps
-- `docs/bc3-knowledge/unsupported-cases.md` — ~O, ~G, ~H with priority strategy
+- `docs/bc3-knowledge/unsupported-cases.md` — ~O, ~G with priority strategy
 
 ## Project Rules
 

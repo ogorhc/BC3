@@ -24,7 +24,7 @@ Record types and structural patterns found in the real-world corpus that the cur
 
 **Status:** Implemented. OParser splits location\price pairs, stored as `CostOverride` on `BC3Document.costOverrides` (Map keyed by concept code).
 
-### ~G — Image/Graphic Attachment
+### ~G — Image/Graphic Attachment — IMPLEMENTED (2026-05-06)
 
 **Occurrences:** 1 in 19-026
 
@@ -42,22 +42,9 @@ Record types and structural patterns found in the real-world corpus that the cur
 
 **Semantics:** Links a concept to an external image/graphic file. The trailing `\|` is a terminator.
 
-**Priority:** Low — 1 occurrence. May be a Presto-specific extension.
+**Status:** Implemented. GParser extracts concept code and filename, stored as `Attachment` (type: 'graphic') on `BC3Document.attachments`.
 
-**Implementation notes:**
-
-- Domain type: extend `Attachment` (already exists in domain)
-- Parser: simple field extraction
-
-### ~H — Unknown Type
-
-**Occurrences:** 1 in Excesos-Mod (malformed file, null byte contamination)
-
-**Format:** Unknown — single occurrence in a file with NUL bytes may be a corruption artifact.
-
-**Priority:** Low — likely corruption, not a real record type. Monitor for clean occurrence before implementing.
-
-## Structural patterns needing parser changes
+### Structural patterns needing parser changes
 
 ### Multiline ~D records
 
@@ -109,5 +96,4 @@ The `\` in `FIEBDC-3/2020\02102025` should not be treated as a subfield separato
 | 3     | ISO-8859-1 support            | Pending |
 | 4     | Null byte stripping           | Pending |
 | 5     | Backslash context sensitivity | Pending |
-| 6     | ~G record type                | Pending |
-| 7     | ~H investigation              | Pending |
+| 6     | ~G record type                | Done    |

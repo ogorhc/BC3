@@ -1,16 +1,43 @@
-# BC3
+# BC3 — FIEBDC-3 Parser for TypeScript & Node.js
 
 [![npm version](https://img.shields.io/npm/v/bc3)](https://www.npmjs.com/package/bc3)
+[![npm downloads](https://img.shields.io/npm/dw/bc3)](https://www.npmjs.com/package/bc3)
 [![license](https://img.shields.io/npm/l/bc3)](./LICENSE)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.9-blue)](https://www.typescriptlang.org/)
 [![CI](https://github.com/ogorhc/BC3/actions/workflows/ci.yml/badge.svg)](https://github.com/ogorhc/BC3/actions/workflows/ci.yml)
 
-**BC3** is a zero-dependency TypeScript library for parsing and navigating **FIEBDC-3 / BC3** construction database files.
+**BC3** is a zero-dependency TypeScript parser for **FIEBDC-3 / BC3**
+construction budget files — the standard format exported by Presto,
+ARQUIMEDES, TCQ, and Spanish-speaking construction software for bills
+of quantities (BOQ), cost databases, and project budgets.
 
-It transforms `.bc3` files exported by Presto, ARQUIMEDES, TCQ, and other construction software into a structured, type-safe hierarchical model. Navigate chapters, subchapters, decomposition trees, measurements, entities, specifications, IT/BIM codes, thesauri, geographic cost overrides, and cost coefficients — all with lossless fidelity to the original file.
+```bash
+npm install bc3
+```
+
+Parse `.bc3` files into a type-safe hierarchical model — navigate
+chapters, subchapters, decomposition trees, measurements, entities,
+specifications, IT/BIM codes, geographic cost overrides, and cost
+coefficients with lossless fidelity to the original file.
+
+## Why BC3
+
+FIEBDC-3 (also called **BC3** or **Formato BC3**) is the standard exchange
+format for construction budgets in Spain and Latin America. Software like
+**Presto**, **ARQUIMEDES**, and **TCQ** exports `.bc3` files — but no
+open-source TypeScript/JavaScript library could parse them into a usable
+data structure. BC3 fills that gap.
+
+- **Parse `.bc3` files** from any FIEBDC-3 edition (2002–2020) out of the box
+- **Walk chapters, subchapters, and decompositions** as a typed tree
+- **Extract prices, measurements, BIM codes, cost overrides, entities,**
+  **and coefficients** from every record type in the corpus
+- **Zero runtime dependencies** — works in Node.js, Deno, and the browser
+- **Lossless fidelity** to the original file; no data discarded
 
 ## Status
 
-**Active development** — 14 of 16 record types parsed, 100% of observed corpus types supported, 119 regression tests.
+**Active development** — 15 of 16 record types parsed, 100% of observed corpus types supported, 126 regression tests.
 
 Current version: `v0.7.0`
 
@@ -45,7 +72,7 @@ if (result.document) {
 
 ### Parsing
 
-- **14 record-type parsers** — `~V` through `~O`, plus `UnknownRecordParser`
+- **15 record-type parsers** — `~V` through `~G`, plus `UnknownRecordParser`
 - **Real-world corpus support** — tested against 7 BC3 files from Presto, ARQUIMEDES, and TCQ spanning FIEBDC-3/2002–2020
 - **Multiline ~D records** — ARQUIMEDES continuation lines parsed correctly
 - **Dotted child codes** — `WORKER.1a`, `I.LT04.01` handled correctly in decompositions
@@ -215,6 +242,7 @@ for (const d of result.diagnostics) {
 | Hierarchy reconstruction | [`docs/parser/hierarchy-reconstruction.md`](docs/parser/hierarchy-reconstruction.md)     |
 | Domain model             | [`docs/domain/model.md`](docs/domain/model.md)                                           |
 | Public API               | [`docs/public-api.md`](docs/public-api.md)                                               |
+| Usage examples           | [`docs/examples.md`](docs/examples.md)                                                   |
 | Development setup        | [`docs/development/setup.md`](docs/development/setup.md)                                 |
 | Roadmap                  | [`docs/development/work-to-issue-mapping.md`](docs/development/work-to-issue-mapping.md) |
 | ADRs                     | [`docs/decisions/index.md`](docs/decisions/index.md)                                     |
@@ -225,6 +253,24 @@ for (const d of result.diagnostics) {
 - Branch naming: `feat/`, `fix/`, `test/`, `docs/`, `chore/` prefixed with issue number
 - Changesets for versioning; automated npm publish on merge to `main`
 - `npm run ci` gates all PRs: build + format check
+
+## Related Terms
+
+| English                            | Español                                   |
+| ---------------------------------- | ----------------------------------------- |
+| bill of quantities (BOQ)           | presupuesto, mediciones                   |
+| cost database                      | base de precios, banco de precios, cuadro |
+| construction budget                | presupuesto de obra, proyecto             |
+| cost estimation                    | valoración, estimación de costes          |
+| decomposition, work breakdown      | descomposición, descompuestos             |
+| FIEBDC-3, BC3, Formato BC3         | FIEBDC-3, BC3, Formato BC3                |
+| Presto, ARQUIMEDES, TCQ            | Presto, ARQUIMEDES, TCQ                   |
+| TypeScript parser, Node.js library | librería TypeScript, parser Node.js       |
+| concept tree, hierarchy            | árbol de conceptos, jerarquía             |
+| overhead, indirect costs           | costes indirectos, gastos generales       |
+| geographic cost override           | cuadro de precios geográfico              |
+| measurements, quantities           | cantidades, líneas de medición            |
+| price list, unit prices            | lista de precios, precios unitarios       |
 
 ## License
 

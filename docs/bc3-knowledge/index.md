@@ -9,7 +9,7 @@ Domain knowledge about the FIEBDC-3 / BC3 file format, derived from corpus analy
 | [record-types.md](./record-types.md)               | Catalog of all record types (`~V`, `~C`, `~D`, …) with corpus occurrence counts |
 | [known-edge-cases.md](./known-edge-cases.md)       | 9 documented edge cases found in real-world files                               |
 | [parser-behavior.md](./parser-behavior.md)         | Current parser capabilities, gaps, and per-file status                          |
-| [unsupported-cases.md](./unsupported-cases.md)     | `~O`, `~G`, `~H` — not yet implemented; implementation notes                    |
+| [unsupported-cases.md](./unsupported-cases.md)     | `~O`, `~G` — now implemented; structural patterns                               |
 | [version-differences.md](./version-differences.md) | Differences between FIEBDC-3/2020 and FIEBDC-3/2024 (corpus-inferred)           |
 
 ## Corpus files
