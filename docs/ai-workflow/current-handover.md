@@ -2,9 +2,27 @@
 
 ## Active Work
 
-<!-- None -->
+- **Issue #144 / PR #145** — `fix/144-zorrozaurre-hierarchy` — awaiting review and merge to `develop`
 
 ## Recent Changes
+
+### 2026-05-07 — Fix: ~D child code detection for Presto 8.7 (#144, PR #145)
+
+- **Root cause:** `looksLikeChildCode()` in `DParser.ts` was context-unaware.
+  - Bug A: chapter codes like `2.2`, `2.10` matched `/^\d+(\.\d+)?$/` → rejected as child codes → misclassified as `percentageCodes` → 44 root nodes instead of 1.
+  - Bug B: large integer performance values (`6990`, `1173`) matched `/^[0-9]{4,}$/` → treated as child codes → 60+ `BC3_D_MISSING_CHILD_CODE` warnings.
+- **Fix:** Added `inPerfSlot` boolean parameter to `looksLikeChildCode`. In perf slot: reject all `/^[\d.]+$/` strings. In lookahead: accept all dotted strings as codes.
+- **Result:** 0 diagnostics on `PRESUPUESTO BC3_ZORROZAURRE.bc3`, 1 root, all 14 children of `2` correctly parsed.
+- **Tests:** 17 new regression tests in `tests/parsing/dispatch/parsers/DParser.zorrozaurre.test.ts`. 165/165 pass.
+- **Docs:** Edge case #11 added to `docs/bc3-knowledge/known-edge-cases.md`.
+- **Branch:** `fix/144-zorrozaurre-hierarchy`
+- **PR:** https://github.com/ogorhc/BC3/pull/145
+
+- **Package v1.0.0** published via Changesets (major bump from v0.7.0).
+- PR #143 merged to `main`. Release workflow auto-publishes to npm.
+- README status updated to "Stable release — v1.0.0".
+- `docs/development/release-process.md` updated with release history and manual publish fallback.
+- **All issues closed.** 0 open issues.
 
 ### 2026-05-06 — SEO: expand npm keywords, optimize README, set GitHub topics
 
@@ -178,13 +196,13 @@ Reorganized all `docs/` content into a clear, navigable directory layout. Fixed 
 ## Notes
 
 - All 147 tests pass; `npm run ci` passes.
-- 1 open issue: #134 (Milestone v1.0.0 MVP release).
-- All parser bugs resolved. All observed corpus record types implemented. Task board clean.
+- **v1.0.0 published.** All issues closed. 0 open issues.
+- All observed corpus record types implemented. Task board clean.
 
 ## Next Steps
 
-1. **Merge open PRs** — `feat/104-null-byte-stripping`, `fix/106-v-backslash-context`, `feat/g-h-parsers`, `feat/88-expression-evaluator`, `chore/remaining-issues`, `chore/docs-audit-fix`.
-2. **Issue #134** — Milestone v1.0.0 MVP release.
+- Merge `main` back into `develop` after release
+- Resume from `docs/development/work-to-issue-mapping.md` genuine remaining items (aliases, unknown content, ~B history, API aspirational features)
 
 ---
 
