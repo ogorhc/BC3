@@ -380,6 +380,7 @@ export class DomainAssembler {
       coefficients,
       costOverrides,
       diagnostics: store.diagnostics ?? [],
+      recordCounts: store.recordCounts,
     });
   }
 }

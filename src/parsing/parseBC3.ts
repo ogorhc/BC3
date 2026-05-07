@@ -70,6 +70,8 @@ export function parseBC3Internal(args: {
 
   dispatchRecords(ctx, records);
 
+  ctx.builder.setRecordCounts(ctx.recordCounts);
+
   const document = assembleDocument(ctx.builder);
 
   return { document, diagnostics: ctx.diagnostics };
