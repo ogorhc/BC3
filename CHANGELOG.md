@@ -1,5 +1,34 @@
 # bc3
 
+## 1.0.0
+
+### Major Changes
+
+- 3ed610f: v1.0.0 — First stable release.
+  - **15 record-type parsers** covering all observed FIEBDC-3/BC3 record types (~V through ~G) with full domain model integration
+  - **7/7 real-world corpus files** parse with 0 errors (Presto, ARQUIMEDES, TCQ generators spanning 2002–2020 editions)
+  - **147 regression tests** with 100% pass rate
+  - **Expression evaluator** for measurement detail formulas (a\*b\*c\*d+p)
+  - **Structured diagnostics** with record/field indices
+  - **Zero runtime dependencies**, ESM-native, TypeScript strict mode
+  - **Null byte stripping**, multiline ~D support, backslash context sensitivity
+  - **Cost coefficients**, geographic overrides, entities, specifications, IT/BIM/LCA codes, thesaurus, attachments
+
+### Minor Changes
+
+- 32b86b3: solve last tasks from project
+- 1a0846a: add resource herarchy
+- 3f4ad42: add G type support
+- 32b86b3: add expression evaluator in measurement
+
+### Patch Changes
+
+- 00f238d: fix ~D record children silently dropped
+- 5dd4752: connect k coefficients to compositions
+- 5dd4752: parse O records
+- a3830c2: Add AI workflow infrastructure, reorganize documentation, and move tests to tests/ directory. No public API changes.
+- 9ce7e47: fix multiline d tokenizer
+
 ## 0.7.0
 
 ### Minor Changes
