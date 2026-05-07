@@ -24,6 +24,8 @@ Thumbs.db
 .vscode
 .idea
 
+scripts/
+
 # temp scripts (individual user scripts)
 /scripts/temp*
 /scripts/debug*
