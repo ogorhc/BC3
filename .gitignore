@@ -24,8 +24,9 @@ Thumbs.db
 .vscode
 .idea
 
-# temp scripts
-/scripts
+# temp scripts (individual user scripts)
+/scripts/temp*
+/scripts/debug*
 
 # private corpus and specs
 data/
