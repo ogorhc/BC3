@@ -1,6 +1,15 @@
+import { RecordCounts } from '../../domain/types/RecordCounts';
 import type { RawRecord } from '../types/RawRecord';
 import { RecordParser } from './parsers/types/RecordParser';
 import { ParseContext } from './types/ParseContext';
+
+function incrementCount(counts: RecordCounts, type: string): void {
+  if (type in counts) {
+    (counts as Record<string, number>)[type]++;
+  } else {
+    counts.unknown++;
+  }
+}
 
 export class RecordDispatcher {
   private readonly parsers: Map<string, RecordParser>;
@@ -11,6 +20,8 @@ export class RecordDispatcher {
 
   dispatch(records: RawRecord[], ctx: ParseContext) {
     for (const record of records) {
+      incrementCount(ctx.recordCounts, record.type);
+
       const parser = this.parsers.get(record.type);
       if (!parser) {
         if (ctx.options.mode === 'strict') {

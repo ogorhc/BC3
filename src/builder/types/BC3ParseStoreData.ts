@@ -1,3 +1,5 @@
+import { Diagnostic } from '../../domain/types/Diagnostic';
+import { RecordCounts } from '../../domain/types/RecordCounts';
 import { ImporterSource } from '../../importers';
 import {
   AInput,
@@ -12,7 +14,6 @@ import {
   VersionPropertyInput,
   XInput,
 } from '../../parsing/dispatch/parsers/types/Parsers';
-import { Diagnostic } from '../../domain/types/Diagnostic';
 import { ParseNode } from '../store/ParseNode';
 
 export interface BC3ParseStoreData {
@@ -40,4 +41,6 @@ export interface BC3ParseStoreData {
 
   nodes?: Map<string, ParseNode>;
   roots?: string[];
+
+  recordCounts?: RecordCounts;
 }

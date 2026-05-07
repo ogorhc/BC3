@@ -7,3 +7,6 @@ export * from './parsing';
 
 // Domain model (public surface)
 export * from './domain';
+
+// Utilities
+export { summaryToString } from './utils/summaryToString';

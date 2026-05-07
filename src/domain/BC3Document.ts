@@ -6,6 +6,7 @@ import { Entity } from './Entity';
 import { ITCodes } from './ITCode';
 import { Specification } from './Specification';
 import { Diagnostic } from './types';
+import { DocumentSummary, RecordCounts } from './types/RecordCounts';
 import {
   ResourceHierarchy,
   ResourceType,
@@ -73,6 +74,9 @@ export class BC3Document {
   /** Diagnostics collected during parsing */
   readonly diagnostics: Diagnostic[];
 
+  /** Raw record counts from parsing */
+  readonly recordCounts: RecordCounts;
+
   constructor(args: {
     metadata?: DocumentMetadata;
     roots: ConceptNode[];
@@ -84,6 +88,7 @@ export class BC3Document {
     coefficients?: Coefficients;
     costOverrides?: Map<string, CostOverride>;
     diagnostics: Diagnostic[];
+    recordCounts?: RecordCounts;
   }) {
     this.metadata = args.metadata;
     this.roots = args.roots;
@@ -95,6 +100,7 @@ export class BC3Document {
     this.coefficients = args.coefficients;
     this.costOverrides = args.costOverrides ?? new Map();
     this.diagnostics = args.diagnostics;
+    this.recordCounts = args.recordCounts ?? ({} as RecordCounts);
   }
 
   /**
@@ -512,4 +518,99 @@ export class BC3Document {
 
   /** Internal cache for resource hierarchy */
   private _resourceHierarchyCache?: ResourceHierarchy;
+
+  /** Internal cache for document summary */
+  private _summaryCache?: DocumentSummary;
+
+  /**
+   * Returns a high-level summary of the parsed document.
+   *
+   * Includes file metadata, raw record counts, concept/measurement/
+   * decomposition statistics, auxiliary data counts, and a diagnostic
+   * severity breakdown.  Computed once and cached on the document.
+   */
+  getSummary(): DocumentSummary {
+    if (this._summaryCache) return this._summaryCache;
+
+    const hierarchy = this.getHierarchySummary();
+
+    let leafCount = 0;
+    const typeDist = new Map<number, number>();
+    let totalMeasurementLines = 0;
+    let conceptsWithD = 0;
+    let conceptsWithSpec = 0;
+    let conceptsWithIT = 0;
+    let conceptsWithThes = 0;
+    let totalDecomps = 0;
+
+    for (const node of this.conceptsByCode.values()) {
+      if (node.children.length === 0) leafCount++;
+
+      const t = node.concept.type;
+      if (t !== undefined && t !== null) {
+        typeDist.set(t, (typeDist.get(t) ?? 0) + 1);
+      }
+
+      totalMeasurementLines += node.measurements.reduce(
+        (sum, m) => sum + m.details.length,
+        0,
+      );
+      if (node.specification) conceptsWithSpec++;
+      if (node.itCodes) conceptsWithIT++;
+      if (node.thesaurus) conceptsWithThes++;
+
+      for (const d of node.decompositions) {
+        totalDecomps++;
+      }
+      if (node.decompositions.length > 0) conceptsWithD++;
+    }
+
+    const diag = this.diagnostics.reduce(
+      (acc, d) => {
+        if (d.level === 'info') acc.info++;
+        else if (d.level === 'warn') acc.warn++;
+        else if (d.level === 'error') acc.error++;
+        return acc;
+      },
+      { info: 0, warn: 0, error: 0 },
+    );
+
+    this._summaryCache = {
+      metadata: this.metadata
+        ? {
+            property: this.metadata.property,
+            version: this.metadata.version,
+            versionDate: this.metadata.versionDate,
+            program: this.metadata.program,
+            header: this.metadata.header,
+            charset: this.metadata.charset,
+          }
+        : undefined,
+      recordCounts: this.recordCounts,
+      totalConcepts: hierarchy.totalNodes,
+      rootConcepts: hierarchy.rootNodes,
+      leafConcepts: leafCount,
+      maxDepth: hierarchy.maxDepth,
+      conceptTypeDistribution: typeDist,
+      conceptsWithMeasurements: this.conceptsByCode.size
+        ? Array.from(this.conceptsByCode.values()).filter(
+            (n) => n.measurements.length > 0,
+          ).length
+        : 0,
+      totalMeasurementLines,
+      totalDecompositions: totalDecomps,
+      conceptsWithDecompositions: conceptsWithD,
+      specifications: conceptsWithSpec,
+      hasSpecificationsDictionary: !!this.specificationsDictionary,
+      itCodes: conceptsWithIT,
+      hasItCodesDictionary: !!this.itCodesDictionary,
+      thesaurusEntries: conceptsWithThes,
+      entities: this.entities.size,
+      costOverrides: this.costOverrides.size,
+      attachments: this.attachments.length,
+      diagnostics: diag,
+    };
+
+    return this._summaryCache;
+  }
 }

@@ -1,3 +1,4 @@
+import { RecordCounts } from '../domain/types/RecordCounts';
 import { ParseNode } from './store/ParseNode';
 import { BC3ParseStoreData } from './types/BC3ParseStoreData';
 
@@ -29,6 +30,8 @@ export class BC3ParseStore {
   /** Array of root node codes (concepts without parents) */
   readonly roots: string[];
 
+  readonly recordCounts: RecordCounts;
+
   constructor(data: BC3ParseStoreData) {
     this.source = data.source;
     this.raw = data.raw;
@@ -53,5 +56,7 @@ export class BC3ParseStore {
 
     this.nodes = data.nodes ?? new Map();
     this.roots = data.roots ?? [];
+
+    this.recordCounts = data.recordCounts ?? ({} as RecordCounts);
   }
 }
