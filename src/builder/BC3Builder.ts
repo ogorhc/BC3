@@ -7,9 +7,11 @@ import {
   ConceptInput,
   DecompositionInput,
   EInput,
+  GInput,
   KDecimalsInput,
   LInput,
   MeasurementInput,
+  OInput,
   TextInput,
   VersionPropertyInput,
   XInput,
@@ -37,6 +39,8 @@ export class BC3Builder {
   private itCodesDictionary: XInput | undefined; // dictionary mode
   private entities: Map<string, EInput> = new Map(); // entityCode -> EInput
   private thesaurus: Map<string, AInput> = new Map(); // conceptCode -> AInput
+  private costOverrides: Map<string, OInput> = new Map(); // conceptCode -> OInput
+  private attachments: GInput[] = [];
 
   private codeChanges: Map<string, string> = new Map();
 
@@ -111,6 +115,14 @@ export class BC3Builder {
 
   onA(input: AInput): void {
     this.thesaurus.set(input.conceptCode, input);
+  }
+
+  onO(input: OInput): void {
+    this.costOverrides.set(input.conceptCode, input);
+  }
+
+  onG(input: GInput): void {
+    this.attachments.push(input);
   }
 
   private applyCodeChanges(): void {
@@ -203,9 +215,15 @@ export class BC3Builder {
       const parentNode = nodes.get(normalizedParent);
 
       if (!parentNode) {
-        // Parent concept not found - will be reported as diagnostic later
-        // This can happen if the parent code in the decomposition doesn't match
-        // the normalized code used when creating the concept node
+        // Parent concept not found for this decomposition
+        if (this.diagnostics) {
+          this.diagnostics.push({
+            level: 'warn',
+            code: 'BC3_D_MISSING_PARENT_CODE',
+            message: `~D parent code "${parentCode}" does not match any ~C concept`,
+            recordType: 'D',
+          });
+        }
         continue;
       }
 
@@ -214,7 +232,15 @@ export class BC3Builder {
         const childNode = nodes.get(normalizedChild);
 
         if (!childNode) {
-          // Child concept not found - will be reported as diagnostic later
+          // Child concept not found for this decomposition line
+          if (this.diagnostics) {
+            this.diagnostics.push({
+              level: 'warn',
+              code: 'BC3_D_MISSING_CHILD_CODE',
+              message: `~D child code "${line.code}" under parent "${normalizedParent}" does not match any ~C concept`,
+              recordType: 'D',
+            });
+          }
           continue;
         }
 
@@ -286,6 +312,8 @@ export class BC3Builder {
       itCodesDictionary: this.itCodesDictionary,
       entities: this.entities,
       thesaurus: this.thesaurus,
+      costOverrides: this.costOverrides,
+      attachments: this.attachments,
       nodes,
       roots,
     });

@@ -92,11 +92,15 @@ BC3.parse(input, {
 
 ## 7. Summary
 
-| Aspect                  | Strict | Lenient  |
-| ----------------------- | ------ | -------- |
-| Unknown records         | Error  | Ignore   |
-| Missing required fields | Error  | Warning  |
-| Invalid values          | Error  | Warning  |
-| Parsing continuation    | Stop   | Continue |
+| Aspect                  | Strict       | Lenient                 |
+| ----------------------- | ------------ | ----------------------- |
+| Unknown records         | Throw error  | Warn (diagnostic, skip) |
+| Missing required fields | Error        | Warning                 |
+| Invalid values          | Error        | Warning                 |
+| Parsing continuation    | Stop (throw) | Continue                |
+
+> **Note:** In lenient mode, unknown record types produce a `warn`-level `Diagnostic`
+> (code `BC3_UNKNOWN_RECORD`) and are skipped. They are not silently ignored.
+> In strict mode, `RecordDispatcher` throws immediately — it does not collect a diagnostic first.
 
 This parsing mode separation ensures both correctness and robustness while maintaining a single domain model.

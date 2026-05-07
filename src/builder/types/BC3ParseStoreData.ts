@@ -4,9 +4,11 @@ import {
   ConceptInput,
   DecompositionLineInput,
   EInput,
+  GInput,
   KDecimalsInput,
   LInput,
   MeasurementInput,
+  OInput,
   VersionPropertyInput,
   XInput,
 } from '../../parsing/dispatch/parsers/types/Parsers';
@@ -33,6 +35,8 @@ export interface BC3ParseStoreData {
   itCodesDictionary?: XInput;
   entities: Map<string, EInput>;
   thesaurus: Map<string, AInput>;
+  costOverrides: Map<string, OInput>;
+  attachments?: GInput[];
 
   nodes?: Map<string, ParseNode>;
   roots?: string[];

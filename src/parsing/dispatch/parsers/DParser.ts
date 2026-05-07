@@ -30,6 +30,16 @@ function parsePorcentajes(sub: string[]): { codes?: string[]; raw?: string } {
 export class DParser implements RecordParser {
   readonly type = 'D';
 
+  private looksLikeChildCode(elem: string): boolean {
+    return (
+      (elem.match(/^[0-9]{4,}$/) && elem.length >= 4) ||
+      (elem.includes('.') && !/^\d+(\.\d+)?$/.test(elem)) ||
+      elem.match(/^[A-Z]+\.[A-Z]/) ||
+      (/[a-zA-Z]/.test(elem) && /\d/.test(elem)) ||
+      elem.startsWith('%')
+    );
+  }
+
   parse(record: RawRecord, ctx: ParseContext): void {
     // ~D | CODIGO_PADRE | < CODIGO_HIJO \ [FACTOR] \ [REND] \ {COD_PORC;} > | ...
     const f = record.fields;
@@ -68,13 +78,22 @@ export class DParser implements RecordParser {
         }
 
         const factor = field[i + 1]?.trim();
-        const performance = field[i + 2]?.trim();
+        let performance = field[i + 2]?.trim();
+
+        // When the performance slot contains a child code (e.g. ARQUIMEDES
+        // multiline format omits performance values), back up so the next
+        // iteration picks it up as the next child's code.
+        let skipPerfSlot = false;
+        if (isNonEmpty(performance) && this.looksLikeChildCode(performance)) {
+          performance = undefined;
+          skipPerfSlot = true;
+        }
 
         // Look ahead to find where the next child code starts
         // The next child code will be at position i+3+N where N is the number of percentage codes
         // Percentage codes are typically alphanumeric (like "MEDAUX", "CI") or have special format
         // Child codes are either numeric (like "311100") or have dots (like "I.LT04.01")
-        let percentageEnd = i + 3;
+        let percentageEnd = skipPerfSlot ? i + 2 : i + 3;
         const percentageSub: string[] = [];
 
         // Collect percentage codes until we find the next child code
@@ -83,18 +102,7 @@ export class DParser implements RecordParser {
           if (!elem) break;
 
           // Check if this element looks like a child code
-          // Child codes:
-          // - numeric (4+ digits) like "311100"
-          // - contain dots like "I.LT04.01"
-          // - start with % like "%MEDAUX", "%CI" (these are auxiliary child codes)
-          // Percentage codes: shorter alphanumeric strings without % prefix
-          const looksLikeChildCode =
-            (elem.match(/^[0-9]{4,}$/) && elem.length >= 4) || // 4+ digit numbers are likely child codes
-            elem.includes('.') || // Codes with dots are child codes
-            elem.match(/^[A-Z]+\.[A-Z]/) || // Pattern like "I.LT04"
-            elem.startsWith('%'); // Codes starting with % are child codes (auxiliary concepts)
-
-          if (looksLikeChildCode) {
+          if (this.looksLikeChildCode(elem)) {
             // This is the next child code, stop collecting percentage codes
             break;
           }

@@ -1,0 +1,21 @@
+# Cursor Rules — BC3 Project
+
+Las reglas completas del proyecto están organizadas en archivos separados dentro de `.cursor/rules/`:
+
+- `00-project-overview.md` - Objetivo, restricciones, estructura básica, dependencias
+- `01-architecture.md` - Patrones de diseño, módulos, dependencias, estructura de carpetas
+- `02-domain-model.md` - Entidades del dominio y relaciones
+- `03-parsing.md` - Grammar rules, parsing modes, diagnostics, estándar BC3
+- `04-workflow.md` - Flujo de trabajo, releases, GitHub Projects, tareas
+- `05-implementation.md` - Reglas de estilo, cómo responder, constraints
+- `06-current-state.md` - Estado actual del proyecto y prioridades
+- `07-public-api.md` - Contrato de API pública
+
+**Consulta estos archivos para el contexto completo del proyecto.**
+
+## Referencia rápida
+
+- **Documentación completa**: ver archivos en `docs/`
+- **Fase actual**: Phase 3 - Core records (MVP)
+- **Próxima prioridad**: Assemble hierarchy (chapters/items)
+- **Restricción clave**: `domain/` NO debe importar de `parsing/` o `builder/`

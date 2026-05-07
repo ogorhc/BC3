@@ -1,6 +1,6 @@
 {
   "name": "bc3",
-  "description": "Parser and hierarchical model for FIEBDC-3 BC3 files.",
+  "description": "Zero-dependency TypeScript parser for FIEBDC-3/BC3 construction budget files (Presto, ARQUIMEDES, TCQ). Builds a type-safe hierarchical model for bills of quantities, cost databases, and construction project budgets.",
   "author": "Igor HC (ogorhc)",
   "license": "MIT",
   "repository": {
@@ -11,7 +11,7 @@
     "url": "https://github.com/ogorhc/bc3/issues"
   },
   "homepage": "https://github.com/ogorhc/bc3#readme",
-  "version": "0.7.0",
+  "version": "1.0.0",
   "type": "module",
   "main": "dist/index.cjs",
   "module": "dist/index.js",
@@ -27,8 +27,11 @@
     "dist"
   ],
   "scripts": {
+    "test": "node --import tsx/esm --test $(find tests -name '*.test.ts' -type f)",
+    "test:watch": "node --import tsx/esm --test --watch $(find tests -name '*.test.ts' -type f)",
     "dev:build": "tsup src/index.ts --format esm,cjs --dts --sourcemap --clean --watch",
     "dev:tokenize": " npm run build && node scripts/tokenize.mjs ./scripts/file.bc3",
+    "diagnose": "npm run build && node scripts/diagnose.mjs",
     "ci": "npm run build && npm run check-format",
     "build": "tsup src/index.ts --format esm,cjs --dts --sourcemap --clean",
     "clean": "rm -rf dist",
@@ -43,10 +46,25 @@
   },
   "keywords": [
     "bc3",
-    "parser",
-    "construction",
     "fiebdc",
-    "ts",
+    "fiebdc-3",
+    "bc3-parser",
+    "fiebdc-parser",
+    "construction",
+    "construction-budget",
+    "boq",
+    "bill-of-quantities",
+    "cost-database",
+    "parser",
+    "typescript",
+    "typescript-parser",
+    "nodejs",
+    "presto",
+    "arquimedes",
+    "tcq",
+    "cost-estimation",
+    "budget-estimation",
+    "esm",
     "library"
   ],
   "devDependencies": {
@@ -55,6 +73,7 @@
     "lint-staged": "16.2.7",
     "prettier": "^3.7.4",
     "tsup": "8.5.1",
+    "tsx": "4.21.0",
     "typescript": "5.9.3"
   },
   "lint-staged": {

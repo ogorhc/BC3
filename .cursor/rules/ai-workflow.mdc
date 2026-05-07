@@ -1,0 +1,34 @@
+# AI Workflow Rules
+
+## Overview
+
+These rules guide AI agents working in this repository.
+
+## Core Principles
+
+1. **Read First** - Always read relevant documentation before making changes
+2. **Follow Playbooks** - Use appropriate playbooks for common tasks
+3. **Be Explicit** - Clearly communicate assumptions and decisions
+4. **Verify First** - Run tests and checks before completing tasks
+5. **Update Context** - Keep current-handover.md accurate
+
+## Workflow Rules
+
+- Always start by reading `docs/ai-workflow/index.md`
+- Use playbook steps as guidance, adapt as needed
+- Document significant decisions in current-handover.md
+- Verify lint and type checks pass before completing
+
+## Code Rules
+
+- Follow existing code style and conventions
+- Add tests for new functionality
+- Update documentation for user-facing changes
+- Keep changes focused and atomic
+
+## Communication Rules
+
+- Be concise but complete
+- Provide context for decisions
+- Flag uncertainties or blockers
+- Summarize completed work

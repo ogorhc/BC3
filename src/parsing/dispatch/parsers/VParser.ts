@@ -6,22 +6,28 @@ export class VParser implements RecordParser {
   readonly type = 'V';
 
   parse(record: RawRecord, ctx: ParseContext): void {
-    // ~V | PROPIEDAD | VERSION \ FECHA | PROGRAMA | CABECERA \ ROTULOS... | JUEGO | COMENTARIO | TIPO | NUMCERT | FECHACERT | URL_BASE |
     const f = record.fields;
 
     const property = f[0]?.[0] ?? '';
-    const version = f[1]?.[0] ?? '';
-    const versionDate = f[1]?.[1] ?? '';
+
+    const rawVersionField = (f[1] ?? []).join('\\');
+    const lastBackslash = rawVersionField.lastIndexOf('\\');
+    const version =
+      lastBackslash >= 0
+        ? rawVersionField.slice(0, lastBackslash)
+        : rawVersionField;
+    const versionDate =
+      lastBackslash >= 0 ? rawVersionField.slice(lastBackslash + 1) : '';
 
     const program = f[2]?.[0] ?? '';
 
     const header = f[3]?.[0] ?? '';
     const labels = (f[3] ?? []).slice(1).filter(Boolean);
 
-    const charset = f[4]?.[0] ?? ''; // 850/437/ANSI
+    const charset = f[4]?.[0] ?? '';
     const comment = f[5]?.[0] ?? '';
 
-    const infoType = f[6]?.[0] ?? ''; // 1..4
+    const infoType = f[6]?.[0] ?? '';
     const certificateNumber = f[7]?.[0] ?? '';
     const certificateDate = f[8]?.[0] ?? '';
 

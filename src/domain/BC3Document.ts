@@ -1,5 +1,7 @@
 import { Attachment } from './Attachment';
+import { Coefficients } from './Coefficients';
 import { ConceptNode } from './ConceptNode';
+import { CostOverride } from './CostOverride';
 import { Entity } from './Entity';
 import { ITCodes } from './ITCode';
 import { Specification } from './Specification';
@@ -62,6 +64,12 @@ export class BC3Document {
   /** IT codes dictionary (IT codes definitions) */
   readonly itCodesDictionary?: ITCodes;
 
+  /** Cost coefficients from ~K record */
+  readonly coefficients?: Coefficients;
+
+  /** Geographic cost overrides from ~O records */
+  readonly costOverrides: Map<string, CostOverride>;
+
   /** Diagnostics collected during parsing */
   readonly diagnostics: Diagnostic[];
 
@@ -73,6 +81,8 @@ export class BC3Document {
     entities?: Map<string, Entity>;
     specificationsDictionary?: Specification;
     itCodesDictionary?: ITCodes;
+    coefficients?: Coefficients;
+    costOverrides?: Map<string, CostOverride>;
     diagnostics: Diagnostic[];
   }) {
     this.metadata = args.metadata;
@@ -82,6 +92,8 @@ export class BC3Document {
     this.entities = args.entities ?? new Map();
     this.specificationsDictionary = args.specificationsDictionary;
     this.itCodesDictionary = args.itCodesDictionary;
+    this.coefficients = args.coefficients;
+    this.costOverrides = args.costOverrides ?? new Map();
     this.diagnostics = args.diagnostics;
   }
 
