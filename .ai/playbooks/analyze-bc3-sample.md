@@ -57,13 +57,13 @@ total=$(wc -l < <path>); tilde=$(grep -c '^~' <path>); echo "$((total - tilde)) 
 
 ### 6. Edge Case Detection
 
-| Check                | Command                                                    |
-| -------------------- | ---------------------------------------------------------- | ---------- |
-| Null bytes           | `grep -c $'\x00' <path>`                                   |
-| Non-standard decimal | Check ~C/~M fields for comma vs period                     |
-| Negative ~K digits   | `grep '~K                                                  | -' <path>` |
-| Empty ~V vendor      | Inspect ~V field 1                                         |
-| Unknown record types | Compare output of step 3 against known 13 types + ~O/~G/~H |
+| Check                | Command                                                 |
+| -------------------- | ------------------------------------------------------- | ---------- |
+| Null bytes           | `grep -c $'\x00' <path>`                                |
+| Non-standard decimal | Check ~C/~M fields for comma vs period                  |
+| Negative ~K digits   | `grep '~K                                               | -' <path>` |
+| Empty ~V vendor      | Inspect ~V field 1                                      |
+| Unknown record types | Compare output of step 3 against known 13 types + ~O/~G |
 
 ### 7. Classify
 

@@ -37,7 +37,7 @@ data structure. BC3 fills that gap.
 
 ## Status
 
-**Active development** — 14 of 16 record types parsed, 100% of observed corpus types supported, 120 regression tests.
+**Active development** — 15 of 16 record types parsed, 100% of observed corpus types supported, 126 regression tests.
 
 Current version: `v0.7.0`
 
@@ -72,7 +72,7 @@ if (result.document) {
 
 ### Parsing
 
-- **14 record-type parsers** — `~V` through `~O`, plus `UnknownRecordParser`
+- **15 record-type parsers** — `~V` through `~G`, plus `UnknownRecordParser`
 - **Real-world corpus support** — tested against 7 BC3 files from Presto, ARQUIMEDES, and TCQ spanning FIEBDC-3/2002–2020
 - **Multiline ~D records** — ARQUIMEDES continuation lines parsed correctly
 - **Dotted child codes** — `WORKER.1a`, `I.LT04.01` handled correctly in decompositions
@@ -242,6 +242,7 @@ for (const d of result.diagnostics) {
 | Hierarchy reconstruction | [`docs/parser/hierarchy-reconstruction.md`](docs/parser/hierarchy-reconstruction.md)     |
 | Domain model             | [`docs/domain/model.md`](docs/domain/model.md)                                           |
 | Public API               | [`docs/public-api.md`](docs/public-api.md)                                               |
+| Usage examples           | [`docs/examples.md`](docs/examples.md)                                                   |
 | Development setup        | [`docs/development/setup.md`](docs/development/setup.md)                                 |
 | Roadmap                  | [`docs/development/work-to-issue-mapping.md`](docs/development/work-to-issue-mapping.md) |
 | ADRs                     | [`docs/decisions/index.md`](docs/decisions/index.md)                                     |

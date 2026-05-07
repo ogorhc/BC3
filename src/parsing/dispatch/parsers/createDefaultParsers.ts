@@ -3,6 +3,7 @@ import { BParser } from './BParser';
 import { CParser } from './CParser';
 import { DParser } from './DParser';
 import { EParser } from './EParser';
+import { GParser } from './GParser';
 import { KParser } from './KParser';
 import { LParser } from './LParser';
 import { MParser } from './MParser';
@@ -31,6 +32,7 @@ export function createDefaultParsers(): RecordParser[] {
     new XParser(),
     new EParser(),
     new AParser(),
+    new GParser(),
     new UnknownRecordParser(),
   ];
 }

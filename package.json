@@ -31,6 +31,7 @@
     "test:watch": "node --import tsx/esm --test --watch $(find tests -name '*.test.ts' -type f)",
     "dev:build": "tsup src/index.ts --format esm,cjs --dts --sourcemap --clean --watch",
     "dev:tokenize": " npm run build && node scripts/tokenize.mjs ./scripts/file.bc3",
+    "diagnose": "npm run build && node scripts/diagnose.mjs",
     "ci": "npm run build && npm run check-format",
     "build": "tsup src/index.ts --format esm,cjs --dts --sourcemap --clean",
     "clean": "rm -rf dist",

@@ -13,6 +13,36 @@
 - **GitHub topics** set: `bc3`, `fiebdc`, `fiebdc-3`, `construction`, `parser`, `typescript`, `nodejs`, `boq`, `cost-estimation`.
 - **Commit:** `d2510cf` on `develop`
 
+### 2026-05-06 — Chore: resolve remaining issues #122–#133
+
+- **#122**: Added `fieldIndex`/`subfieldIndex` optional properties to `Diagnostic` type.
+- **#129**: Added `tests/api/IntegrationCorpus.test.ts` — parses all 7 real-world corpus files (Latin-1 decode, lenient mode). Validates hierarchy summary on each. 7 tests pass.
+- **#131**: Created `docs/examples.md` with full usage examples (parse string, parse file, inspect tree, measurements, coefficients, entities, cost overrides, attachments).
+- **#123, #124, #133**: Closed as not planned (perf profiling, streaming parser, automated publish).
+- **#132**: Already documented (release-process.md + changesets).
+- **Branch:** `chore/remaining-issues`
+
+### 2026-05-06 — Feature: Expression evaluator for measurement details (#88)
+
+- **`evaluatePartial()`** utility in `src/utils/expressionEvaluator.ts` — computes `a * b * c * d + p` from measurement dimensions (length, latitude, height, units). Missing dimensions default to 1.
+- **`MeasurementDetail`** promoted from interface to class with `partial` computed property.
+- **DomainAssembler** now calls `evaluatePartial()` when constructing `MeasurementDetail` instances.
+- **10 unit tests** in `tests/utils/expressionEvaluator.test.ts`.
+- **4 integration tests** in `tests/api/ExpressionEvaluator.test.ts`.
+- 140 tests pass.
+- **Branch:** `feat/88-expression-evaluator`
+- Fixes #88
+
+### 2026-05-06 — Feature: Implement ~G parser, remove ~H references (#108, #109)
+
+- **GParser** implemented — extracts concept code + filename from `~G|code|filename.ext\|`.
+- **Pipeline wired**: Builder `onG()` → Store `attachments` → DomainAssembler converts to `Attachment` (type: 'graphic') → `BC3Document.attachments`.
+- **4 tests** added in `tests/parsing/dispatch/parsers/GParser.test.ts`.
+- **~H removed from all docs/code** — confirmed NUL-byte corruption artifact, not a real BC3 record type.
+- **Docs updated**: parser-coverage-matrix (15 parsers, 100%), unsupported-cases, parser-behavior, record-types, work-to-issue-mapping, index, architecture overview, README (14→15 types, 120→126 tests).
+- **Branch:** `feat/g-h-parsers`
+- Fixes #108, #109
+
 ### 2026-05-06 — Fix: backslash context-sensitivity in ~V (#106)
 
 - **VParser** now reconstructs the version field by joining subfields with `\`, then splits on the **last** `\` to separate version from optional date suffix.
@@ -144,18 +174,17 @@ Reorganized all `docs/` content into a clear, navigable directory layout. Fixed 
 ## Blockers
 
 - Specification PDFs (`docs/specifications/Formato-FIEBDC-3-202{0,4}.pdf`) cannot be directly read — `pdftotext` unavailable. Version-differences knowledge is corpus-inferred only.
-- `~H` record type found in Excesos-Mod may be a NUL-byte corruption artifact.
 
 ## Notes
 
-- All 120 tests pass; `npm run ci` passes.
-- Old root-level doc stubs have been deleted. All broken references across the repo have been fixed.
-- The DParser heuristic for detecting child codes requires 4+ digit numeric codes or alphanumeric codes. Short numeric codes (1-3 digits) without letters are still treated as percentage codes — this is a pre-existing limitation, not introduced by this fix.
+- All 147 tests pass; `npm run ci` passes.
+- 1 open issue: #134 (Milestone v1.0.0 MVP release).
+- All parser bugs resolved. All observed corpus record types implemented. Task board clean.
 
 ## Next Steps
 
-1. **Backslash context-sensitivity in ~V** — `FIEBDC-3/2020\02102025` uses `\` as date separator.
-2. **Implement ~G parser** — image/graphic attachment (1 occurrence).
+1. **Merge open PRs** — `feat/88-expression-evaluator`, `feat/g-h-parsers`, `fix/106-v-backslash-context`, `feat/104-null-byte-stripping` are ready.
+2. **Remaining open issues** (7): #122 (diagnostics model), #123 (perf profiling), #124 (streaming parser), #129 (integration tests), #131 (usage examples), #132/#133 (CI/release), #134 (v1.0.0 milestone).
 
 ---
 
