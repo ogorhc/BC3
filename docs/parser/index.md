@@ -37,8 +37,6 @@ Input string
 | `~X`    | XParser             | IT codes / BIM / LCA parameters  | Rare (large)       |
 | `~E`    | EParser             | Entities (vendors, authors)      | Rare               |
 | `~A`    | AParser             | Thesaurus                        | Rare               |
+| `~O`    | OParser             | Cost overrides (geographic)      | Rare               |
+| `~G`    | GParser             | Image/graphic attachment         | 1 occurrence       |
 | Unknown | UnknownRecordParser | —                                | —                  |
-
-### Not yet implemented
-
-`~O` (cost override), `~G` — see `docs/bc3-knowledge/unsupported-cases.md`.

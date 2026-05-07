@@ -33,7 +33,7 @@ npm run dev:tokenize
 ### 4. Implement Fix
 
 - Fix the root cause, not the symptom.
-- If the fix touches a parser, review all 14 parsers for the same pattern.
+- If the fix touches a parser, review all 16 parsers for the same pattern.
 - Do not introduce bypasses around the module dependency rules.
 
 ### 5. Verify

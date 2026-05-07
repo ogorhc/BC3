@@ -39,15 +39,15 @@ Input string
 
 ## Gaps vs real-world corpus
 
-| Gap                                                                                                                                                                                | Impact on corpus files                                                             |
-| ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------- |
-| **ISO-8859-1 encoding** — tokenizer operates on raw strings; if passed a UTF-8 decoded string from an ISO-8859-1 file, Spanish characters (á, é, í, ó, ú, ñ, °, €) will be garbled | Affects all 7 files                                                                |
-| **Multiline ~D records** — tokenizer uses `~` as record boundary; continuation lines without `~` prefix are dropped or mis-associated                                              | Affects VQUISI (3,897 continuation lines), Excesos-Mod (34,858 continuation lines) |
-| **Null byte handling** — stripNullBytes() added (#104); NUL bytes removed before tokenizing                                                                                        | Affected Excesos-Mod (now resolved)                                                |
-| **Extremely long lines** — no known hard limit but ~X records with 300+ parameter pairs and 27,598-char lines may stress memory                                                    | Affects TSL                                                                        |
-| **~K negative digit counts** — parser likely expects unsigned integers for `-9`                                                                                                    | Affects VQUISI                                                                     |
-| **~V empty vendor field** — if parser assumes non-empty field 1, TCQ files would fail                                                                                              | Affects 250617_Mod                                                                 |
-| **Backslash in version string** — VParser reconstructs version field and splits on last `\` for date suffix (fixed #106)                                                           | Affected TSL, 250617_Mod (now resolved)                                            |
+| Gap                                                                                                                                        | Status             |
+| ------------------------------------------------------------------------------------------------------------------------------------------ | ------------------ |
+| **ISO-8859-1 encoding** — callers must decode Latin-1 before calling `BC3.parse()` (#100). Tokenizer operates on JS strings.               | Deferred to caller |
+| **Multiline ~D records** — resolved: DParser handles ARQUIMEDES format. Null-byte stripping (#104) handles Excesos-Mod continuation lines. | Resolved           |
+| **Null byte handling** — `stripNullBytes()` added (#104). NUL bytes removed before tokenizing.                                             | Resolved           |
+| **Extremely long lines** — ~X records with 300+ parameter pairs and 27,598-char lines parse correctly. No hard limit observed.             | Working (untuned)  |
+| **~K negative digit counts** — resolved: KParser stores subfields as raw strings (#98).                                                    | Resolved           |
+| **~V empty vendor field** — all ~V fields are optional. TCQ files parse correctly.                                                         | Resolved           |
+| **Backslash in version string** — VParser reconstructs version field and splits on last `\` for date suffix (#106).                        | Resolved           |
 
 ## Parsing modes behavior
 

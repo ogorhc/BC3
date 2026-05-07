@@ -17,7 +17,7 @@ BC3 parser project — a zero-dependency TypeScript library that parses FIEBDC-3
 - **Formatting:** Prettier (80 width, single quotes, trailing commas)
 - **Versioning:** Changesets
 - **Runtime deps:** None (zero-dependency library)
-- **Test framework:** `node:test` (built-in) + `tsx` loader — run with `npm test`; 83 tests across 3 files
+- **Test framework:** `node:test` (built-in) + `tsx` loader — run with `npm test`; 147 tests across 13 files
 
 ## Architecture
 
@@ -27,7 +27,7 @@ BC3 parser project — a zero-dependency TypeScript library that parses FIEBDC-3
 BC3.parse(input)
   → Tokenizer (~ record boundaries, | fields, \\ subfields)
     → RecordDispatcher (routes ~X → XParser)
-      → 14 strategy parsers (~V through ~E + UnknownRecordParser)
+      → 16 strategy parsers (~V through ~G + UnknownRecordParser)
         → BC3ParseStore (intermediate)
           → DomainAssembler → BC3Document (composite tree)
 ```
@@ -69,7 +69,7 @@ Metadata: `data/bc3-corpus/metadata/samples.index.json`
 - `docs/bc3-knowledge/version-differences.md` — FIEBDC-3 evolution
 - `docs/bc3-knowledge/known-edge-cases.md` — 9 documented edge cases
 - `docs/bc3-knowledge/parser-behavior.md` — current parser capabilities and gaps
-- `docs/bc3-knowledge/unsupported-cases.md` — ~O, ~G with priority strategy
+- `docs/bc3-knowledge/unsupported-cases.md` — historical record of resolved ~O/~G and structural patterns
 
 ## Project Rules
 
@@ -106,7 +106,7 @@ Metadata: `data/bc3-corpus/metadata/samples.index.json`
 src/                     # Library source
   api/                   # Public API (BC3.parse)
   importers/             # Source adapters
-  parsing/               # Tokenizer + 14 record-type parsers
+  parsing/               # Tokenizer + 16 record-type parsers
   builder/               # BC3ParseStore → DomainAssembler
   domain/                # Pure domain model
   utils/                 # Generic helpers

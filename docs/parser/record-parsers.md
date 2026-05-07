@@ -218,6 +218,34 @@ Real-world TSL (Presto 25.00) files contain `~X` lines up to 27,598 characters w
 
 ---
 
+## ~O — Cost Overrides (Geographic)
+
+**File:** `OParser.ts`
+
+```
+~O | CODIGO_CONCEPTO | < LOCATION \ PRICE \ > |
+```
+
+Pairs extracted as `location\price` subfields. Stored as `CostOverride` with `CostLocation[]` on `BC3Document.costOverrides`.
+
+**Diagnostics:** `BC3_O_MISSING_CODE` (warn) if concept code is empty.
+
+---
+
+## ~G — Image/Graphic Attachment
+
+**File:** `GParser.ts`
+
+```
+~G | CODIGO_CONCEPTO | FILENAME.EXT \ |
+```
+
+Stored as `Attachment` (type: `'graphic'`) on `BC3Document.attachments`.
+
+**Diagnostics:** `BC3_G_MISSING_CODE` (warn) if concept code is empty. `BC3_G_MISSING_FILENAME` (warn) if filename is empty.
+
+---
+
 ## Unknown record type fallback
 
 **File:** `UnknownRecordParser.ts`
