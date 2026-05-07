@@ -13,6 +13,7 @@ import {
 } from '../../domain/Specification';
 import { Thesaurus } from '../../domain/Thesaurus';
 import { Concept } from '../../domain/types/Concept';
+import { evaluatePartial } from '../../utils/expressionEvaluator';
 import { BC3ParseStore } from '../BC3ParseStore';
 import { normalizeCode } from '../store/normalizeCode';
 
@@ -139,15 +140,25 @@ export class DomainAssembler {
 
       // Convert MeasurementDetailInput to MeasurementDetail
       const details: MeasurementDetail[] = measurementInput.details.map(
-        (detail) => ({
-          type: detail.type,
-          comment: detail.comment,
-          bimIds: detail.bimIds,
-          units: detail.units,
-          length: detail.length ? parseFloat(detail.length) : undefined,
-          latitude: detail.latitude ? parseFloat(detail.latitude) : undefined,
-          height: detail.height ? parseFloat(detail.height) : undefined,
-        }),
+        (detail) => {
+          const length = detail.length ? parseFloat(detail.length) : undefined;
+          const latitude = detail.latitude
+            ? parseFloat(detail.latitude)
+            : undefined;
+          const height = detail.height ? parseFloat(detail.height) : undefined;
+          const units = detail.units ? parseFloat(detail.units) : undefined;
+
+          return new MeasurementDetail({
+            type: detail.type,
+            comment: detail.comment,
+            bimIds: detail.bimIds,
+            units: isNaN(units!) ? undefined : units,
+            length: isNaN(length!) ? undefined : length,
+            latitude: isNaN(latitude!) ? undefined : latitude,
+            height: isNaN(height!) ? undefined : height,
+            partial: evaluatePartial({ length, latitude, height, units }),
+          });
+        },
       );
 
       const measurement = new Measurement({

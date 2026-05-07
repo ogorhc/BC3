@@ -6,4 +6,6 @@ export interface Diagnostic {
   code?: string;
   recordIndex?: number;
   recordType?: string;
+  fieldIndex?: number;
+  subfieldIndex?: number;
 }
