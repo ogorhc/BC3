@@ -94,6 +94,6 @@ The `\` in `FIEBDC-3/2020\02102025` should not be treated as a subfield separato
 | 1     | Multiline ~D handling         | Done    |
 | 2     | ~O record type                | Done    |
 | 3     | ISO-8859-1 support            | Pending |
-| 4     | Null byte stripping           | Pending |
+| 4     | Null byte stripping           | Done    |
 | 5     | Backslash context sensitivity | Pending |
 | 6     | ~G record type                | Done    |

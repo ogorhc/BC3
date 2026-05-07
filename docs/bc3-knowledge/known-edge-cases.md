@@ -2,7 +2,7 @@
 
 Edge cases discovered in the real-world BC3 corpus that deviate from the standard single-line, ASCII, well-formed BC3 model.
 
-## 1. Multiline ~D records (ARQUIMEDES generator) — partially fixed
+## 1. Multiline ~D records (ARQUIMEDES generator) — resolved
 
 **File:** `PRESUPUESTO-VQUISI.bc3` (FIEBDC-3/2012, ARQUIMEDES)
 
@@ -18,26 +18,15 @@ Edge cases discovered in the real-world BC3 corpus that deviate from the standar
 
 **Impact:** 3,897 continuation lines (62% of total lines). The parser's tokenizer currently uses `~` as record boundary — continuation lines starting without `~` would be discarded as garbage or attached to the next record.
 
-**Resolution (2026-05-06):** The tokenizer correctly includes continuation lines in the record body (they fall between `~` markers). The fix was in DParser: ARQUEMEDES multiline format omits performance/rendimiento values, emitting only code+factor (2 subfields per child instead of 3). DParser now detects when the performance slot contains a child code and backs up to treat it as the next child's code. 3 of 3 children now parse correctly in tested fixtures.
+**Resolution (2026-05-06):** Tokenizer includes continuation lines between `~` markers. DParser handles ARQUIMEDES multiline format (code+factor, omitting performance). Null-byte stripping (#104) handles Excesos-Mod's 34,858 continuation lines.
 
-**Remaining:** Excesos-Mod has 34,858 multiline continuation lines mixed with NUL bytes — this file still requires null-byte stripping.
-
-## 2. Null byte contamination
+## 2. Null byte contamination — resolved (#104)
 
 **File:** `250617_Modificado2_v10(Excesos-Mod).bc3` (FIEBDC-3/2002, Presto 8.8)
 
 **Pattern:** Every single line (37,713 total) contains one or more NUL (`0x00`) bytes. The file is 6.6 MB with only ~2,855 actual record-starting lines. The remaining 34,858 lines are a mix of multiline record continuations and null-byte padding.
 
-Example hex dump:
-
-```
-00000070  0a 7e 4f 7c 25 45 58 30  36 7c 30 30 30 5c 36 5c  |.~O|%EX06|000\6\|
-00000080  30 30 31 5c 30 5c 30 30  32 5c 30 7c 0d 0a 7e 43  |001\0\002\0|..~C|
-```
-
-**Impact:** Cannot be parsed without preprocessing. grep reports "binary file matches." The parser would need to strip NUL bytes before tokenization.
-
-**Mitigation:** Add a preprocessing step: `input.replace(/\x00/g, '')` or handle in the tokenizer.
+**Resolution (2026-05-06):** `stripNullBytes()` added to Tokenizer — removes `\x00` before tokenizing. File now parses without errors.
 
 ## 3. ISO-8859-1 encoding (universal)
 
@@ -82,7 +71,7 @@ Field 1 (vendor) is empty. The TCQ generator emits no vendor name.
 
 **Mitigation:** All ~V fields should be treated as optional.
 
-## 7. ~O records with geographic overrides
+## 7. ~O records with geographic overrides — resolved (#94)
 
 **Files:** 19-026, 21-028, Excesos-Mod
 
@@ -90,9 +79,9 @@ Field 1 (vendor) is empty. The TCQ generator emits no vendor name.
 
 These records contain location-specific cost multipliers. The value is a flat sequence of `location_name\price` pairs using backslash as the pair separator.
 
-**Impact:** Currently unsupported — falls through to UnknownRecordParser.
+**Resolution (2026-05-06):** OParser extracts location\price pairs. Stored as `CostOverride` with `CostLocation[]` in `BC3Document.costOverrides`.
 
-## 8. ~K negative digit counts
+## 8. ~K negative digit counts — resolved (#98)
 
 **File:** `PRESUPUESTO-VQUISI.bc3`
 
@@ -100,7 +89,7 @@ These records contain location-specific cost multipliers. The value is a flat se
 
 The first digit group is `-9` (negative). The digit count fields in ~K specify decimal places for price display.
 
-**Impact:** Parser expecting unsigned integers for digit counts would fail on negative values.
+**Resolution:** KParser stores all subfields as raw strings — no integer parsing occurs. Negative values pass through safely.
 
 ## 9. `.BC3` uppercase extension
 

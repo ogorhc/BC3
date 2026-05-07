@@ -2,7 +2,7 @@
 
 ## When to Use
 
-Adding the first tests to the project. There is currently no test framework configured.
+Adding tests for new or existing functionality. Test framework is already configured: `node:test` (built-in) + `tsx` loader. Tests live in `tests/` mirroring `src/` structure. Run with `npm test`.
 
 ## Steps
 

@@ -1,40 +1,48 @@
 # Roadmap — BC3
 
-### Phase 0 — Planning
+**Status:** Phases 0–4 complete. Phase 5 partially complete. Phase 6 ready.
 
-- Define architecture
-- Create repo structure
-- Create GitHub Project
+## Phase 0 — Planning ✓
 
-### Phase 1 — Core Infrastructure
+- Architecture defined
+- Repo structure created
+- GitHub Project established (28 items, all Done)
 
-- Tokenizer for BC3 records
-- RecordParser interface (Strategy)
-- RecordDispatcher
+## Phase 1 — Core Infrastructure ✓
 
-### Phase 2 — Domain Model (Composite)
+- Tokenizer for BC3 records (field `|`, subfield `\`, EOF marker, null byte stripping)
+- RecordParser interface (Strategy pattern)
+- RecordDispatcher (routing + diagnostics)
 
-- ConceptNode
-- ChapterNode
-- MeasurementNode
-- Document root
+## Phase 2 — Domain Model ✓
 
-### Phase 3 — Builder
+- ConceptNode, Concept, Decomposition
+- Measurement, MeasurementDetail (with partial expression evaluation)
+- ChapterNode, Document root (BC3Document)
+- Entity, Specification, ITCode, Thesaurus, CostOverride, Coefficients, Attachment
 
-- DocumentBuilder API
-- Relationship linking
-- Final Bc3Document output
+## Phase 3 — Builder ✓
 
-### Phase 4 — Essential record types
+- BC3Builder pipeline: init → on\* → buildStore
+- BC3ParseStore → DomainAssembler → BC3Document
+- Hierarchy assembly with parent-child relationship linking
+- Code change rewriting (~B)
 
-- Implement ~V, ~C, ~D, ~T
+## Phase 4 — Essential Record Types ✓
+
+- ~V (Version/Metadata), ~C (Concept), ~D (Decomposition), ~T (Text)
+- ~K (Coefficients), ~M (Measurement), ~N (Notes)
+- ~B (Code rename), ~Y (Layout)
 - First end-to-end parse
 
-### Phase 5 — Full format support
+## Phase 5 — Extended Record Types (partial)
 
-- ~K, ~M, ~N, ~R, ~X, ~G, ~F, ~W, ~I…
+- **Done:** ~L (Specifications), ~X (IT/BIM/LCA codes), ~E (Entities), ~A (Thesaurus), ~O (Cost Overrides), ~G (Graphics)
+- **Not observed in corpus:** ~R, ~F, ~W, ~I — zero occurrences, no spec documentation available
 
-### Phase 6 — Release
+## Phase 6 — Release
 
-- Documentation
-- v0.1.0-alpha publish to npm
+- Documentation complete (docs/, examples.md, README)
+- 147 tests passing, CI clean
+- 7/7 real-world corpus files parsing with 0 errors
+- Ready for v1.0.0 release (#134)

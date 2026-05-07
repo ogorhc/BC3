@@ -183,8 +183,8 @@ Reorganized all `docs/` content into a clear, navigable directory layout. Fixed 
 
 ## Next Steps
 
-1. **Merge open PRs** — `feat/88-expression-evaluator`, `feat/g-h-parsers`, `fix/106-v-backslash-context`, `feat/104-null-byte-stripping` are ready.
-2. **Remaining open issues** (7): #122 (diagnostics model), #123 (perf profiling), #124 (streaming parser), #129 (integration tests), #131 (usage examples), #132/#133 (CI/release), #134 (v1.0.0 milestone).
+1. **Merge open PRs** — `feat/104-null-byte-stripping`, `fix/106-v-backslash-context`, `feat/g-h-parsers`, `feat/88-expression-evaluator`, `chore/remaining-issues`, `chore/docs-audit-fix`.
+2. **Issue #134** — Milestone v1.0.0 MVP release.
 
 ---
 

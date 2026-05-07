@@ -43,7 +43,7 @@ API (BC3.parse) → Importer → Tokenizer → Dispatcher → Strategy parsers
                          → Builder (BC3ParseStore) → DomainAssembler → BC3Document
 ```
 
-There are 14 per-record-type parsers (~V through ~E, plus UnknownRecordParser). Parsing mode defaults to `'lenient'` (collects diagnostics); `'strict'` fails on first error.
+There are 16 per-record-type parsers (~V through ~G, plus UnknownRecordParser). Parsing mode defaults to `'lenient'` (collects diagnostics); `'strict'` fails on first error.
 
 ## Git workflow
 
@@ -122,7 +122,7 @@ For every new task:
 
 ## Next Issue Workflow
 
-When the user says "next", follow `.ai/playbooks/implement-next-issue.md`.
+When the user says "next", follow `.ai/playbooks/start-github-issue.md` and `.ai/playbooks/finish-github-issue.md`.
 
 Use:
 
