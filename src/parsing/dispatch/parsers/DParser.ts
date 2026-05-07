@@ -30,14 +30,39 @@ function parsePorcentajes(sub: string[]): { codes?: string[]; raw?: string } {
 export class DParser implements RecordParser {
   readonly type = 'D';
 
-  private looksLikeChildCode(elem: string): boolean {
-    return (
-      (elem.match(/^[0-9]{4,}$/) && elem.length >= 4) ||
-      (elem.includes('.') && !/^\d+(\.\d+)?$/.test(elem)) ||
-      elem.match(/^[A-Z]+\.[A-Z]/) ||
-      (/[a-zA-Z]/.test(elem) && /\d/.test(elem)) ||
-      elem.startsWith('%')
-    );
+  private looksLikeChildCode(elem: string, inPerfSlot = false): boolean {
+    if (inPerfSlot) {
+      // In the performance (REND) slot the value is always a quantity.
+      // Reject all numeric patterns so that large integer performances
+      // (e.g. 6990, 1173) and decimal performances (e.g. 0.76, 1.5) do
+      // NOT trigger the ARQUIMEDES "skip perf slot" path.
+      // Only non-numeric strings in this slot (i.e. an actual concept code)
+      // should cause the slot to be skipped — that is the ARQUIMEDES pattern
+      // where the perf slot is absent and the next child code lands here.
+      if (/^[\d.]+$/.test(elem)) return false;
+    }
+
+    // Percentage codes.
+    if (elem.startsWith('%')) return true;
+
+    // Dotted codes: covers chapter codes like 2.2, 2.10, 3.5.1 AND
+    // alphanumeric dotted codes like I.LT04.01, WORKER.1a.
+    // In the lookahead context decimal performance values (e.g. 0.76) also
+    // match here, but since they won't match any ~C concept they produce a
+    // BC3_D_MISSING_CHILD_CODE diagnostic and are skipped — which is the
+    // correct lenient-mode behaviour (no silent data loss).
+    if (elem.includes('.')) return true;
+
+    // Alphanumeric codes (letters + digits).
+    if (/[a-zA-Z]/.test(elem) && /\d/.test(elem)) return true;
+
+    // Pure-letter codes.
+    if (/^[a-zA-Z]/.test(elem)) return true;
+
+    // Pure integers: valid numeric concept codes (e.g. 1001, 311100).
+    if (/^\d+$/.test(elem)) return true;
+
+    return false;
   }
 
   parse(record: RawRecord, ctx: ParseContext): void {
@@ -84,7 +109,10 @@ export class DParser implements RecordParser {
         // multiline format omits performance values), back up so the next
         // iteration picks it up as the next child's code.
         let skipPerfSlot = false;
-        if (isNonEmpty(performance) && this.looksLikeChildCode(performance)) {
+        if (
+          isNonEmpty(performance) &&
+          this.looksLikeChildCode(performance, true)
+        ) {
           performance = undefined;
           skipPerfSlot = true;
         }

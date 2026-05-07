@@ -107,3 +107,20 @@ Child concept codes containing dots (e.g. `WORKER.1a`, `I.LT04.01`) trigger an a
 
 - Exclude decimal numbers (`/^\d+(\.\d+)?$/`) from the dot-based child code detection
 - Add alphanumeric detection (`/[a-zA-Z]/.test(elem) && /\d/.test(elem)`) for child codes without dots like `MAT01`, `WORKER2b`
+
+## 11. Presto 8.7 — pure-numeric dotted chapter codes and large integer performances — resolved
+
+**File:** `PRESUPUESTO BC3_ZORROZAURRE.bc3` (FIEBDC-3/2002, Presto 8.7)
+
+**Pattern A — numeric dotted chapter codes:** Presto 8.7 uses purely numeric dotted codes for chapters (e.g. `2`, `2.1`, `2.2`, `2.10`). The old `looksLikeChildCode` heuristic applied `/^\d+(\.\d+)?$/` to exclude decimal-looking strings from child code detection, which incorrectly excluded chapter codes like `2.2`. Result: all siblings after the first child (`2.1`) were misclassified as percentage codes, then orphaned as root nodes. A file with 1 expected root produced 44 roots.
+
+**Pattern B — large integer performance values:** The same file uses large integer quantities as performance values (e.g. `6990`, `1173`, `2825` m²). The old Rule A (`/^[0-9]{4,}$/`) matched these values in the performance slot, treating them as child codes and triggering `BC3_D_MISSING_CHILD_CODE` warnings for every such entry.
+
+**Root cause:** `looksLikeChildCode()` was context-unaware — it was called identically on both the performance slot value (`CODE\FACTOR\**PERF**\...`) and the lookahead position (values after a complete triplet). The two positions have different semantics.
+
+**Resolution:** `looksLikeChildCode(elem, inPerfSlot)` now takes a boolean context parameter:
+
+- `inPerfSlot=true`: rejects all numeric strings (`/^[\d.]+$/`) — pure quantities, never concept codes
+- lookahead (default): accepts all dotted strings as potential codes (covers `2.2`, `2.10`, alphanumeric dotted codes), pure integers remain valid (covers short numeric concept codes like `1001`)
+
+After the fix: 0 diagnostics, 1 root, all 14 children of `2` correctly parsed.
