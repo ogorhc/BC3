@@ -6,6 +6,14 @@
 
 ## Recent Changes
 
+### 2026-05-07 — Release v1.0.0 (#134, #143)
+
+- **Package v1.0.0** published via Changesets (major bump from v0.7.0).
+- PR #143 merged to `main`. Release workflow auto-publishes to npm.
+- README status updated to "Stable release — v1.0.0".
+- `docs/development/release-process.md` updated with release history and manual publish fallback.
+- **All issues closed.** 0 open issues.
+
 ### 2026-05-06 — SEO: expand npm keywords, optimize README, set GitHub topics
 
 - **package.json keywords** expanded 6 → 21: `fiebdc`, `bc3-parser`, `construction-budget`, `boq`, `presto`, `arquimedes`, `tcq`, etc.
@@ -178,13 +186,13 @@ Reorganized all `docs/` content into a clear, navigable directory layout. Fixed 
 ## Notes
 
 - All 147 tests pass; `npm run ci` passes.
-- 1 open issue: #134 (Milestone v1.0.0 MVP release).
-- All parser bugs resolved. All observed corpus record types implemented. Task board clean.
+- **v1.0.0 published.** All issues closed. 0 open issues.
+- All observed corpus record types implemented. Task board clean.
 
 ## Next Steps
 
-1. **Merge open PRs** — `feat/104-null-byte-stripping`, `fix/106-v-backslash-context`, `feat/g-h-parsers`, `feat/88-expression-evaluator`, `chore/remaining-issues`, `chore/docs-audit-fix`.
-2. **Issue #134** — Milestone v1.0.0 MVP release.
+- Merge `main` back into `develop` after release
+- Resume from `docs/development/work-to-issue-mapping.md` genuine remaining items (aliases, unknown content, ~B history, API aspirational features)
 
 ---
 
