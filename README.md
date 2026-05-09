@@ -37,9 +37,9 @@ data structure. BC3 fills that gap.
 
 ## Status
 
-**Stable release** — 15 of 16 record types parsed, 100% of observed corpus types supported, 147 regression tests. 7/7 real-world BC3 files parse with 0 errors.
+**Stable release** — 15 of 16 record types parsed, 100% of observed corpus types supported, 179 regression tests. 7/7 real-world BC3 files parse with 0 errors. Includes `getSummary()` for record counts, concept type distribution, and diagnostic breakdowns.
 
-Current version: `v1.0.0`
+Current version: `v1.1.0`
 
 ## Installation
 

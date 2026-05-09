@@ -110,3 +110,27 @@ for (const att of doc.attachments) {
   console.log(`${att.conceptCode}: ${att.type} — ${att.url}`);
 }
 ```
+
+## Get a document summary
+
+```typescript
+import { BC3, summaryToString } from 'bc3';
+
+const result = BC3.parse(bc3Text, { mode: 'lenient' });
+const summary = result.document!.getSummary();
+
+// Human-readable
+console.log(summaryToString(summary));
+// Version: FIEBDC-3/2020  Program: Presto 8.7
+// Records:  V:1  C:973  D:405  T:781  M:770  E:0  A:79  K:1
+// Concepts:  973 total  1 root  568 leaves  max depth: 7
+//   Type 0: 622  Type 1: 7  Type 2: 55  Type 3: 289
+// Measurements:  74 concepts  4481 detail lines
+// Decompositions:  2473 links  405 concepts with decompositions
+// Diagnostics:  0 info  0 warn  0 error
+
+// Programmatic
+console.log(summary.totalConcepts); // 973
+console.log(summary.recordCounts.C); // 973
+console.log(summary.conceptTypeDistribution); // Map(4) { 0→622, 1→7, 2→55, 3→289 }
+```
