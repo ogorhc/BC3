@@ -7,15 +7,24 @@
 
 ## Project Status
 
-All 28 GitHub Project items (Phases 0–3) are Done. 147 tests pass. 7/7 real-world corpus files parse with 0 errors. 15 of 16 spec record types implemented (16 parsers including ~N/~B/~Y with zero corpus occurrences).
+All 28 GitHub Project items (Phases 0–3) are Done. 179 tests pass. 7/7 real-world corpus files parse with 0 errors. 15 of 16 spec record types implemented (16 parsers including ~N/~B/~Y with zero corpus occurrences). v1.1.0 shipped with `getSummary()` + `summaryToString()`.
 
-**1 open issue:** #134 — Milestone v1.0.0 (MVP release).
+**0 open issues.**
 
 ---
 
 ## Completed (shipped)
 
-### A. Missing parsers — all implemented
+### A. v1.1.0 — Summary & diagnostics API
+
+| Finding                                                          | Issue | Status |
+| ---------------------------------------------------------------- | ----- | ------ |
+| `getSummary()` — record counts, concept type distribution, stats | new   | Done   |
+| `summaryToString()` — human-readable summary formatter           | new   | Done   |
+| Dispatcher-based record counting                                 | new   | Done   |
+| Presto 8.7 hierarchy fix (numeric dotted codes, large int perf)  | #144  | Done   |
+
+### B. Missing parsers — all implemented
 
 | Finding                                | Issue | Status                    |
 | -------------------------------------- | ----- | ------------------------- |
@@ -77,13 +86,13 @@ All 28 GitHub Project items (Phases 0–3) are Done. 147 tests pass. 7/7 real-wo
 
 ### Priority 3: API maturity
 
-| Finding                                         | Issue                                                |
-| ----------------------------------------------- | ---------------------------------------------------- |
-| `charset` option documented but not implemented | `[Feature]: Implement charset option in BC3.parse()` |
-| `collectRawRecords` option not implemented      | `[Feature]: Implement collectRawRecords option`      |
-| `BC3.parseAsync()` not implemented              | `[Feature]: Implement BC3.parseAsync()`              |
-| `stats` in ParseResult not implemented          | `[Feature]: Add parse statistics to ParseResult`     |
-| `BC3.from()` source factory not implemented     | `[Feature]: Implement BC3.from() source factory`     |
+| Finding                                         | Issue                                                         |
+| ----------------------------------------------- | ------------------------------------------------------------- |
+| `charset` option documented but not implemented | `[Feature]: Implement charset option in BC3.parse()`          |
+| `collectRawRecords` option not implemented      | `[Feature]: Implement collectRawRecords option`               |
+| `BC3.parseAsync()` not implemented              | `[Feature]: Implement BC3.parseAsync()`                       |
+| ~~`stats` in ParseResult not implemented~~      | Done (v1.1.0) — `document.getSummary()` + `summaryToString()` |
+| `BC3.from()` source factory not implemented     | `[Feature]: Implement BC3.from() source factory`              |
 
 ### Priority 4: Lower-impact
 

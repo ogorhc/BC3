@@ -2,27 +2,25 @@
 
 ## Active Work
 
-- **Issue #144 / PR #145** — `fix/144-zorrozaurre-hierarchy` — awaiting review and merge to `develop`
+- **v1.1.0** — `getSummary()` + `summaryToString()` implemented. Docs updated. Next: changeset + release.
 
 ## Recent Changes
 
-### 2026-05-07 — Fix: ~D child code detection for Presto 8.7 (#144, PR #145)
+### 2026-05-07 — Feature: `getSummary()` + `summaryToString()` (v1.1.0)
 
-- **Root cause:** `looksLikeChildCode()` in `DParser.ts` was context-unaware.
-  - Bug A: chapter codes like `2.2`, `2.10` matched `/^\d+(\.\d+)?$/` → rejected as child codes → misclassified as `percentageCodes` → 44 root nodes instead of 1.
-  - Bug B: large integer performance values (`6990`, `1173`) matched `/^[0-9]{4,}$/` → treated as child codes → 60+ `BC3_D_MISSING_CHILD_CODE` warnings.
-- **Fix:** Added `inPerfSlot` boolean parameter to `looksLikeChildCode`. In perf slot: reject all `/^[\d.]+$/` strings. In lookahead: accept all dotted strings as codes.
-- **Result:** 0 diagnostics on `PRESUPUESTO BC3_ZORROZAURRE.bc3`, 1 root, all 14 children of `2` correctly parsed.
-- **Tests:** 17 new regression tests in `tests/parsing/dispatch/parsers/DParser.zorrozaurre.test.ts`. 165/165 pass.
-- **Docs:** Edge case #11 added to `docs/bc3-knowledge/known-edge-cases.md`.
-- **Branch:** `fix/144-zorrozaurre-hierarchy`
-- **PR:** https://github.com/ogorhc/BC3/pull/145
+- **`document.getSummary()`** — returns `DocumentSummary` with: record counts (per-type, tracked in dispatcher), concept type distribution, measurement/decomposition stats, auxiliary data counts (specs, IT codes, entities, thesaurus, cost overrides, attachments), and diagnostic severity breakdown. Cached on first call.
+- **`summaryToString(summary)`** — formats a `DocumentSummary` into compact, human-readable text.
+- **Record counting** — added `recordCounts` to `ParseContext`, incremented in `RecordDispatcher` (1 file, not 16 parsers). Flows through `BC3Builder` → `BC3ParseStore` → `DomainAssembler` → `BC3Document`.
+- **New types:** `RecordCounts`, `DocumentSummary` in `src/domain/types/RecordCounts.ts`.
+- **Tests:** 14 new tests in `tests/api/DocumentSummary.test.ts`. 179/179 pass.
+- **Docs updated:** README, public-api.md, roadmap.md, release-process.md, work-to-issue-mapping.md, examples.md — all reflect v1.1.0.
 
-- **Package v1.0.0** published via Changesets (major bump from v0.7.0).
-- PR #143 merged to `main`. Release workflow auto-publishes to npm.
-- README status updated to "Stable release — v1.0.0".
-- `docs/development/release-process.md` updated with release history and manual publish fallback.
-- **All issues closed.** 0 open issues.
+### 2026-05-07 — Release v1.0.1 (patch)
+
+- `bc3@1.0.1` published to npm via Changesets release flow.
+- Fix: `~D` hierarchy for Presto 8.7 (numeric dotted chapter codes + large integer performances). See #144 / PR #145.
+
+### 2026-05-07 — Release v1.0.0 (#134, #143)
 
 ### 2026-05-06 — SEO: expand npm keywords, optimize README, set GitHub topics
 

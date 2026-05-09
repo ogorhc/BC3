@@ -69,13 +69,15 @@ When `develop` is ready to ship:
 
 ## Releases
 
-| Version | Date       | Notes                                                                |
-| ------- | ---------- | -------------------------------------------------------------------- |
-| v1.0.0  | 2026-05-07 | First stable release — 15 parsers, 147 tests, 7/7 corpus files parse |
-| v0.7.0  | 2026-01-12 | Last pre-release                                                     |
-| v0.6.x  | 2026-01-07 | Build fixes                                                          |
-| v0.5.1  | 2026-01-05 | ESM/CJS dual output                                                  |
-| v0.4.0  | 2026-01-05 | Builder + domain assembler                                           |
-| v0.2.0  | 2026-01-05 | Public API shape                                                     |
-| v0.1.x  | 2025-12-16 | Initial alpha                                                        |
-| v0.0.x  | 2025-12-15 | Skeleton                                                             |
+| Version | Date       | Notes                                                                                                  |
+| ------- | ---------- | ------------------------------------------------------------------------------------------------------ |
+| v1.1.0  | 2026-05-07 | `getSummary()` + `summaryToString()` — record counts, concept type distribution, diagnostic breakdowns |
+| v1.0.1  | 2026-05-07 | Fix: ~D hierarchy for Presto 8.7 (numeric dotted chapter codes + large integer performances)           |
+| v1.0.0  | 2026-05-07 | First stable release — 15 parsers, 147 tests, 7/7 corpus files parse                                   |
+| v0.7.0  | 2026-01-12 | Last pre-release                                                                                       |
+| v0.6.x  | 2026-01-07 | Build fixes                                                                                            |
+| v0.5.1  | 2026-01-05 | ESM/CJS dual output                                                                                    |
+| v0.4.0  | 2026-01-05 | Builder + domain assembler                                                                             |
+| v0.2.0  | 2026-01-05 | Public API shape                                                                                       |
+| v0.1.x  | 2025-12-16 | Initial alpha                                                                                          |
+| v0.0.x  | 2025-12-15 | Skeleton                                                                                               |
