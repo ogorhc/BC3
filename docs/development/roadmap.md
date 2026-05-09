@@ -1,6 +1,6 @@
 # Roadmap — BC3
 
-**Status:** Phases 0–4 complete. Phase 5 partially complete. Phase 6 ready.
+**Status:** Phases 0–6 complete. v1.1.0 shipped.
 
 ## Phase 0 — Planning ✓
 
@@ -35,14 +35,17 @@
 - ~B (Code rename), ~Y (Layout)
 - First end-to-end parse
 
-## Phase 5 — Extended Record Types (partial)
+## Phase 5 — Extended Record Types ✓
 
 - **Done:** ~L (Specifications), ~X (IT/BIM/LCA codes), ~E (Entities), ~A (Thesaurus), ~O (Cost Overrides), ~G (Graphics)
 - **Not observed in corpus:** ~R, ~F, ~W, ~I — zero occurrences, no spec documentation available
 
-## Phase 6 — Release
+## Phase 6 — Release & Polish ✓
 
 - Documentation complete (docs/, examples.md, README)
-- 147 tests passing, CI clean
+- 179 tests passing, CI clean
 - 7/7 real-world corpus files parsing with 0 errors
-- Ready for v1.0.0 release (#134)
+- `getSummary()` — record counts, concept type distribution, measurement/decomposition stats, diagnostic breakdowns
+- `summaryToString()` — human-readable summary formatter
+- Presto 8.7 hierarchy fix (numeric dotted chapter codes, large integer performances)
+- v1.1.0 shipped

@@ -4,13 +4,15 @@ This document defines the **public API** of the `bc3` library: entry points, inp
 
 The API must remain stable over time. Internal modules (importers/parsing/builder) may evolve without breaking consumers.
 
-> **What is actually implemented (as of v0.7.0):**
+> **What is actually implemented (as of v1.1.0):**
 >
 > ```ts
 > BC3.parse(input: string, options?: { mode?: 'strict' | 'lenient' }): ParseResult
 > ```
 >
 > `ParseResult` has `{ document: BC3Document; diagnostics: Diagnostic[] }`.
+>
+> `BC3Document` exposes `getSummary(): DocumentSummary` (record counts, concept type distribution, measurement/decomposition stats, diagnostic breakdown) and the companion utility `summaryToString(summary)` for human-readable output.
 >
 > **Encoding:** `BC3.parse()` accepts a UTF-16 JavaScript string. All real-world BC3 corpus files use ISO-8859-1 (Latin-1) encoding. Callers must decode before parsing:
 >
@@ -92,7 +94,8 @@ Contains:
 
 - `document`: `BC3Document` — **implemented**
 - `diagnostics`: `Diagnostic[]` (warnings/errors) — **implemented**
-- `stats` (optional): parse statistics (record counts, duration) — **[ASPIRATIONAL]** not implemented
+- `document.getSummary()` — `DocumentSummary` with record counts, concept stats — **implemented (v1.1.0)**
+- `stats` (optional): parse statistics (record counts, duration) — **[ASPIRATIONAL]** replaced by `getSummary()` on document
 
 ---
 
@@ -133,11 +136,13 @@ Diagnostics include:
 
 ## 7. Export surface
 
-The library should export:
+The library exports:
 
 - `BC3` (main façade)
-- Domain types: `BC3Document`, `Concept`, etc.
-- Parse types: `BC3ParseOptions`, `BC3ParseResult`, `Diagnostic`
+- Domain types: `BC3Document`, `Concept`, `ConceptNode`, `Decomposition`, `Measurement`, `MeasurementDetail`, `Entity`, `Specification`, `ITCodes`, `Thesaurus`, `CostOverride`, `Coefficients`, `Attachment`
+- Parse types: `ParseOptions`, `ParseResult`, `Diagnostic`
+- Summary types: `DocumentSummary`, `RecordCounts`
+- Utilities: `summaryToString()` — formats a `DocumentSummary` into readable text
 
 Internal implementation details must not be exported:
 
@@ -170,6 +175,8 @@ However, the initial stable contract remains:
 
 - Primary API: `BC3.parse(input: string, options?: { mode? }): ParseResult` (sync) — **implemented**
 - Optional future: `BC3.parseAsync(...)` — **[ASPIRATIONAL]**
-- Return: `{ document: BC3Document; diagnostics: Diagnostic[] }` — `stats` is aspirational
+- Return: `{ document: BC3Document; diagnostics: Diagnostic[] }` — implemented
+- Document summary: `document.getSummary(): DocumentSummary` — implemented (v1.1.0)
+- Summary formatter: `summaryToString(summary): string` — implemented (v1.1.0)
 - Mode: strict vs lenient
 - Keep internal implementation private
